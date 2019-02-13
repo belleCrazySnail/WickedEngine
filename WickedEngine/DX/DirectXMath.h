@@ -9,6 +9,19 @@
 
 #pragma once
 
+#ifdef __APPLE__
+#define _In_
+#define _In_reads_(x)
+#define _In_reads_bytes_(s)
+#define _Out_
+#define _Out_writes_(x)
+#define _Out_writes_bytes_(s)
+#define _Out_opt_
+
+#define _Use_decl_annotations_
+#define _Analysis_assume_(s)
+#endif
+
 #ifndef __cplusplus
 #error DirectX Math requires C++
 #endif
@@ -23,7 +36,7 @@
 #if _XM_VECTORCALL_
 #define XM_CALLCONV __vectorcall
 #else
-#define XM_CALLCONV __fastcall
+#define XM_CALLCONV 
 #endif
 
 #if defined(_MSC_VER) && (_MSC_FULL_VER < 190023506)
@@ -93,7 +106,7 @@
 // C4514/4820: Off by default noise
 #include <math.h>
 #include <float.h>
-#include <malloc.h>
+//#include <malloc.h>
 #pragma warning(pop)
 
 #ifndef _XM_NO_INTRINSICS_
@@ -128,7 +141,7 @@
 #endif
 #endif // !_XM_NO_INTRINSICS_
 
-#include <sal.h>
+//#include <sal.h>
 #include <assert.h>
 
 #pragma warning(push)
@@ -325,7 +338,7 @@ typedef const XMVECTOR& CXMVECTOR;
 
 //------------------------------------------------------------------------------
 // Conversion types for constants
-__declspec(align(16)) struct XMVECTORF32
+struct alignas(16) XMVECTORF32
 {
     union
     {
@@ -341,7 +354,7 @@ __declspec(align(16)) struct XMVECTORF32
 #endif
 };
 
-__declspec(align(16)) struct XMVECTORI32
+struct alignas(16) XMVECTORI32
 {
     union
     {
@@ -356,7 +369,7 @@ __declspec(align(16)) struct XMVECTORI32
 #endif
 };
 
-__declspec(align(16)) struct XMVECTORU8
+struct alignas(16) XMVECTORU8
 {
     union
     {
@@ -371,7 +384,7 @@ __declspec(align(16)) struct XMVECTORU8
 #endif
 };
 
-__declspec(align(16)) struct XMVECTORU32
+struct alignas(16) XMVECTORU32
 {
     union
     {
@@ -429,7 +442,7 @@ typedef const XMMATRIX& CXMMATRIX;
 #ifdef _XM_NO_INTRINSICS_
 struct XMMATRIX
 #else
-__declspec(align(16)) struct XMMATRIX
+struct alignas(16) XMMATRIX
 #endif
 {
 #ifdef _XM_NO_INTRINSICS_
@@ -512,7 +525,7 @@ struct XMFLOAT2
 };
 
 // 2D Vector; 32 bit floating point components aligned on a 16 byte boundary
-__declspec(align(16)) struct XMFLOAT2A : public XMFLOAT2
+struct alignas(16) XMFLOAT2A : public XMFLOAT2
 {
     XMFLOAT2A() = default;
 
@@ -584,7 +597,7 @@ struct XMFLOAT3
 };
 
 // 3D Vector; 32 bit floating point components aligned on a 16 byte boundary
-__declspec(align(16)) struct XMFLOAT3A : public XMFLOAT3
+struct alignas(16) XMFLOAT3A : public XMFLOAT3
 {
     XMFLOAT3A() = default;
 
@@ -659,7 +672,7 @@ struct XMFLOAT4
 };
 
 // 4D Vector; 32 bit floating point components aligned on a 16 byte boundary
-__declspec(align(16)) struct XMFLOAT4A : public XMFLOAT4
+struct alignas(16) XMFLOAT4A : public XMFLOAT4
 {
     XMFLOAT4A() = default;
 
@@ -789,7 +802,7 @@ struct XMFLOAT4X3
 };
 
 // 4x3 Row-major Matrix: 32 bit floating point components aligned on a 16 byte boundary
-__declspec(align(16)) struct XMFLOAT4X3A : public XMFLOAT4X3
+struct alignas(16) XMFLOAT4X3A : public XMFLOAT4X3
 {
     XMFLOAT4X3A() = default;
 
@@ -844,7 +857,7 @@ struct XMFLOAT3X4
 };
 
 // 3x4 Column-major Matrix: 32 bit floating point components aligned on a 16 byte boundary
-__declspec(align(16)) struct XMFLOAT3X4A : public XMFLOAT3X4
+struct alignas(16) XMFLOAT3X4A : public XMFLOAT3X4
 {
     XMFLOAT3X4A() = default;
 
@@ -900,7 +913,7 @@ struct XMFLOAT4X4
 };
 
 // 4x4 Matrix: 32 bit floating point components aligned on a 16 byte boundary
-__declspec(align(16)) struct XMFLOAT4X4A : public XMFLOAT4X4
+struct alignas(16) XMFLOAT4X4A : public XMFLOAT4X4
 {
     XMFLOAT4X4A() = default;
 
@@ -1410,7 +1423,7 @@ XMMATRIX    XM_CALLCONV     XMMatrixMultiplyTranspose(FXMMATRIX M1, CXMMATRIX M2
 XMMATRIX    XM_CALLCONV     XMMatrixTranspose(FXMMATRIX M);
 XMMATRIX    XM_CALLCONV     XMMatrixInverse(_Out_opt_ XMVECTOR* pDeterminant, _In_ FXMMATRIX M);
 XMVECTOR    XM_CALLCONV     XMMatrixDeterminant(FXMMATRIX M);
-_Success_(return)
+//_Success_(return)
 bool        XM_CALLCONV     XMMatrixDecompose(_Out_ XMVECTOR *outScale, _Out_ XMVECTOR *outRotQuat, _Out_ XMVECTOR *outTrans, _In_ FXMMATRIX M);
 
 XMMATRIX    XM_CALLCONV     XMMatrixIdentity();
@@ -1880,7 +1893,7 @@ template<uint32_t VSLeftRotateElements, uint32_t Select0, uint32_t Select1, uint
 // separate math routine it would be reloaded.
 
 #ifndef XMGLOBALCONST
-#define XMGLOBALCONST extern const __declspec(selectany)
+#define XMGLOBALCONST static const
 #endif
 
 XMGLOBALCONST XMVECTORF32 g_XMSinCoefficients0      = { { { -0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f } } };
