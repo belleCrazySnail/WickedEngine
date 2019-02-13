@@ -36,6 +36,13 @@ namespace wiGraphicsTypes
 		LINELIST,
 		PATCHLIST,
 	};
+    enum ACCESS_TYPE
+    {
+        ACCESS_TYPE_DISCARD,
+        ACCESS_TYPE_PRESERVE,
+        ACCESS_TYPE_CLEAR,
+        ACCESS_TYPE_NO_ACCESS,
+    };
 	enum COMPARISON_FUNC
 	{
 		COMPARISON_NEVER,
@@ -592,6 +599,35 @@ namespace wiGraphicsTypes
 			async_latency(0)
 		{}
 	};
+    struct DepthStencilValue
+    {
+        FLOAT Depth;
+        UINT8 Stencil;
+    };
+    struct ClearValue
+    {
+        union {
+            FLOAT Color[4];
+            DepthStencilValue DepthStencil;
+        };
+    };
+    struct AccessDesc
+    {
+        ACCESS_TYPE Type;
+        ClearValue Clear;
+    };
+    struct RenderTargetAccessDesc
+    {
+        AccessDesc BeginningAccess;
+        ACCESS_TYPE EndingAccess;
+    };
+    struct RenderPassDesc
+    {
+        UINT NumRenderTargets;
+        RenderTargetAccessDesc RenderTargets[8] = {};
+        RenderTargetAccessDesc Depth;
+        RenderTargetAccessDesc Stencil;
+    };
 	struct GraphicsPSODesc
 	{
 		VertexShader*			vs = nullptr;

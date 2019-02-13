@@ -1,6 +1,6 @@
 #include "wiJobSystem.h"
 #include "wiSpinLock.h"
-#include "wiBackLog.h"
+//#include "wiBackLog.h"
 #include "wiContainers.h"
 
 #include <atomic>
@@ -26,7 +26,7 @@ namespace wiJobSystem
 		auto numCores = std::thread::hardware_concurrency();
 
 		// Calculate the actual number of worker threads we want:
-		numThreads = max(1, numCores);
+        numThreads = std::max(1u, numCores);
 
 		for (uint32_t threadID = 0; threadID < numThreads; ++threadID)
 		{
@@ -76,7 +76,7 @@ namespace wiJobSystem
 
 		std::stringstream ss("");
 		ss << "wiJobSystem Initialized with [" << numCores << " cores] [" << numThreads << " threads]";
-		wiBackLog::post(ss.str().c_str());
+		//wiBackLog::post(ss.str().c_str());
 	}
 
 	// This little function will not let the system to be deadlocked while the main thread is waiting for something
@@ -122,7 +122,7 @@ namespace wiJobSystem
 
 				// Calculate the current group's offset into the jobs:
 				const uint32_t groupJobOffset = groupIndex * groupSize;
-				const uint32_t groupJobEnd = min(groupJobOffset + groupSize, jobCount);
+                const uint32_t groupJobEnd = std::min(groupJobOffset + groupSize, jobCount);
 
 				wiJobDispatchArgs args;
 				args.groupIndex = groupIndex;

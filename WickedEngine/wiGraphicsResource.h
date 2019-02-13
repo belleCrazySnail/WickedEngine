@@ -5,6 +5,7 @@
 #include "wiGraphicsDescriptors.h"
 
 #include <vector>
+#include <string>
 
 namespace wiGraphicsTypes
 {
@@ -23,6 +24,7 @@ namespace wiGraphicsTypes
 	{
 		BYTE* data;
 		size_t size;
+        std::string MetalName;
 		ShaderByteCode() :data(nullptr), size(0) {}
 		~ShaderByteCode() { SAFE_DELETE_ARRAY(data); }
 	};
@@ -228,14 +230,23 @@ namespace wiGraphicsTypes
 		bool IsValid() { return !resource.empty() && resource[0] != WI_NULL_HANDLE; }
 		GPUQueryDesc GetDesc() const { return desc; }
 
-		BOOL	result_passed;
+		bool	result_passed;
 		UINT64	result_passed_sample_count;
 		UINT64	result_timestamp;
 		UINT64	result_timestamp_frequency;
-		BOOL	result_disjoint;
+		bool	result_disjoint;
 	};
 
-
+    struct RenderPass : public GraphicsDeviceChild
+    {
+        wiCPUHandle resource = WI_NULL_HANDLE;
+        RenderPassDesc desc;
+        
+        const RenderPassDesc& GetDesc() const { return desc; }
+        
+        RenderPass();
+        ~RenderPass();
+    };
 	struct GraphicsPSO : public GraphicsDeviceChild
 	{
 		wiCPUHandle	pipeline;
