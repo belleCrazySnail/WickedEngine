@@ -33,12 +33,12 @@ namespace wiGraphicsTypes
 		virtual HRESULT CreateTexture2D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture2D *pTexture2D) = 0;
 		virtual HRESULT CreateTexture3D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture3D *pTexture3D);
 		virtual HRESULT CreateInputLayout(const VertexLayoutDesc *pInputElementDescs, UINT NumElements, const ShaderByteCode* shaderCode, VertexLayout *pInputLayout);
-		virtual HRESULT CreateVertexShader(const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader);
-		virtual HRESULT CreatePixelShader(const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader);
-		virtual HRESULT CreateGeometryShader(const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader);
-		virtual HRESULT CreateHullShader(const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader);
-		virtual HRESULT CreateDomainShader(const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader);
-		virtual HRESULT CreateComputeShader(const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader);
+        virtual HRESULT CreateVertexShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader);
+		virtual HRESULT CreatePixelShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader);
+		virtual HRESULT CreateGeometryShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader);
+		virtual HRESULT CreateHullShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader);
+		virtual HRESULT CreateDomainShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader);
+		virtual HRESULT CreateComputeShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader);
 		virtual HRESULT CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState);
 		virtual HRESULT CreateDepthStencilState(const DepthStencilStateDesc *pDepthStencilStateDesc, DepthStencilState *pDepthStencilState);
 		virtual HRESULT CreateRasterizerState(const RasterizerStateDesc *pRasterizerStateDesc, RasterizerState *pRasterizerState);

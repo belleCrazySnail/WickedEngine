@@ -485,7 +485,7 @@ namespace wiGraphicsTypes
         MTLRenderPipelineDescriptor* pipelineDesc = [[MTLRenderPipelineDescriptor alloc] init];
         if (pDesc->vs != nullptr)
         {
-            pipelineDesc.vertexFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->vs->code.MetalName.c_str()]];
+            pipelineDesc.vertexFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->vs->code.ShaderName.c_str()]];
         }
         if (pDesc->hs != nullptr)
         {
@@ -498,7 +498,7 @@ namespace wiGraphicsTypes
         }
         if (pDesc->ps != nullptr)
         {
-            pipelineDesc.fragmentFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->ps->code.MetalName.c_str()]];
+            pipelineDesc.fragmentFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->ps->code.ShaderName.c_str()]];
         }
         
 		// Input layout:
@@ -573,7 +573,7 @@ namespace wiGraphicsTypes
         MTLComputePipelineDescriptor *computeDesc = [[MTLComputePipelineDescriptor alloc] init];
 		if (pDesc->cs != nullptr)
 		{
-            computeDesc.computeFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->cs->code.MetalName.c_str()]];
+            computeDesc.computeFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->cs->code.ShaderName.c_str()]];
 		}
         computeDesc.threadGroupSizeIsMultipleOfThreadExecutionWidth = TRUE;
         NSError* error = nil;

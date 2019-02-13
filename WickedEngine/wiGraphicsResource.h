@@ -24,7 +24,7 @@ namespace wiGraphicsTypes
 	{
 		BYTE* data;
 		size_t size;
-        std::string MetalName;
+        std::string ShaderName;
 		ShaderByteCode() :data(nullptr), size(0) {}
 		~ShaderByteCode() { SAFE_DELETE_ARRAY(data); }
 	};

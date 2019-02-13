@@ -128,60 +128,66 @@ HRESULT GraphicsDevice::CreateInputLayout(const VertexLayoutDesc *pInputElementD
     
     return S_OK;
 }
-HRESULT GraphicsDevice::CreateVertexShader(const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader)
+HRESULT GraphicsDevice::CreateVertexShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader)
 {
     pVertexShader->Register(this);
     
+    pVertexShader->code.ShaderName = shaderName;
     pVertexShader->code.data = new BYTE[BytecodeLength];
     memcpy(pVertexShader->code.data, pShaderBytecode, BytecodeLength);
     pVertexShader->code.size = BytecodeLength;
     
     return (pVertexShader->code.data != nullptr && pVertexShader->code.size > 0 ? S_OK : E_FAIL);
 }
-HRESULT GraphicsDevice::CreatePixelShader(const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader)
+HRESULT GraphicsDevice::CreatePixelShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader)
 {
     pPixelShader->Register(this);
     
+    pPixelShader->code.ShaderName = shaderName;
     pPixelShader->code.data = new BYTE[BytecodeLength];
     memcpy(pPixelShader->code.data, pShaderBytecode, BytecodeLength);
     pPixelShader->code.size = BytecodeLength;
     
     return (pPixelShader->code.data != nullptr && pPixelShader->code.size > 0 ? S_OK : E_FAIL);
 }
-HRESULT GraphicsDevice::CreateGeometryShader(const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader)
+HRESULT GraphicsDevice::CreateGeometryShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader)
 {
     pGeometryShader->Register(this);
     
+    pGeometryShader->code.ShaderName = shaderName;
     pGeometryShader->code.data = new BYTE[BytecodeLength];
     memcpy(pGeometryShader->code.data, pShaderBytecode, BytecodeLength);
     pGeometryShader->code.size = BytecodeLength;
     
     return (pGeometryShader->code.data != nullptr && pGeometryShader->code.size > 0 ? S_OK : E_FAIL);
 }
-HRESULT GraphicsDevice::CreateHullShader(const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader)
+HRESULT GraphicsDevice::CreateHullShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader)
 {
     pHullShader->Register(this);
     
+    pHullShader->code.ShaderName = shaderName;
     pHullShader->code.data = new BYTE[BytecodeLength];
     memcpy(pHullShader->code.data, pShaderBytecode, BytecodeLength);
     pHullShader->code.size = BytecodeLength;
     
     return (pHullShader->code.data != nullptr && pHullShader->code.size > 0 ? S_OK : E_FAIL);
 }
-HRESULT GraphicsDevice::CreateDomainShader(const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader)
+HRESULT GraphicsDevice::CreateDomainShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader)
 {
     pDomainShader->Register(this);
     
+    pDomainShader->code.ShaderName = shaderName;
     pDomainShader->code.data = new BYTE[BytecodeLength];
     memcpy(pDomainShader->code.data, pShaderBytecode, BytecodeLength);
     pDomainShader->code.size = BytecodeLength;
     
     return (pDomainShader->code.data != nullptr && pDomainShader->code.size > 0 ? S_OK : E_FAIL);
 }
-HRESULT GraphicsDevice::CreateComputeShader(const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader)
+HRESULT GraphicsDevice::CreateComputeShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader)
 {
     pComputeShader->Register(this);
     
+    pComputeShader->code.ShaderName = shaderName;
     pComputeShader->code.data = new BYTE[BytecodeLength];
     memcpy(pComputeShader->code.data, pShaderBytecode, BytecodeLength);
     pComputeShader->code.size = BytecodeLength;
