@@ -44,7 +44,10 @@ namespace wiGraphicsTypes
             case ACCESS_TYPE_DISCARD:
                 return MTLLoadActionDontCare;
                 break;
-                
+            case ACCESS_TYPE_PRESERVE:
+                return MTLLoadActionLoad;
+            case ACCESS_TYPE_CLEAR:
+                return MTLLoadActionClear;
             default:
                 break;
         }
@@ -57,7 +60,8 @@ namespace wiGraphicsTypes
             case ACCESS_TYPE_DISCARD:
                 return MTLStoreActionDontCare;
                 break;
-                
+            case ACCESS_TYPE_PRESERVE:
+                return MTLStoreActionStore;
             default:
                 break;
         }
@@ -73,9 +77,309 @@ namespace wiGraphicsTypes
 		case FORMAT_UNKNOWN:
 			return MTLPixelFormatInvalid;
 			break;
+        case FORMAT_R32G32B32A32_TYPELESS:
+            return MTLPixelFormatRGBA32Uint;
+            break;
+        case FORMAT_R32G32B32A32_FLOAT:
+            return MTLPixelFormatRGBA32Float;
+            break;
+        case FORMAT_R32G32B32A32_UINT:
+            return MTLPixelFormatRGBA32Uint;
+            break;
+        case FORMAT_R32G32B32A32_SINT:
+            return MTLPixelFormatRGBA32Sint;
+            break;
+        //these rgb 3 channel format didn't have a corresponding format in metal
+        case FORMAT_R32G32B32_TYPELESS:
+        case FORMAT_R32G32B32_FLOAT:
+        case FORMAT_R32G32B32_UINT:
+        case FORMAT_R32G32B32_SINT:
+            return MTLPixelFormatInvalid;
+            break;
+        case FORMAT_R16G16B16A16_TYPELESS:
+            return MTLPixelFormatRGBA16Uint;
+            break;
+        case FORMAT_R16G16B16A16_FLOAT:
+            return MTLPixelFormatRGBA16Float;
+            break;
+        case FORMAT_R16G16B16A16_UNORM:
+            return MTLPixelFormatRGBA16Unorm;
+            break;
+        case FORMAT_R16G16B16A16_UINT:
+            return MTLPixelFormatRGBA16Uint;
+            break;
+        case FORMAT_R16G16B16A16_SNORM:
+            return MTLPixelFormatRGBA16Snorm;
+            break;
+        case FORMAT_R16G16B16A16_SINT:
+            return MTLPixelFormatRGBA16Sint;
+            break;
+        case FORMAT_R32G32_TYPELESS:
+            return MTLPixelFormatRG32Uint;
+            break;
+        case FORMAT_R32G32_FLOAT:
+            return MTLPixelFormatRG32Float;
+            break;
+        case FORMAT_R32G32_UINT:
+            return MTLPixelFormatRG32Uint;
+            break;
+        case FORMAT_R32G32_SINT:
+            return MTLPixelFormatRG32Sint;
+            break;
+        //strange dx format
+        case FORMAT_R32G8X24_TYPELESS:
+        case FORMAT_D32_FLOAT_S8X24_UINT:
+        case FORMAT_R32_FLOAT_X8X24_TYPELESS:
+        case FORMAT_X32_TYPELESS_G8X24_UINT:
+            return MTLPixelFormatInvalid;
+            break;
+        case FORMAT_R10G10B10A2_TYPELESS:
+            return MTLPixelFormatRGB10A2Uint;
+            break;
+        case FORMAT_R10G10B10A2_UNORM:
+            return MTLPixelFormatRGB10A2Unorm;
+            break;
+        case FORMAT_R10G10B10A2_UINT:
+            return MTLPixelFormatRGB10A2Uint;
+            break;
+        case FORMAT_R11G11B10_FLOAT:
+            return MTLPixelFormatRG11B10Float;
+            break;
+        case FORMAT_R8G8B8A8_TYPELESS:
+            return MTLPixelFormatRGBA8Uint;
+            break;
+        case FORMAT_R8G8B8A8_UNORM:
+            return MTLPixelFormatRGBA8Unorm;
+            break;
+        case FORMAT_R8G8B8A8_UNORM_SRGB:
+            return MTLPixelFormatRGBA8Unorm_sRGB;
+            break;
+        case FORMAT_R8G8B8A8_UINT:
+            return MTLPixelFormatRGBA8Uint;
+            break;
+        case FORMAT_R8G8B8A8_SNORM:
+            return MTLPixelFormatRGBA8Snorm;
+            break;
+        case FORMAT_R8G8B8A8_SINT:
+            return MTLPixelFormatRGBA8Sint;
+            break;
+        case FORMAT_R16G16_TYPELESS:
+            return MTLPixelFormatRG16Uint;
+            break;
+        case FORMAT_R16G16_FLOAT:
+            return MTLPixelFormatRG16Float;
+            break;
+        case FORMAT_R16G16_UNORM:
+            return MTLPixelFormatRG16Unorm;
+            break;
+        case FORMAT_R16G16_UINT:
+            return MTLPixelFormatRG16Uint;
+            break;
+        case FORMAT_R16G16_SNORM:
+            return MTLPixelFormatRG16Snorm;
+            break;
+        case FORMAT_R16G16_SINT:
+            return MTLPixelFormatRG16Sint;
+            break;
+        case FORMAT_R32_TYPELESS:
+            return MTLPixelFormatR32Uint;
+            break;
+        case FORMAT_D32_FLOAT:
+            return MTLPixelFormatDepth32Float;
+            break;
+        case FORMAT_R32_FLOAT:
+            return MTLPixelFormatR32Float;
+            break;
+        case FORMAT_R32_UINT:
+            return MTLPixelFormatR32Uint;
+            break;
+        case FORMAT_R32_SINT:
+            return MTLPixelFormatR32Sint;
+            break;
+        case FORMAT_R24G8_TYPELESS:
+        case FORMAT_D24_UNORM_S8_UINT:
+        case FORMAT_R24_UNORM_X8_TYPELESS:
+        case FORMAT_X24_TYPELESS_G8_UINT:
+            return MTLPixelFormatDepth24Unorm_Stencil8;
+            break;
+        case FORMAT_R8G8_TYPELESS:
+            return MTLPixelFormatRG8Uint;
+            break;
+        case FORMAT_R8G8_UNORM:
+            return MTLPixelFormatRG8Unorm;
+            break;
+        case FORMAT_R8G8_UINT:
+            return MTLPixelFormatRG8Uint;
+            break;
+        case FORMAT_R8G8_SNORM:
+            return MTLPixelFormatRG8Snorm;
+            break;
+        case FORMAT_R8G8_SINT:
+            return MTLPixelFormatRG8Sint;
+            break;
+        case FORMAT_R16_TYPELESS:
+            return MTLPixelFormatR16Uint;
+            break;
+        case FORMAT_R16_FLOAT:
+            return MTLPixelFormatR16Float;
+            break;
+        case FORMAT_D16_UNORM:
+            return MTLPixelFormatDepth16Unorm;
+            break;
+        case FORMAT_R16_UNORM:
+            return MTLPixelFormatR16Unorm;
+            break;
+        case FORMAT_R16_UINT:
+            return MTLPixelFormatR16Uint;
+            break;
+        case FORMAT_R16_SNORM:
+            return MTLPixelFormatR16Snorm;
+            break;
+        case FORMAT_R16_SINT:
+            return MTLPixelFormatR16Sint;
+            break;
+        case FORMAT_R8_TYPELESS:
+            return MTLPixelFormatR8Uint;
+            break;
+        case FORMAT_R8_UNORM:
+            return MTLPixelFormatR8Unorm;
+            break;
+        case FORMAT_R8_UINT:
+            return MTLPixelFormatR8Uint;
+            break;
+        case FORMAT_R8_SNORM:
+            return MTLPixelFormatR8Snorm;
+            break;
+        case FORMAT_R8_SINT:
+            return MTLPixelFormatR8Sint;
+            break;
+        case FORMAT_A8_UNORM:
+            return MTLPixelFormatA8Unorm;
+            break;
+        case FORMAT_R1_UNORM:
+            return MTLPixelFormatInvalid;
+            break;
+        case FORMAT_R9G9B9E5_SHAREDEXP:
+            return MTLPixelFormatRGB9E5Float;
+            break;
+        case FORMAT_R8G8_B8G8_UNORM:
+            return MTLPixelFormatBGRG422;
+            break;
+        case FORMAT_G8R8_G8B8_UNORM:
+            return MTLPixelFormatGBGR422;
+            break;
+        case FORMAT_BC1_TYPELESS:
+        case FORMAT_BC1_UNORM:
+            return MTLPixelFormatBC1_RGBA;
+            break;
+        case FORMAT_BC1_UNORM_SRGB:
+            return MTLPixelFormatBC1_RGBA_sRGB;
+            break;
+        case FORMAT_BC2_TYPELESS:
+        case FORMAT_BC2_UNORM:
+            return MTLPixelFormatBC2_RGBA;
+            break;
+        case FORMAT_BC2_UNORM_SRGB:
+            return MTLPixelFormatBC2_RGBA_sRGB;
+            break;
+        case FORMAT_BC3_TYPELESS:
+        case FORMAT_BC3_UNORM:
+            return MTLPixelFormatBC3_RGBA;
+            break;
+        case FORMAT_BC3_UNORM_SRGB:
+            return MTLPixelFormatBC3_RGBA_sRGB;
+            break;
+        case FORMAT_BC4_TYPELESS:
+        case FORMAT_BC4_UNORM:
+            return MTLPixelFormatBC4_RUnorm;
+            break;
+        case FORMAT_BC4_SNORM:
+            return MTLPixelFormatBC4_RSnorm;
+            break;
+        case FORMAT_BC5_TYPELESS:
+        case FORMAT_BC5_UNORM:
+            return MTLPixelFormatBC5_RGUnorm;
+            break;
+        case FORMAT_BC5_SNORM:
+            return MTLPixelFormatBC5_RGSnorm;
+            break;
+        case FORMAT_B5G6R5_UNORM:
+#if TARGET_OS_OSX
+            return MTLPixelFormatInvalid;
+#else
+            return MTLPixelFormatB5G6R5Unorm;
+#endif
+            break;
+        case FORMAT_B5G5R5A1_UNORM:
+#if TARGET_OS_OSX
+            return MTLPixelFormatInvalid;
+#else
+            return MTLPixelFormatA1BGR5Unorm;
+#endif
+            break;
+        case FORMAT_B8G8R8A8_UNORM:
+        case FORMAT_B8G8R8X8_UNORM:
+            return MTLPixelFormatBGRA8Unorm;
+            break;
+        case FORMAT_R10G10B10_XR_BIAS_A2_UNORM:
+            return MTLPixelFormatBGR10A2Unorm;
+            break;
+        case FORMAT_B8G8R8A8_TYPELESS:
+            return MTLPixelFormatBGRA8Unorm;
+            break;
+        case FORMAT_B8G8R8A8_UNORM_SRGB:
+            return MTLPixelFormatBGRA8Unorm_sRGB;
+            break;
+        case FORMAT_B8G8R8X8_TYPELESS:
+            return MTLPixelFormatBGRA8Unorm;
+            break;
+        case FORMAT_B8G8R8X8_UNORM_SRGB:
+            return MTLPixelFormatBGRA8Unorm_sRGB;
+            break;
+        case FORMAT_BC6H_TYPELESS:
+        case FORMAT_BC6H_UF16:
+            return MTLPixelFormatBC6H_RGBUfloat;
+            break;
+        case FORMAT_BC6H_SF16:
+            return MTLPixelFormatBC6H_RGBFloat;
+            break;
+        case FORMAT_BC7_TYPELESS:
+        case FORMAT_BC7_UNORM:
+            return MTLPixelFormatBC7_RGBAUnorm;
+            break;
+        case FORMAT_BC7_UNORM_SRGB:
+            return MTLPixelFormatBC7_RGBAUnorm_sRGB;
+            break;
+        case FORMAT_AYUV:
+        case FORMAT_Y410:
+        case FORMAT_Y416:
+        case FORMAT_NV12:
+        case FORMAT_P010:
+        case FORMAT_P016:
+        case FORMAT_420_OPAQUE:
+        case FORMAT_YUY2:
+        case FORMAT_Y210:
+        case FORMAT_Y216:
+        case FORMAT_NV11:
+        case FORMAT_AI44:
+        case FORMAT_IA44:
+        case FORMAT_P8:
+        case FORMAT_A8P8:
+            return MTLPixelFormatInvalid;
+            break;
+        case FORMAT_B4G4R4A4_UNORM:
+#if TARGET_OS_OSX
+            return MTLPixelFormatInvalid;
+#else
+            return MTLPixelFormatABGR4Unorm;
+#endif
+            break;
+        case FORMAT_FORCE_UINT:
+            return MTLPixelFormatInvalid;
+            break;
         default:
             break;
-		}
+        }
 		return MTLPixelFormatInvalid;
 	}
     inline MTLVertexFormat _ConvertVertexFormat(FORMAT value)
@@ -86,6 +390,126 @@ namespace wiGraphicsTypes
         {
             case FORMAT_UNKNOWN:
                 return MTLVertexFormatInvalid;
+                break;
+            case FORMAT_R32G32B32A32_FLOAT:
+                return MTLVertexFormatFloat4;
+                break;
+            case FORMAT_R32G32B32A32_UINT:
+                return MTLVertexFormatUInt4;
+                break;
+            case FORMAT_R32G32B32A32_SINT:
+                return MTLVertexFormatInt4;
+                break;
+            case FORMAT_R32G32B32_FLOAT:
+                return MTLVertexFormatFloat3;
+                break;
+            case FORMAT_R32G32B32_UINT:
+                return MTLVertexFormatUInt3;
+                break;
+            case FORMAT_R32G32B32_SINT:
+                return MTLVertexFormatInt3;
+                break;
+            case FORMAT_R16G16B16A16_FLOAT:
+                return MTLVertexFormatHalf4;
+                break;
+            case FORMAT_R16G16B16A16_UNORM:
+                return MTLVertexFormatUShort4Normalized;
+                break;
+            case FORMAT_R16G16B16A16_UINT:
+                return MTLVertexFormatUShort4;
+                break;
+            case FORMAT_R16G16B16A16_SNORM:
+                return MTLVertexFormatShort4Normalized;
+                break;
+            case FORMAT_R16G16B16A16_SINT:
+                return MTLVertexFormatShort4;
+                break;
+            case FORMAT_R32G32_FLOAT:
+                return MTLVertexFormatFloat2;
+                break;
+            case FORMAT_R32G32_UINT:
+                return MTLVertexFormatUInt2;
+                break;
+            case FORMAT_R32G32_SINT:
+                return MTLVertexFormatInt2;
+                break;
+            case FORMAT_R10G10B10A2_UINT:
+                return MTLVertexFormatUInt1010102Normalized;
+                break;
+            case FORMAT_R8G8B8A8_UNORM:
+                return MTLVertexFormatUChar4Normalized;
+                break;
+            case FORMAT_R8G8B8A8_UINT:
+                return MTLVertexFormatUChar4;
+                break;
+            case FORMAT_R8G8B8A8_SNORM:
+                return MTLVertexFormatChar4Normalized;
+                break;
+            case FORMAT_R8G8B8A8_SINT:
+                return MTLVertexFormatChar4;
+                break;
+            case FORMAT_R16G16_FLOAT:
+                return MTLVertexFormatHalf2;
+                break;
+            case FORMAT_R16G16_UNORM:
+                return MTLVertexFormatUShort2Normalized;
+                break;
+            case FORMAT_R16G16_UINT:
+                return MTLVertexFormatUShort2;
+                break;
+            case FORMAT_R16G16_SNORM:
+                return MTLVertexFormatShort2Normalized;
+                break;
+            case FORMAT_R16G16_SINT:
+                return MTLVertexFormatShort2;
+                break;
+            case FORMAT_R32_FLOAT:
+                return MTLVertexFormatFloat;
+                break;
+            case FORMAT_R32_UINT:
+                return MTLVertexFormatUInt;
+                break;
+            case FORMAT_R32_SINT:
+                return MTLVertexFormatInt;
+                break;
+            case FORMAT_R8G8_UNORM:
+                return MTLVertexFormatUChar2Normalized;
+                break;
+            case FORMAT_R8G8_UINT:
+                return MTLVertexFormatUChar2;
+                break;
+            case FORMAT_R8G8_SNORM:
+                return MTLVertexFormatChar2Normalized;
+                break;
+            case FORMAT_R8G8_SINT:
+                return MTLVertexFormatChar2;
+                break;
+            case FORMAT_R16_FLOAT:
+                return MTLVertexFormatHalf;
+                break;
+            case FORMAT_R16_UNORM:
+                return MTLVertexFormatUShortNormalized;
+                break;
+            case FORMAT_R16_UINT:
+                return MTLVertexFormatUShort;
+                break;
+            case FORMAT_R16_SNORM:
+                return MTLVertexFormatShortNormalized;
+                break;
+            case FORMAT_R16_SINT:
+                return MTLVertexFormatShort;
+                break;
+            case FORMAT_R8_UNORM:
+                return MTLVertexFormatUCharNormalized;
+                break;
+            case FORMAT_R8_UINT:
+                return MTLVertexFormatUChar;
+                break;
+            case FORMAT_R8_SNORM:
+                return MTLVertexFormatCharNormalized;
+                break;
+            case FORMAT_R8_SINT:
+                return MTLVertexFormatChar;
                 break;
             default:
                 break;
@@ -99,9 +523,28 @@ namespace wiGraphicsTypes
 		case COMPARISON_NEVER:
 			return MTLCompareFunctionNever;
 			break;
-		default:
-			break;
-		}
+        case COMPARISON_LESS:
+            return MTLCompareFunctionLess;
+            break;
+        case COMPARISON_EQUAL:
+            return MTLCompareFunctionEqual;
+            break;
+        case COMPARISON_LESS_EQUAL:
+            return MTLCompareFunctionLessEqual;
+            break;
+        case COMPARISON_GREATER:
+            return MTLCompareFunctionGreater;
+            break;
+        case COMPARISON_NOT_EQUAL:
+            return MTLCompareFunctionNotEqual;
+            break;
+        case COMPARISON_GREATER_EQUAL:
+            return MTLCompareFunctionGreaterEqual;
+            break;
+        case COMPARISON_ALWAYS:
+            return MTLCompareFunctionAlways;
+            break;
+        }
 		return MTLCompareFunctionNever;
 	}
 	inline MTLBlendFactor _ConvertBlend(BLEND value)
@@ -111,9 +554,57 @@ namespace wiGraphicsTypes
 		case BLEND_ZERO:
 			return MTLBlendFactorZero;
 			break;
-		default:
-			break;
-		}
+        case BLEND_ONE:
+            return MTLBlendFactorOne;
+            break;
+        case BLEND_SRC_COLOR:
+            return MTLBlendFactorSourceColor;
+            break;
+        case BLEND_INV_SRC_COLOR:
+            return MTLBlendFactorOneMinusSourceColor;
+            break;
+        case BLEND_SRC_ALPHA:
+            return MTLBlendFactorSourceAlpha;
+            break;
+        case BLEND_INV_SRC_ALPHA:
+            return MTLBlendFactorOneMinusSourceAlpha;
+            break;
+        case BLEND_DEST_ALPHA:
+            return MTLBlendFactorDestinationAlpha;
+            break;
+        case BLEND_INV_DEST_ALPHA:
+            return MTLBlendFactorOneMinusDestinationAlpha;
+            break;
+        case BLEND_DEST_COLOR:
+            return MTLBlendFactorDestinationColor;
+            break;
+        case BLEND_INV_DEST_COLOR:
+            return MTLBlendFactorOneMinusDestinationColor;
+            break;
+        case BLEND_SRC_ALPHA_SAT:
+            return MTLBlendFactorSourceAlphaSaturated;
+            break;
+        case BLEND_BLEND_FACTOR:
+            return MTLBlendFactorBlendColor;
+            break;
+        case BLEND_INV_BLEND_FACTOR:
+            return MTLBlendFactorOneMinusBlendColor;
+            break;
+        case BLEND_SRC1_COLOR:
+            return MTLBlendFactorSource1Color;
+            break;
+        case BLEND_INV_SRC1_COLOR:
+            return MTLBlendFactorOneMinusSource1Color;
+            break;
+        case BLEND_SRC1_ALPHA:
+            return MTLBlendFactorSource1Alpha;
+            break;
+        case BLEND_INV_SRC1_ALPHA:
+            return MTLBlendFactorOneMinusSource1Alpha;
+            break;
+        default:
+            break;
+        }
 		return MTLBlendFactorZero;
 	}
 	inline MTLBlendOperation _ConvertBlendOp(BLEND_OP value)
@@ -123,9 +614,21 @@ namespace wiGraphicsTypes
 		case BLEND_OP_ADD:
 			return MTLBlendOperationAdd;
 			break;
-		default:
-			break;
-		}
+        case BLEND_OP_SUBTRACT:
+            return MTLBlendOperationSubtract;
+            break;
+        case BLEND_OP_REV_SUBTRACT:
+            return MTLBlendOperationReverseSubtract;
+            break;
+        case BLEND_OP_MIN:
+            return MTLBlendOperationMin;
+            break;
+        case BLEND_OP_MAX:
+            return MTLBlendOperationMax;
+            break;
+        default:
+            break;
+        }
 		return MTLBlendOperationAdd;
 	}
     inline MTLVertexStepFunction _ConvertInputClassification(INPUT_CLASSIFICATION value)
@@ -148,11 +651,23 @@ namespace wiGraphicsTypes
 		switch (value)
 		{
 		case TEXTURE_ADDRESS_WRAP:
-			return MTLSamplerAddressModeClampToEdge;
+            return MTLSamplerAddressModeRepeat;
 			break;
-		default:
-			break;
-		}
+        case TEXTURE_ADDRESS_MIRROR:
+            return MTLSamplerAddressModeMirrorRepeat;
+            break;
+        case TEXTURE_ADDRESS_CLAMP:
+            return MTLSamplerAddressModeClampToEdge;
+            break;
+        case TEXTURE_ADDRESS_BORDER:
+            return MTLSamplerAddressModeClampToBorderColor;
+            break;
+        case TEXTURE_ADDRESS_MIRROR_ONCE:
+            return MTLSamplerAddressModeMirrorClampToEdge;
+            break;
+        default:
+            break;
+        }
 		return MTLSamplerAddressModeClampToEdge;
 	}
     
