@@ -785,20 +785,13 @@ namespace wiGraphicsTypes
 	{
 		pBuffer->Register(this);
 		pBuffer->desc = *pDesc;
-#if TARGET_OS_IOS
-        // Statically sized
-        static const size_t alignment = 16;
-#else
-        static const size_t alignment = 256;
-#endif
-        UINT64 alignedSize = Align(pDesc->ByteWidth, alignment);
         MTLResourceOptions option = MTLResourceStorageModeShared;
         id <MTLBuffer> buffer = nil;
         if (pInitialData != nullptr)
-            buffer = [_device newBufferWithBytes:pInitialData->pSysMem length:alignedSize options:option];
+            buffer = [_device newBufferWithBytes:pInitialData->pSysMem length:pDesc->ByteWidth options:option];
         else
-            buffer = [_device newBufferWithLength:alignedSize options:option];
-        pBuffer->resource = (wiCPUHandle)buffer;
+            buffer = [_device newBufferWithLength:pDesc->ByteWidth options:option];
+        pBuffer->resource = RETAIN_RES(buffer);
 		return S_OK;
 	}
     
@@ -826,8 +819,9 @@ namespace wiGraphicsTypes
 		{
 			texDesc.usage |= MTLTextureUsageRenderTarget;
 		}
+        texDesc.storageMode = MTLStorageModePrivate;
         id <MTLTexture> mtlTex = [_device newTextureWithDescriptor:texDesc];
-        pTexture2D->resource = (wiCPUHandle)mtlTex;
+        pTexture2D->resource = RETAIN_RES(mtlTex);
 
 		// Issue data copy on request:
 		if (pInitialData != nullptr)
@@ -837,9 +831,9 @@ namespace wiGraphicsTypes
                 {texDesc.width, texDesc.height, 1} // MTLSize
             };
             [mtlTex replaceRegion:region mipmapLevel:0 withBytes:pInitialData->pSysMem bytesPerRow:pInitialData->SysMemPitch];
-            id <MTLBlitCommandEncoder> blitEnc = [_commandBuffer blitCommandEncoder];
-            [blitEnc generateMipmapsForTexture:mtlTex];
-            [blitEnc endEncoding];
+//            id <MTLBlitCommandEncoder> blitEnc = [_commandBuffer blitCommandEncoder];
+//            [blitEnc generateMipmapsForTexture:mtlTex];
+//            [blitEnc endEncoding];
 		}
 
 		return S_OK;
@@ -975,10 +969,10 @@ namespace wiGraphicsTypes
 		samplerDesc.compareFunction = _ConvertComparisonFunc(pSamplerDesc->ComparisonFunc);
 		samplerDesc.lodMinClamp = pSamplerDesc->MinLOD;
 		samplerDesc.lodMaxClamp = pSamplerDesc->MaxLOD;
-        //samplerDesc.borderColor = MTLSamplerBorderColorTransparentBlack;
+        samplerDesc.borderColor = MTLSamplerBorderColorTransparentBlack;
 		samplerDesc.normalizedCoordinates = FALSE;
         id <MTLSamplerState> sam_state = [_device newSamplerStateWithDescriptor:samplerDesc];
-        pSamplerState->resource = (wiCPUHandle)sam_state;
+        pSamplerState->resource = RETAIN_RES(sam_state);
 
 		return S_OK;
 	}
@@ -1072,7 +1066,7 @@ namespace wiGraphicsTypes
 		}
         NSError* error = nil;
         id <MTLRenderPipelineState> mtl_pipeline = [_device newRenderPipelineStateWithDescriptor:pipelineDesc error:&error];
-        pso->pipeline = (wiCPUHandle)mtl_pipeline;
+        pso->pipeline = RETAIN_RES(mtl_pipeline);
 
 		return S_OK;
 	}

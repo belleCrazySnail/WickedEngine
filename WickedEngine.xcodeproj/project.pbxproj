@@ -75,6 +75,24 @@
 		6853C2D0221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2CD221584D9000F7B58 /* wiFFTGenerator.cpp */; };
 		6853C2D22215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2D12215854B000F7B58 /* wiSceneSystem_Serializers.cpp */; };
 		6853C2D32215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2D12215854B000F7B58 /* wiSceneSystem_Serializers.cpp */; };
+		6853C2F22215E0CF000F7B58 /* RenderPath3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E22215E0CE000F7B58 /* RenderPath3D.cpp */; };
+		6853C2F32215E0CF000F7B58 /* RenderPath3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E22215E0CE000F7B58 /* RenderPath3D.cpp */; };
+		6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E32215E0CE000F7B58 /* RenderPath3D_Forward.cpp */; };
+		6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E32215E0CE000F7B58 /* RenderPath3D_Forward.cpp */; };
+		6853C2F62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E52215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp */; };
+		6853C2F72215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E52215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp */; };
+		6853C2F82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp */; };
+		6853C2F92215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2E82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp */; };
+		6853C2FA2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2EA2215E0CF000F7B58 /* RenderPath2D.cpp */; };
+		6853C2FB2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2EA2215E0CF000F7B58 /* RenderPath2D.cpp */; };
+		6853C2FC2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2EE2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp */; };
+		6853C2FD2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2EE2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp */; };
+		6853C2FE2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2EF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp */; };
+		6853C2FF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2EF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp */; };
+		6853C3002215E0CF000F7B58 /* RenderPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2F02215E0CF000F7B58 /* RenderPath.cpp */; };
+		6853C3012215E0CF000F7B58 /* RenderPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2F02215E0CF000F7B58 /* RenderPath.cpp */; };
+		6853C3082215E2D1000F7B58 /* wiFadeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */; };
+		6853C3092215E2D1000F7B58 /* wiFadeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */; };
 		685F8BCC2209C30800A516B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BCB2209C30800A516B4 /* AppDelegate.m */; };
 		685F8BCF2209C30800A516B4 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BCE2209C30800A516B4 /* GameViewController.m */; };
 		685F8BD22209C30800A516B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685F8BD02209C30800A516B4 /* Main.storyboard */; };
@@ -175,6 +193,24 @@
 		6853C2CD221584D9000F7B58 /* wiFFTGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiFFTGenerator.cpp; path = WickedEngine/wiFFTGenerator.cpp; sourceTree = "<group>"; };
 		6853C2CE221584D9000F7B58 /* wiFFTGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiFFTGenerator.h; path = WickedEngine/wiFFTGenerator.h; sourceTree = "<group>"; };
 		6853C2D12215854B000F7B58 /* wiSceneSystem_Serializers.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiSceneSystem_Serializers.cpp; path = WickedEngine/wiSceneSystem_Serializers.cpp; sourceTree = "<group>"; };
+		6853C2E22215E0CE000F7B58 /* RenderPath3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath3D.cpp; path = WickedEngine/RenderPath3D.cpp; sourceTree = "<group>"; };
+		6853C2E32215E0CE000F7B58 /* RenderPath3D_Forward.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath3D_Forward.cpp; path = WickedEngine/RenderPath3D_Forward.cpp; sourceTree = "<group>"; };
+		6853C2E42215E0CF000F7B58 /* RenderPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath.h; path = WickedEngine/RenderPath.h; sourceTree = "<group>"; };
+		6853C2E52215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath3D_TiledDeferred.cpp; path = WickedEngine/RenderPath3D_TiledDeferred.cpp; sourceTree = "<group>"; };
+		6853C2E62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath3D_TiledDeferred.h; path = WickedEngine/RenderPath3D_TiledDeferred.h; sourceTree = "<group>"; };
+		6853C2E72215E0CF000F7B58 /* RenderPath3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath3D.h; path = WickedEngine/RenderPath3D.h; sourceTree = "<group>"; };
+		6853C2E82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath3D_Deferred.cpp; path = WickedEngine/RenderPath3D_Deferred.cpp; sourceTree = "<group>"; };
+		6853C2E92215E0CF000F7B58 /* RenderPath3D_Deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath3D_Deferred.h; path = WickedEngine/RenderPath3D_Deferred.h; sourceTree = "<group>"; };
+		6853C2EA2215E0CF000F7B58 /* RenderPath2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath2D.cpp; path = WickedEngine/RenderPath2D.cpp; sourceTree = "<group>"; };
+		6853C2EB2215E0CF000F7B58 /* RenderPath3D_PathTracing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath3D_PathTracing.h; path = WickedEngine/RenderPath3D_PathTracing.h; sourceTree = "<group>"; };
+		6853C2EC2215E0CF000F7B58 /* RenderPath2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath2D.h; path = WickedEngine/RenderPath2D.h; sourceTree = "<group>"; };
+		6853C2ED2215E0CF000F7B58 /* RenderPath3D_Forward.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath3D_Forward.h; path = WickedEngine/RenderPath3D_Forward.h; sourceTree = "<group>"; };
+		6853C2EE2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath3D_TiledForward.cpp; path = WickedEngine/RenderPath3D_TiledForward.cpp; sourceTree = "<group>"; };
+		6853C2EF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath3D_PathTracing.cpp; path = WickedEngine/RenderPath3D_PathTracing.cpp; sourceTree = "<group>"; };
+		6853C2F02215E0CF000F7B58 /* RenderPath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RenderPath.cpp; path = WickedEngine/RenderPath.cpp; sourceTree = "<group>"; };
+		6853C2F12215E0CF000F7B58 /* RenderPath3D_TiledForward.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath3D_TiledForward.h; path = WickedEngine/RenderPath3D_TiledForward.h; sourceTree = "<group>"; };
+		6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiFadeManager.cpp; path = WickedEngine/wiFadeManager.cpp; sourceTree = "<group>"; };
+		6853C3072215E2D0000F7B58 /* wiFadeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiFadeManager.h; path = WickedEngine/wiFadeManager.h; sourceTree = "<group>"; };
 		685F8BBE2209C30600A516B4 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		685F8BBF2209C30600A516B4 /* Renderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		685F8BC02209C30600A516B4 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
@@ -251,7 +287,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6853C25E2214848E000F7B58 /* DX */ = {
+		6853C25E2214848E000F7B58 /* DXUtil */ = {
 			isa = PBXGroup;
 			children = (
 				6853C262221484A5000F7B58 /* DirectXMath.h */,
@@ -264,7 +300,7 @@
 				6853C26C221531AF000F7B58 /* DirectXCollision.h */,
 				6853C26D221531AF000F7B58 /* DirectXCollision.inl */,
 			);
-			name = DX;
+			name = DXUtil;
 			sourceTree = "<group>";
 		};
 		6853C2D4221586CD000F7B58 /* UI */ = {
@@ -272,6 +308,13 @@
 			children = (
 			);
 			name = UI;
+			sourceTree = "<group>";
+		};
+		6853C30A2215E468000F7B58 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Shaders;
 			sourceTree = "<group>";
 		};
 		685F8BB82209C30600A516B4 = {
@@ -347,7 +390,8 @@
 			isa = PBXGroup;
 			children = (
 				685F8C302209DF5D00A516B4 /* CommonInclude.h */,
-				6853C25E2214848E000F7B58 /* DX */,
+				6853C30A2215E468000F7B58 /* Shaders */,
+				6853C25E2214848E000F7B58 /* DXUtil */,
 				685F8C63220B545C00A516B4 /* Helpers */,
 				685F8C5E220B53CA00A516B4 /* System */,
 				685F8C2C2209DE7A00A516B4 /* Graphics */,
@@ -392,6 +436,22 @@
 		685F8C2D2209DE8100A516B4 /* High level interface */ = {
 			isa = PBXGroup;
 			children = (
+				6853C2F02215E0CF000F7B58 /* RenderPath.cpp */,
+				6853C2E42215E0CF000F7B58 /* RenderPath.h */,
+				6853C2EA2215E0CF000F7B58 /* RenderPath2D.cpp */,
+				6853C2EC2215E0CF000F7B58 /* RenderPath2D.h */,
+				6853C2E82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp */,
+				6853C2E92215E0CF000F7B58 /* RenderPath3D_Deferred.h */,
+				6853C2E32215E0CE000F7B58 /* RenderPath3D_Forward.cpp */,
+				6853C2ED2215E0CF000F7B58 /* RenderPath3D_Forward.h */,
+				6853C2EF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp */,
+				6853C2EB2215E0CF000F7B58 /* RenderPath3D_PathTracing.h */,
+				6853C2E52215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp */,
+				6853C2E62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.h */,
+				6853C2EE2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp */,
+				6853C2F12215E0CF000F7B58 /* RenderPath3D_TiledForward.h */,
+				6853C2E22215E0CE000F7B58 /* RenderPath3D.cpp */,
+				6853C2E72215E0CF000F7B58 /* RenderPath3D.h */,
 			);
 			name = "High level interface";
 			sourceTree = "<group>";
@@ -459,6 +519,8 @@
 		685F8C63220B545C00A516B4 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */,
+				6853C3072215E2D0000F7B58 /* wiFadeManager.h */,
 				6853C2BE22158142000F7B58 /* wiTimer.mm */,
 				6853C2BD22158142000F7B58 /* wiTimer.h */,
 				6853C2B6221580B9000F7B58 /* wiProfiler.cpp */,
@@ -611,6 +673,8 @@
 			files = (
 				6853C2CF221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
 				6853C2CB22158478000F7B58 /* wiSprite.cpp in Sources */,
+				6853C2FA2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
+				6853C2FE2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
 				685F8C61220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
 				6853C2D22215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
 				6853C23422143AE4000F7B58 /* wiArchive.cpp in Sources */,
@@ -624,14 +688,19 @@
 				6853C27C22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
 				6853C24D22144197000F7B58 /* wiBackLog.cpp in Sources */,
 				6853C29022153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
+				6853C3082215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BD82209C30800A516B4 /* main.m in Sources */,
 				6853C23622143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7E220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2BF22158143000F7B58 /* wiTimer.mm in Sources */,
+				6853C2FC2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				6853C2A02215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A622154123000F7B58 /* wiDepthTarget.cpp in Sources */,
+				6853C2F22215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				6853C27422153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				685F8C422209E0F400A516B4 /* wiGraphicsDevice.cpp in Sources */,
+				6853C2F82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
+				6853C3002215E0CF000F7B58 /* RenderPath.cpp in Sources */,
 				685F8BCC2209C30800A516B4 /* AppDelegate.m in Sources */,
 				6853C24F22144197000F7B58 /* wiHelper.cpp in Sources */,
 				6853C2AE22154C31000F7B58 /* wiCube.cpp in Sources */,
@@ -641,11 +710,13 @@
 				6853C27622153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				6853C2B9221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				685F8BED2209C30800A516B4 /* Shaders.metal in Sources */,
+				6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28622153EA2000F7B58 /* wiRenderer.cpp in Sources */,
 				6853C2C922158478000F7B58 /* wiLensFlare.cpp in Sources */,
 				6853C2A22215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				6853C29522154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				685F8C442209E0F400A516B4 /* wiGraphicsResource.cpp in Sources */,
+				6853C2F62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				6853C28822153EA2000F7B58 /* wiRenderTarget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -656,6 +727,8 @@
 			files = (
 				6853C2D0221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
 				6853C2CC22158478000F7B58 /* wiSprite.cpp in Sources */,
+				6853C2FB2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
+				6853C2FF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
 				685F8C62220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
 				6853C2D32215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
 				6853C23522143AE4000F7B58 /* wiArchive.cpp in Sources */,
@@ -669,14 +742,19 @@
 				6853C27D22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
 				6853C24E22144197000F7B58 /* wiBackLog.cpp in Sources */,
 				6853C29122153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
+				6853C3092215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BEA2209C30800A516B4 /* main.m in Sources */,
 				6853C23722143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7F220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2C022158143000F7B58 /* wiTimer.mm in Sources */,
+				6853C2FD2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				6853C2A12215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A722154123000F7B58 /* wiDepthTarget.cpp in Sources */,
+				6853C2F32215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				6853C27522153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				685F8BE12209C30800A516B4 /* AppDelegate.m in Sources */,
+				6853C2F92215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
+				6853C3012215E0CF000F7B58 /* RenderPath.cpp in Sources */,
 				685F8BEE2209C30800A516B4 /* Shaders.metal in Sources */,
 				6853C25022144197000F7B58 /* wiHelper.cpp in Sources */,
 				6853C2AF22154C31000F7B58 /* wiCube.cpp in Sources */,
@@ -686,11 +764,13 @@
 				6853C27722153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				6853C2BA221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				685F8C592209F50A00A516B4 /* wiGraphicsResource.cpp in Sources */,
+				6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28722153EA2000F7B58 /* wiRenderer.cpp in Sources */,
 				6853C2CA22158478000F7B58 /* wiLensFlare.cpp in Sources */,
 				6853C2A32215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				6853C29622154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				685F8C582209F50700A516B4 /* wiGraphicsDevice.cpp in Sources */,
+				6853C2F72215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				6853C28922153EA2000F7B58 /* wiRenderTarget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
