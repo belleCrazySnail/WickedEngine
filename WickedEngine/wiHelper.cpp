@@ -6,7 +6,11 @@
 #include "Utility/stb_image_write.h"
 
 #include <locale>
+#ifdef _WIN32
 #include <direct.h>
+#elif __APPLE__
+#include <unistd.h>
+#endif
 #include <chrono>
 #include <iomanip>
 #include <fstream>
@@ -66,29 +70,35 @@ namespace wiHelper
 	}
 
 	void messageBox(const std::string& msg, const std::string& caption){
-#ifndef WINSTORE_SUPPORT
+#ifdef _WIN32
 		MessageBoxA(wiWindowRegistration::GetRegisteredWindow(), msg.c_str(), caption.c_str(), 0);
-#else
+#elif WINSTORE_SUPPORT
 		wstring wmsg(msg.begin(), msg.end());
 		wstring wcaption(caption.begin(), caption.end());
 		Windows::UI::Popups::MessageDialog(ref new Platform::String(wmsg.c_str()), ref new Platform::String(wcaption.c_str())).ShowAsync();
+#elif __APPLE__
+        
 #endif
 	}
 
 	void screenshot(const std::string& name)
 	{
+#ifdef __APPLE__
+        
+#else
 		CreateDirectoryA("screenshots", 0);
+#endif
 		stringstream ss("");
 		if (name.length() <= 0)
 			ss << GetOriginalWorkingDirectory() << "screenshots/sc_" << getCurrentDateTimeAsString() << ".jpg";
 		else
 			ss << name;
 
-		bool result = saveTextureToFile(wiRenderer::GetDevice()->GetBackBuffer(), ss.str());
-		assert(result);
+        bool result = saveTextureToFile(wiRenderer::GetDevice()->GetBackBuffer(), ss.str());
+        assert(result);
 	}
 
-	bool saveTextureToFile(wiGraphicsTypes::Texture2D& texture, const string& fileName)
+	bool saveTextureToFile(const wiGraphicsTypes::Texture2D& texture, const string& fileName)
 	{
 		using namespace wiGraphicsTypes;
 
@@ -96,7 +106,7 @@ namespace wiHelper
 
 		device->WaitForGPU();
 
-		TextureDesc desc = texture.GetDesc();
+		const TextureDesc &desc = texture.GetDesc();
 		UINT data_count = desc.Width * desc.Height;
 		UINT data_stride = device->GetFormatStride(desc.Format);
 		UINT data_size = data_count * data_stride;
@@ -112,7 +122,7 @@ namespace wiHelper
 		HRESULT hr = device->CreateTexture2D(&staging_desc, nullptr, &stagingTex);
 		assert(SUCCEEDED(hr));
 
-		bool download_success = device->DownloadResource(&texture, &stagingTex, data.data(), GRAPHICSTHREAD_IMMEDIATE);
+		bool download_success = device->DownloadResource((GPUResource *)&texture, &stagingTex, data.data(), GRAPHICSTHREAD_IMMEDIATE);
 		assert(download_success);
 
 		return saveTextureToFile(data, desc, fileName);
@@ -182,15 +192,17 @@ namespace wiHelper
 	string getCurrentDateTimeAsString()
 	{
 		time_t t = std::time(nullptr);
-		struct tm time_info;
-		localtime_s(&time_info, &t);
+        struct tm *time_info = std::localtime(&t);
 		stringstream ss("");
-		ss << std::put_time(&time_info, "%d-%m-%Y %H-%M-%S");
+		ss << std::put_time(time_info, "%d-%m-%Y %H-%M-%S");
 		return ss.str();
 	}
 
 	string GetApplicationDirectory()
 	{
+#ifdef __APPLE__
+        return "";
+#else
 		static string __appDir;
 		static bool __initComplete = false;
 		if (!__initComplete)
@@ -202,6 +214,7 @@ namespace wiHelper
 			__initComplete = true;
 		}
 		return __appDir;
+#endif
 	}
 
 	string GetOriginalWorkingDirectory()
@@ -222,7 +235,7 @@ namespace wiHelper
 
 	void GetFilesInDirectory(std::vector<string>& out, const std::string& directory)
 	{
-#ifndef WINSTORE_SUPPORT
+#ifdef _WIN32
 		// WINDOWS
 		wstring wdirectory = wstring(directory.begin(), directory.end());
 		HANDLE dir;
@@ -340,7 +353,11 @@ namespace wiHelper
 	
 	void Sleep(float milliseconds)
 	{
+#ifdef __APPLE__
+        
+#else
 		::Sleep((DWORD)milliseconds);
+#endif
 	}
 
 	void Spin(float milliseconds)

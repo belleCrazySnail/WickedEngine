@@ -42,7 +42,7 @@ namespace wiFont_Internal
 	PixelShader			*pixelShader = nullptr;
 	GraphicsPSO			*PSO = nullptr;
 
-	atomic_bool initialized = false;
+	atomic_bool initialized(false);
 
 	std::unique_ptr<Texture2D> texture;
 

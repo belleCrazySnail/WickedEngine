@@ -2,11 +2,10 @@
 #include "wiMath.h"
 #include "wiTextureHelper.h"
 #include "wiResourceManager.h"
-#include "wiPhysicsEngine.h"
+//#include "wiPhysicsEngine.h"
 #include "wiArchive.h"
 #include "wiRenderer.h"
 #include "wiJobSystem.h"
-#include "wiSpinlock.h"
 
 #include <functional>
 #include <unordered_map>
@@ -333,7 +332,7 @@ namespace wiSceneSystem
 			for (size_t i = 0; i < vertices.size(); ++i)
 			{
 				const XMFLOAT3& pos = vertex_positions[i];
-				XMFLOAT3& nor = vertex_normals.empty() ? XMFLOAT3(1, 1, 1) : vertex_normals[i];
+				XMFLOAT3 nor = vertex_normals.empty() ? XMFLOAT3(1, 1, 1) : vertex_normals[i];
 				XMStoreFloat3(&nor, XMVector3Normalize(XMLoadFloat3(&nor)));
 				uint32_t subsetIndex = vertex_subsetindices[i];
 				vertices[i].FromFULL(pos, nor, subsetIndex);
@@ -925,7 +924,7 @@ namespace wiSceneSystem
 
 		RunAnimationUpdateSystem(animations, transforms, dt);
 
-		wiPhysicsEngine::RunPhysicsUpdateSystem(weather, armatures, transforms, meshes, objects, rigidbodies, softbodies, dt);
+//        wiPhysicsEngine::RunPhysicsUpdateSystem(weather, armatures, transforms, meshes, objects, rigidbodies, softbodies, dt);
 
 		RunTransformUpdateSystem(transforms);
 
@@ -1022,30 +1021,30 @@ namespace wiSceneSystem
 		// Entities are unique within a ComponentManager, so the most populated ComponentManager
 		//	will actually give us how many entities there are in the scene
 		size_t entityCount = 0;
-		entityCount = max(entityCount, names.GetCount());
-		entityCount = max(entityCount, layers.GetCount());
-		entityCount = max(entityCount, transforms.GetCount());
-		entityCount = max(entityCount, prev_transforms.GetCount());
-		entityCount = max(entityCount, hierarchy.GetCount());
-		entityCount = max(entityCount, materials.GetCount());
-		entityCount = max(entityCount, meshes.GetCount());
-		entityCount = max(entityCount, impostors.GetCount());
-		entityCount = max(entityCount, objects.GetCount());
-		entityCount = max(entityCount, aabb_objects.GetCount());
-		entityCount = max(entityCount, rigidbodies.GetCount());
-		entityCount = max(entityCount, softbodies.GetCount());
-		entityCount = max(entityCount, armatures.GetCount());
-		entityCount = max(entityCount, lights.GetCount());
-		entityCount = max(entityCount, aabb_lights.GetCount());
-		entityCount = max(entityCount, cameras.GetCount());
-		entityCount = max(entityCount, probes.GetCount());
-		entityCount = max(entityCount, aabb_probes.GetCount());
-		entityCount = max(entityCount, forces.GetCount());
-		entityCount = max(entityCount, decals.GetCount());
-		entityCount = max(entityCount, aabb_decals.GetCount());
-		entityCount = max(entityCount, animations.GetCount());
-		entityCount = max(entityCount, emitters.GetCount());
-		entityCount = max(entityCount, hairs.GetCount());
+        entityCount = std::max(entityCount, names.GetCount());
+		entityCount = std::max(entityCount, layers.GetCount());
+		entityCount = std::max(entityCount, transforms.GetCount());
+		entityCount = std::max(entityCount, prev_transforms.GetCount());
+		entityCount = std::max(entityCount, hierarchy.GetCount());
+		entityCount = std::max(entityCount, materials.GetCount());
+		entityCount = std::max(entityCount, meshes.GetCount());
+		entityCount = std::max(entityCount, impostors.GetCount());
+		entityCount = std::max(entityCount, objects.GetCount());
+		entityCount = std::max(entityCount, aabb_objects.GetCount());
+		entityCount = std::max(entityCount, rigidbodies.GetCount());
+		entityCount = std::max(entityCount, softbodies.GetCount());
+		entityCount = std::max(entityCount, armatures.GetCount());
+		entityCount = std::max(entityCount, lights.GetCount());
+		entityCount = std::max(entityCount, aabb_lights.GetCount());
+		entityCount = std::max(entityCount, cameras.GetCount());
+		entityCount = std::max(entityCount, probes.GetCount());
+		entityCount = std::max(entityCount, aabb_probes.GetCount());
+		entityCount = std::max(entityCount, forces.GetCount());
+		entityCount = std::max(entityCount, decals.GetCount());
+		entityCount = std::max(entityCount, aabb_decals.GetCount());
+		entityCount = std::max(entityCount, animations.GetCount());
+		entityCount = std::max(entityCount, emitters.GetCount());
+		entityCount = std::max(entityCount, hairs.GetCount());
 		return entityCount;
 	}
 
@@ -1442,7 +1441,7 @@ namespace wiSceneSystem
 					keyRight--;
 
 					// Left keyframe is just near right:
-					keyLeft = max(0, keyRight - 1);
+					keyLeft = std::max(0, keyRight - 1);
 				}
 
 				float left = sampler.keyframe_times[keyLeft];
@@ -1742,7 +1741,7 @@ namespace wiSceneSystem
 							softBody->_flags |= SoftBodyPhysicsComponent::SAFE_TO_REGISTER; // this will be registered as soft body in the next frame
 							softBody->worldMatrix = transform.world;
 
-							if (wiPhysicsEngine::IsEnabled() && softBody->physicsobject != nullptr)
+//                            if (wiPhysicsEngine::IsEnabled() && softBody->physicsobject != nullptr)
 							{
 								// If physics engine is enabled and this object was registered, it will update soft body vertices in world space, so after that they no longer need to be transformed:
 								object.transform_index = -1;
@@ -1804,7 +1803,7 @@ namespace wiSceneSystem
 			XMStoreFloat3(&decal.position, T);
 			XMFLOAT3 scale;
 			XMStoreFloat3(&scale, S);
-			decal.range = max(scale.x, max(scale.y, scale.z)) * 2;
+			decal.range = std::max(scale.x, std::max(scale.y, scale.z)) * 2;
 
 			AABB& aabb = aabb_decals[args.jobIndex];
 			aabb.createFromHalfWidth(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
@@ -1840,7 +1839,7 @@ namespace wiSceneSystem
 			XMMatrixDecompose(&S, &R, &T, W);
 			XMFLOAT3 scale;
 			XMStoreFloat3(&scale, S);
-			probe.range = max(scale.x, max(scale.y, scale.z)) * 2;
+			probe.range = std::max(scale.x, std::max(scale.y, scale.z)) * 2;
 
 			AABB& aabb = aabb_probes[args.jobIndex];
 			aabb.createFromHalfWidth(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));

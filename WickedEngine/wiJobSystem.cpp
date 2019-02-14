@@ -1,6 +1,6 @@
 #include "wiJobSystem.h"
 #include "wiSpinLock.h"
-//#include "wiBackLog.h"
+#include "wiBackLog.h"
 #include "wiContainers.h"
 
 #include <atomic>
@@ -76,7 +76,7 @@ namespace wiJobSystem
 
 		std::stringstream ss("");
 		ss << "wiJobSystem Initialized with [" << numCores << " cores] [" << numThreads << " threads]";
-		//wiBackLog::post(ss.str().c_str());
+        wiBackLog::post(ss.str().c_str());
 	}
 
 	// This little function will not let the system to be deadlocked while the main thread is waiting for something

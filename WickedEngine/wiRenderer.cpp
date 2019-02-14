@@ -25,7 +25,7 @@
 #include "ShaderInterop_TracedRendering.h"
 #include "ShaderInterop_BVH.h"
 #include "ShaderInterop_Utility.h"
-#include "wiWidget.h"
+//#include "wiWidget.h"
 #include "wiGPUSortLib.h"
 #include "wiAllocators.h"
 #include "wiGPUBVH.h"
@@ -35,8 +35,6 @@
 #include <algorithm>
 #include <unordered_set>
 #include <deque>
-
-#include <DirectXCollision.h>
 
 using namespace std;
 using namespace wiGraphicsTypes;
@@ -432,7 +430,7 @@ void ReloadShaders(const std::string& path)
 	wiLensFlare::LoadShaders();
 	wiOcean::LoadShaders();
 	CSFFT_512x512_Data_t::LoadShaders();
-	wiWidget::LoadShaders();
+//    wiWidget::LoadShaders();
 	wiGPUSortLib::LoadShaders();
 	wiGPUBVH::LoadShaders();
 }
@@ -1402,7 +1400,7 @@ void RenderMeshes(const RenderQueue& renderQueue, RENDERPASS renderPass, UINT re
 				float distance = batch.GetDistance();
 				float swapDistance = instance.impostorSwapDistance;
 				float fadeThreshold = instance.impostorFadeThresholdRadius;
-				dither = max(0, distance - swapDistance) / fadeThreshold;
+                dither = std::max(0.f, distance - swapDistance) / fadeThreshold;
 			}
 
 			if (dither > 0)
@@ -1693,7 +1691,7 @@ void RenderImpostors(const CameraComponent& camera, RENDERPASS renderPass, GRAPH
 					continue;
 				}
 
-				float dither = max(0, impostor.swapInDistance - distance) / impostor.fadeThresholdRadius;
+                float dither = std::max(0.f, impostor.swapInDistance - distance) / impostor.fadeThresholdRadius;
 
 				((volatile Instance*)instances.data)[drawableInstanceCount].Create(mat, XMFLOAT4((float)impostorID * impostorCaptureAngles * 3, 1, 1, 1), dither);
 
@@ -4225,7 +4223,7 @@ void OcclusionCulling_Read()
 
 			while (!device->QueryRead(&query, GRAPHICSTHREAD_IMMEDIATE)) {}
 
-			if (query.result_passed == TRUE)
+			if (query.result_passed == true)
 			{
 				object.occlusionHistory |= 1; // mark this frame as visible
 			}
@@ -6006,8 +6004,8 @@ void RefreshEnvProbes(GRAPHICSTHREAD threadID)
 				device->BindConstantBuffer(CS, constantBuffers[CBTYPE_FILTERENVMAP], CB_GETBINDSLOT(FilterEnvmapCB), threadID);
 
 				device->Dispatch(
-					max(1, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
-					max(1, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+                    std::max(1u, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+                    std::max(1u, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
 					6,
 					threadID);
 
@@ -6079,7 +6077,8 @@ void RefreshImpostors(GRAPHICSTHREAD threadID)
 			InstanceAtlas instanceAtlas;
 		};
 
-		for (size_t impostorID = 0; impostorID < min(maxImpostorCount, scene.impostors.GetCount()); ++impostorID)
+        size_t imp_count = std::min((size_t)maxImpostorCount, scene.impostors.GetCount());
+        for (size_t impostorID = 0; impostorID < imp_count; ++impostorID)
 		{
 			ImpostorComponent& impostor = scene.impostors[impostorID];
 			if (!impostor.IsDirty())
@@ -6625,8 +6624,8 @@ void GenerateMipChain(Texture2D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 			{
 				device->BindUAV(CS, texture, 0, threadID, i + 1);
 				device->BindResource(CS, texture, TEXSLOT_UNIQUE0, threadID, i);
-				desc.Width = max(1, desc.Width / 2);
-				desc.Height = max(1, desc.Height / 2);
+				desc.Width = std::max(1u, desc.Width / 2);
+				desc.Height = std::max(1u, desc.Height / 2);
 
 				GenerateMIPChainCB cb;
 				cb.outputResolution.x = desc.Width;
@@ -6636,8 +6635,8 @@ void GenerateMipChain(Texture2D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 				device->BindConstantBuffer(CS, constantBuffers[CBTYPE_MIPGEN], CB_GETBINDSLOT(GenerateMIPChainCB), threadID);
 
 				device->Dispatch(
-					max(1, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
-					max(1, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+					std::max(1u, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+					std::max(1u, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
 					6,
 					threadID);
 
@@ -6673,8 +6672,8 @@ void GenerateMipChain(Texture2D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 			{
 				device->BindUAV(CS, texture, 0, threadID, i + 1);
 				device->BindResource(CS, texture, TEXSLOT_UNIQUE0, threadID, i);
-				desc.Width = max(1, desc.Width / 2);
-				desc.Height = max(1, desc.Height / 2);
+                desc.Width = std::max(1u, desc.Width / 2);
+                desc.Height = std::max(1u, desc.Height / 2);
 
 				GenerateMIPChainCB cb;
 				cb.outputResolution.x = desc.Width;
@@ -6684,8 +6683,8 @@ void GenerateMipChain(Texture2D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 				device->BindConstantBuffer(CS, constantBuffers[CBTYPE_MIPGEN], CB_GETBINDSLOT(GenerateMIPChainCB), threadID);
 
 				device->Dispatch(
-					max(1, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
-					max(1, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+					std::max(1u, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+					std::max(1u, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
 					6,
 					threadID);
 
@@ -6731,8 +6730,8 @@ void GenerateMipChain(Texture2D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 		{
 			device->BindUAV(CS, texture, 0, threadID, i + 1);
 			device->BindResource(CS, texture, TEXSLOT_UNIQUE0, threadID, i);
-			desc.Width = max(1, desc.Width / 2);
-			desc.Height = max(1, desc.Height / 2);
+			desc.Width = std::max(1u, desc.Width / 2);
+			desc.Height = std::max(1u, desc.Height / 2);
 
 			GenerateMIPChainCB cb;
 			cb.outputResolution.x = desc.Width;
@@ -6742,8 +6741,8 @@ void GenerateMipChain(Texture2D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 			device->BindConstantBuffer(CS, constantBuffers[CBTYPE_MIPGEN], CB_GETBINDSLOT(GenerateMIPChainCB), threadID);
 
 			device->Dispatch(
-				max(1, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
-				max(1, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+				std::max(1u, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
+				std::max(1u, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_2D_BLOCK_SIZE)),
 				1,
 				threadID);
 
@@ -6801,9 +6800,9 @@ void GenerateMipChain(Texture3D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 	{
 		device->BindUAV(CS, texture, 0, threadID, i + 1);
 		device->BindResource(CS, texture, TEXSLOT_UNIQUE0, threadID, i);
-		desc.Width = max(1, desc.Width / 2);
-		desc.Height = max(1, desc.Height / 2);
-		desc.Depth = max(1, desc.Depth / 2);
+		desc.Width = std::max(1u, desc.Width / 2);
+		desc.Height = std::max(1u, desc.Height / 2);
+		desc.Depth = std::max(1u, desc.Depth / 2);
 
 		GenerateMIPChainCB cb;
 		cb.outputResolution.x = desc.Width;
@@ -6814,9 +6813,9 @@ void GenerateMipChain(Texture3D* texture, MIPGENFILTER filter, GRAPHICSTHREAD th
 		device->BindConstantBuffer(CS, constantBuffers[CBTYPE_MIPGEN], CB_GETBINDSLOT(GenerateMIPChainCB), threadID);
 
 		device->Dispatch(
-			max(1, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_3D_BLOCK_SIZE)), 
-			max(1, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_3D_BLOCK_SIZE)), 
-			max(1, (UINT)ceilf((float)desc.Depth / GENERATEMIPCHAIN_3D_BLOCK_SIZE)), 
+			std::max(1u, (UINT)ceilf((float)desc.Width / GENERATEMIPCHAIN_3D_BLOCK_SIZE)),
+			std::max(1u, (UINT)ceilf((float)desc.Height / GENERATEMIPCHAIN_3D_BLOCK_SIZE)),
+			std::max(1u, (UINT)ceilf((float)desc.Depth / GENERATEMIPCHAIN_3D_BLOCK_SIZE)),
 			threadID);
 	}
 
@@ -7403,7 +7402,7 @@ void GenerateClouds(Texture2D* dst, UINT refinementCount, float randomness, GRAP
 	cb.xRandomness = randomness;
 	if (refinementCount == 0)
 	{
-		cb.xRefinementCount = max(1, (UINT)log2(dst_desc.Width));
+		cb.xRefinementCount = std::max(1u, (UINT)log2(dst_desc.Width));
 	}
 	else
 	{
@@ -8112,7 +8111,7 @@ Texture2D* GetLuminance(Texture2D* sourceImage, GRAPHICSTHREAD threadID)
 
 		while (desc.Width > 1)
 		{
-			desc.Width = max(desc.Width / 16, 1);
+			desc.Width = std::max(desc.Width / 16, 1u);
 			desc.Height = desc.Width;
 
 			Texture2D* tex = new Texture2D;
@@ -8169,9 +8168,9 @@ RAY GetPickRay(long cursorX, long cursorY)
 	XMMATRIX V = camera.GetView();
 	XMMATRIX P = camera.GetRealProjection();
 	XMMATRIX W = XMMatrixIdentity();
-	XMVECTOR& lineStart = XMVector3Unproject(XMVectorSet((float)cursorX, (float)cursorY, 0, 1), 0, 0, camera.width, camera.height, 0.0f, 1.0f, P, V, W);
-	XMVECTOR& lineEnd = XMVector3Unproject(XMVectorSet((float)cursorX, (float)cursorY, 1, 1), 0, 0, camera.width, camera.height, 0.0f, 1.0f, P, V, W);
-	XMVECTOR& rayDirection = XMVector3Normalize(XMVectorSubtract(lineEnd, lineStart));
+	XMVECTOR lineStart = XMVector3Unproject(XMVectorSet((float)cursorX, (float)cursorY, 0, 1), 0, 0, camera.width, camera.height, 0.0f, 1.0f, P, V, W);
+	XMVECTOR lineEnd = XMVector3Unproject(XMVectorSet((float)cursorX, (float)cursorY, 1, 1), 0, 0, camera.width, camera.height, 0.0f, 1.0f, P, V, W);
+	XMVECTOR rayDirection = XMVector3Normalize(XMVectorSubtract(lineEnd, lineStart));
 	return RAY(lineStart, rayDirection);
 }
 
@@ -8446,7 +8445,7 @@ void SetOcclusionCullingEnabled(bool value)
 		for (int i = 0; i < ARRAYSIZE(occlusionQueries); ++i)
 		{
 			GetDevice()->CreateQuery(&desc, &occlusionQueries[i]);
-			occlusionQueries[i].result_passed = TRUE;
+			occlusionQueries[i].result_passed = true;
 		}
 	}
 
@@ -8481,7 +8480,7 @@ bool GetAdvancedRefractionsEnabled() { return advancedRefractions; }
 bool IsRequestedReflectionRendering() { return requestReflectionRendering; }
 void SetEnvironmentMap(wiGraphicsTypes::Texture2D* tex) { enviroMap = tex; }
 Texture2D* GetEnvironmentMap() { return enviroMap; }
-void SetGameSpeed(float value) { GameSpeed = max(0, value); }
+void SetGameSpeed(float value) { GameSpeed = std::max(0.f, value); }
 float GetGameSpeed() { return GameSpeed; }
 void SetOceanEnabled(bool enabled)
 {

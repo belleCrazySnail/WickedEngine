@@ -91,7 +91,7 @@ bool GraphicsDevice::IsFormatUnorm(FORMAT value) const
 	return false;
 }
 
-Texture2D GraphicsDevice::GetBackBuffer()
+const Texture2D &GraphicsDevice::GetBackBuffer()
 {
     return Texture2D();
 }

@@ -2,7 +2,7 @@
 #include "wiGraphicsDevice_SharedInternals.h"
 //#include "wiHelper.h"
 #include "ShaderInterop_Vulkan.h"
-//#include "wiBackLog.h"
+#include "wiBackLog.h"
 
 #include <sstream>
 #include <vector>
@@ -739,9 +739,6 @@ namespace wiGraphicsTypes
         assert(address >= dataBegin && address < dataEnd);
         return static_cast<uint64_t>(address - dataBegin);
     }
-    
-    // We allow up to three command buffers to be in flight on GPU before we wait
-    static const NSUInteger kMaxBuffersInFlight = 3;
 
     id <MTLRenderCommandEncoder> GraphicsDevice_Metal::GetDirectCommandList(GRAPHICSTHREAD threadID) {
         return GetFrameResources().drawInfo[threadID].commandLists;
@@ -762,10 +759,10 @@ namespace wiGraphicsTypes
         NSLog(@"Selected Device: %@", _device.name);
         _queue = [_device newCommandQueue];
         _library = [_device newDefaultLibrary];
-        _inFlightSemaphore = dispatch_semaphore_create(kMaxBuffersInFlight);
+        _inFlightSemaphore = dispatch_semaphore_create(BACKBUFFER_COUNT);
         _view = BRIDGE_RES1(MTKView, window);
 
-//		wiBackLog::post("Created GraphicsDevice_Metal");
+        wiBackLog::post("Created GraphicsDevice_Metal");
 	}
 	GraphicsDevice_Metal::~GraphicsDevice_Metal()
 	{

@@ -268,7 +268,7 @@ UINT wiRenderTarget::GetMipCount()
 	if (desc.MipLevels>0)
 		return desc.MipLevels;
 
-	UINT maxDim = max(desc.Width, desc.Height);
+    UINT maxDim = std::max(desc.Width, desc.Height);
 	return static_cast<UINT>( log2(static_cast<double>(maxDim)) );
 }
 

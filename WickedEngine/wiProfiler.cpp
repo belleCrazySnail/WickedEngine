@@ -63,7 +63,7 @@ namespace wiProfiler
 
 		assert(rangeStack.empty() && "There was a range which was not ended!");
 
-		if (disjoint.result_disjoint == FALSE)
+		if (disjoint.result_disjoint == false)
 		{
 			for (auto& x : ranges)
 			{
@@ -146,7 +146,7 @@ namespace wiProfiler
 		assert(!rangeStack.empty() && "There is no range to end!");
 		const std::string& top = rangeStack.top();
 
-		auto& it = ranges.find(top);
+		auto it = ranges.find(top);
 		if (it != ranges.end())
 		{
 			switch (it->second->domain)

@@ -20,6 +20,7 @@
 
 #define _Use_decl_annotations_
 #define _Analysis_assume_(s)
+#define _Success_(e)
 #endif
 
 #ifndef __cplusplus
@@ -48,7 +49,11 @@
 #endif
 
 #ifndef XM_DEPRECATED
+#if defined(__GNUC__) || defined(__clang__)
+#define XM_DEPRECATED __attribute__((deprecated("This is deprecated and will be removed in a future version.")))
+#elif defined(_MSC_VER)
 #define XM_DEPRECATED __declspec(deprecated("This is deprecated and will be removed in a future version."))
+#endif
 #endif
 
 #if !defined(_XM_AVX2_INTRINSICS_) && defined(__AVX2__) && !defined(_XM_NO_INTRINSICS_)
@@ -98,7 +103,7 @@
 #endif // !_XM_ARM_NEON_INTRINSICS_ && !_XM_SSE_INTRINSICS_ && !_XM_NO_INTRINSICS_
 
 #if !defined(_XM_NO_XMVECTOR_OVERLOADS_) && defined(__clang__)
-#define _XM_NO_XMVECTOR_OVERLOADS_
+//#define _XM_NO_XMVECTOR_OVERLOADS_
 #endif
 
 #pragma warning(push)
@@ -1423,7 +1428,7 @@ XMMATRIX    XM_CALLCONV     XMMatrixMultiplyTranspose(FXMMATRIX M1, CXMMATRIX M2
 XMMATRIX    XM_CALLCONV     XMMatrixTranspose(FXMMATRIX M);
 XMMATRIX    XM_CALLCONV     XMMatrixInverse(_Out_opt_ XMVECTOR* pDeterminant, _In_ FXMMATRIX M);
 XMVECTOR    XM_CALLCONV     XMMatrixDeterminant(FXMMATRIX M);
-//_Success_(return)
+_Success_(return)
 bool        XM_CALLCONV     XMMatrixDecompose(_Out_ XMVECTOR *outScale, _Out_ XMVECTOR *outRotQuat, _Out_ XMVECTOR *outTrans, _In_ FXMMATRIX M);
 
 XMMATRIX    XM_CALLCONV     XMMatrixIdentity();
@@ -1893,7 +1898,11 @@ template<uint32_t VSLeftRotateElements, uint32_t Select0, uint32_t Select1, uint
 // separate math routine it would be reloaded.
 
 #ifndef XMGLOBALCONST
-#define XMGLOBALCONST static const
+#if defined(__GNUC__) || defined(__clang__)
+#define XMGLOBALCONST extern const __attribute__((selectany))
+#elif defined(_MSC_VER)
+#define XMGLOBALCONST extern const __declspec(selectany)
+#endif
 #endif
 
 XMGLOBALCONST XMVECTORF32 g_XMSinCoefficients0      = { { { -0.16666667f, +0.0083333310f, -0.00019840874f, +2.7525562e-06f } } };

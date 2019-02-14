@@ -92,7 +92,7 @@ namespace wiGraphicsTypes
 		~Sampler();
 
 		bool IsValid() { return resource != WI_NULL_HANDLE; }
-		SamplerDesc GetDesc() { return desc; }
+		const SamplerDesc &GetDesc() { return desc; }
 	};
 
 	struct GPUResource : public GraphicsDeviceChild
@@ -119,7 +119,7 @@ namespace wiGraphicsTypes
 		virtual ~GPUBuffer();
 
 		bool IsValid() { return resource != WI_NULL_HANDLE; }
-		GPUBufferDesc GetDesc() { return desc; }
+		const GPUBufferDesc &GetDesc() { return desc; }
 	};
 
 	struct VertexLayout : public GraphicsDeviceChild
@@ -140,7 +140,7 @@ namespace wiGraphicsTypes
 		BlendState();
 		~BlendState();
 
-		BlendStateDesc GetDesc() { return desc; }
+		const BlendStateDesc &GetDesc() { return desc; }
 	};
 
 	struct DepthStencilState : public GraphicsDeviceChild
@@ -151,7 +151,7 @@ namespace wiGraphicsTypes
 		DepthStencilState();
 		~DepthStencilState();
 
-		DepthStencilStateDesc GetDesc() { return desc; }
+		const DepthStencilStateDesc &GetDesc() { return desc; }
 	};
 
 	struct RasterizerState : public GraphicsDeviceChild
@@ -162,7 +162,7 @@ namespace wiGraphicsTypes
 		RasterizerState();
 		~RasterizerState();
 
-		RasterizerStateDesc GetDesc() { return desc; }
+		const RasterizerStateDesc &GetDesc() { return desc; }
 	};
 
 	struct Texture : public GPUResource
@@ -228,7 +228,7 @@ namespace wiGraphicsTypes
 		virtual ~GPUQuery();
 
 		bool IsValid() { return !resource.empty() && resource[0] != WI_NULL_HANDLE; }
-		GPUQueryDesc GetDesc() const { return desc; }
+		const GPUQueryDesc &GetDesc() const { return desc; }
 
 		bool	result_passed;
 		UINT64	result_passed_sample_count;

@@ -18,16 +18,13 @@
 #define WICKEDENGINE_BUILD_VULKAN
 #endif // HAS VULKAN
 
-
+#define ALIGN_16 void* operator new(size_t i){return _mm_malloc(i, 16);} void operator delete(void* p){_mm_free(p);}
 
 
 // Platform agnostic:
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
-using namespace DirectX;
-using namespace DirectX::PackedVector;
-
-static const XMFLOAT4X4 IDENTITYMATRIX = XMFLOAT4X4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+#include <DirectXCollision.h>
 
 #elif __APPLE__
 
@@ -47,24 +44,24 @@ typedef uint32_t HRESULT;
 #define S_OK 0x00000000
 #define E_FAIL 0x80004005
 
-#import <simd/simd.h>
+#define SUCCEEDED(hr) (((HRESULT)(hr)) == 0)
+#define FAILED(hr) (((HRESULT)(hr)) != 0)
 
-typedef simd::float4x4 XMMATRIX;
-typedef simd::float4x4 XMFLOAT4X4;
-typedef simd::float2 XMFLOAT2;
-typedef simd::float3 XMFLOAT3;
-typedef simd::float4 XMFLOAT4;
-//typedef uint32_t uint;
-typedef simd::uint2 XMUINT2;
-typedef simd::uint3 XMUINT3;
-typedef simd::uint4 XMUINT4;
-typedef simd::int2 XMINT2;
-typedef simd::int3 XMINT3;
-typedef simd::int4 XMINT4;
+#define ARRAYSIZE(x) (sizeof(x)/sizeof(0[x]))
+#define ZeroMemory(d, l) memset((d), 0, (l))
+
+#define _getcwd getcwd
+#define _chdir chdir
+
+#define ALIGN_16
+
+#define _XM_NO_INTRINSICS_
+#include "DX/DirectXMath.h"
+#include "DX/DirectXPackedVector.h"
+#include "DX/DirectXCollision.h"
 
 #endif //_WIN32
 
-#define ALIGN_16 void* operator new(size_t i){return _mm_malloc(i, 16);} void operator delete(void* p){_mm_free(p);}
 #define SAFE_RELEASE(a) if((a)!=nullptr){(a)->Release();(a)=nullptr;}
 #define SAFE_DELETE(a) if((a)!=nullptr){delete (a);(a)=nullptr;}
 #define SAFE_DELETE_ARRAY(a) if((a)!=nullptr){delete[](a);(a)=nullptr;}
@@ -86,6 +83,9 @@ inline void RECREATE(T*& myObject)
 	myObject = new T;
 }
 
+using namespace DirectX;
+using namespace DirectX::PackedVector;
+static const XMFLOAT4X4 IDENTITYMATRIX = XMFLOAT4X4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
 
 #endif //WICKEDENGINE_COMMONINCLUDE_H

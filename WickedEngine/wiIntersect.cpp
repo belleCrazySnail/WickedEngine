@@ -12,7 +12,8 @@ AABB AABB::get(const XMMATRIX& mat) const
 	XMFLOAT3 corners[8];
 	for (int i = 0; i < 8; ++i)
 	{
-		XMVECTOR point = XMVector3Transform(XMLoadFloat3(&corner(i)), mat);
+        XMFLOAT3 cor = corner(i);
+		XMVECTOR point = XMVector3Transform(XMLoadFloat3(&cor), mat);
 		XMStoreFloat3(&corners[i], point);
 	}
 	XMFLOAT3 min = corners[0];
@@ -62,8 +63,8 @@ float AABB::getArea() const
 	return (_max.x - _min.x)*(_max.y - _min.y)*(_max.z - _min.z);
 }
 float AABB::getRadius() const {
-	XMFLOAT3& abc = getHalfWidth();
-	return max(max(abc.x, abc.y), abc.z);
+	XMFLOAT3 abc = getHalfWidth();
+	return std::max(std::max(abc.x, abc.y), abc.z);
 }
 AABB::INTERSECTION_TYPE AABB::intersects(const AABB& b) const {
 
@@ -107,20 +108,20 @@ bool AABB::intersects(const RAY& ray) const {
 	float tx1 = (MIN.x - ray.origin.x)*ray.direction_inverse.x;
 	float tx2 = (MAX.x - ray.origin.x)*ray.direction_inverse.x;
 
-	float tmin = min(tx1, tx2);
-	float tmax = max(tx1, tx2);
+    float tmin = std::min(tx1, tx2);
+	float tmax = std::max(tx1, tx2);
 
 	float ty1 = (MIN.y - ray.origin.y)*ray.direction_inverse.y;
 	float ty2 = (MAX.y - ray.origin.y)*ray.direction_inverse.y;
 
-	tmin = max(tmin, min(ty1, ty2));
-	tmax = min(tmax, max(ty1, ty2));
+	tmin = std::max(tmin, std::min(ty1, ty2));
+	tmax = std::min(tmax, std::max(ty1, ty2));
 
 	float tz1 = (MIN.z - ray.origin.z)*ray.direction_inverse.z;
 	float tz2 = (MAX.z - ray.origin.z)*ray.direction_inverse.z;
 
-	tmin = max(tmin, min(tz1, tz2));
-	tmax = min(tmax, max(tz1, tz2));
+	tmin = std::max(tmin, std::min(tz1, tz2));
+	tmax = std::min(tmax, std::max(tz1, tz2));
 
 	return tmax >= tmin;
 }
@@ -287,7 +288,8 @@ Frustum::BoxFrustumIntersect Frustum::CheckBox(const AABB& box) const
 
 		for (int i = 0; i < 8; ++i)
 		{
-			if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[p]), XMLoadFloat3(&box.corner(i)))) < 0.0f)
+            XMFLOAT3 cor = box.corner(i);
+			if (XMVectorGetX(XMPlaneDotCoord(XMLoadFloat4(&m_planesNorm[p]), XMLoadFloat3(&cor))) < 0.0f)
 			{
 				iPtIn = 0;
 				--iInCount;

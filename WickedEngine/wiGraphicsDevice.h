@@ -92,7 +92,7 @@ namespace wiGraphicsTypes
 
 		virtual void SetResolution(int width, int height) = 0;
 
-		virtual Texture2D GetBackBuffer();
+		virtual const Texture2D &GetBackBuffer();
 
 		enum GRAPHICSDEVICE_CAPABILITY
 		{
@@ -110,9 +110,7 @@ namespace wiGraphicsTypes
 
 		inline XMMATRIX GetScreenProjection() const
 		{
-            XMMATRIX m;
-            return m;
-			//return XMMatrixOrthographicOffCenterLH(0, (float)GetScreenWidth(), (float)GetScreenHeight(), 0, -1, 1);
+            return XMMatrixOrthographicOffCenterLH(0, (float)GetScreenWidth(), (float)GetScreenHeight(), 0, -1, 1);
 		}
 		inline FORMAT GetBackBufferFormat() const { return BACKBUFFER_FORMAT; }
 		inline static UINT GetBackBufferCount() { return BACKBUFFER_COUNT; }

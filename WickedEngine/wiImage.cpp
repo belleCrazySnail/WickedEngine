@@ -55,7 +55,7 @@ namespace wiImage
 	GraphicsPSO			postprocessPSO[wiImageParams::PostProcess::POSTPROCESS_COUNT];
 	GraphicsPSO			deferredPSO;
 
-	std::atomic_bool initialized = false;
+	std::atomic_bool initialized(false);
 
 
 	void Draw(Texture2D* texture, const wiImageParams& params, GRAPHICSTHREAD threadID)

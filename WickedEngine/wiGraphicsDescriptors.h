@@ -2,6 +2,7 @@
 #define _GRAPHICS_DESCRIPTORS_H_
 
 #include "CommonInclude.h"
+#include <string>
 
 namespace wiGraphicsTypes
 {
@@ -403,7 +404,7 @@ namespace wiGraphicsTypes
 	};
 	struct VertexLayoutDesc
 	{
-		char* SemanticName;
+        std::string SemanticName;
 		UINT SemanticIndex;
 		FORMAT Format;
 		UINT InputSlot;
