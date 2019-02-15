@@ -2,7 +2,6 @@
 #include "CommonInclude.h"
 #include "wiEnums.h"
 #include "wiIntersect.h"
-#include "wiIntersect.h"
 #include "wiRenderTarget.h"
 #include "wiEmittedParticle.h"
 #include "wiHairParticle.h"
@@ -21,7 +20,7 @@ namespace wiSceneSystem
 	{
 		char name[128];
 
-		inline void operator=(const std::string& str) { strcpy_s(name, str.c_str()); }
+		inline void operator=(const std::string& str) { strcpy(name, str.c_str()); }
 		inline bool operator==(const std::string& str) const { return strcmp(name, str.c_str()) == 0; }
 
 		void Serialize(wiArchive& archive, uint32_t seed = 0);
@@ -267,7 +266,8 @@ namespace wiSceneSystem
 			}
 			inline XMVECTOR LoadNOR() const
 			{
-				return XMLoadFloat3(&GetNor_FULL());
+                XMFLOAT3 tmp = GetNor_FULL();
+				return XMLoadFloat3(&tmp);
 			}
 			inline void MakeFromParams(const XMFLOAT3& normal)
 			{

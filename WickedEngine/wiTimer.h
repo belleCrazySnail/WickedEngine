@@ -4,9 +4,13 @@
 class wiTimer
 {
 private:
+#ifdef _WIN32
 	static double PCFreq;
 	static __int64 CounterStart;
-
+#elif __APPLE__
+    static double CounterStart;
+#endif
+    
 	double lastTime;
 public:
 	wiTimer();

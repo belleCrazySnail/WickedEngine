@@ -6,7 +6,7 @@
 #include "wiSpinLock.h"
 #include "wiFont.h"
 #include "wiImage.h"
-#include "wiLua.h"
+//#include "wiLua.h"
 
 #include <mutex>
 #include <sstream>
@@ -144,7 +144,7 @@ namespace wiBackLog
 		if (history.size() > deletefromline) {
 			history.pop_front();
 		}
-		wiLua::GetGlobal()->RunText(inputArea.str());
+//        wiLua::GetGlobal()->RunText(inputArea.str());
 		inputArea.str("");
 	}
 	void deletefromInput() 

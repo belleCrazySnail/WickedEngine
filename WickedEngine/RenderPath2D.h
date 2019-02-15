@@ -1,6 +1,6 @@
 #pragma once
 #include "RenderPath.h"
-#include "wiGUI.h"
+//#include "wiGUI.h"
 
 #include <string>
 
@@ -34,7 +34,7 @@ class RenderPath2D :
 {
 private:
 	static wiRenderTarget rtFinal;
-	wiGUI GUI;
+//    wiGUI GUI;
 	float spriteSpeed = 1.0f;
 
 protected:
@@ -74,6 +74,6 @@ public:
 	void SortLayers();
 	void CleanLayers();
 
-	wiGUI& GetGUI() { return GUI; }
+//    wiGUI& GetGUI() { return GUI; }
 };
 

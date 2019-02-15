@@ -33,12 +33,12 @@ namespace wiGraphicsTypes
 		virtual HRESULT CreateTexture2D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture2D *pTexture2D) = 0;
 		virtual HRESULT CreateTexture3D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture3D *pTexture3D) = 0;
 		virtual HRESULT CreateInputLayout(const VertexLayoutDesc *pInputElementDescs, UINT NumElements, const ShaderByteCode* shaderCode, VertexLayout *pInputLayout) = 0;
-		virtual HRESULT CreateVertexShader(const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader) = 0;
-		virtual HRESULT CreatePixelShader(const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader) = 0;
-		virtual HRESULT CreateGeometryShader(const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader) = 0;
-		virtual HRESULT CreateHullShader(const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader) = 0;
-		virtual HRESULT CreateDomainShader(const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader) = 0;
-		virtual HRESULT CreateComputeShader(const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader) = 0;
+        virtual HRESULT CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader) = 0;
+		virtual HRESULT CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader) = 0;
+		virtual HRESULT CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader) = 0;
+		virtual HRESULT CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader) = 0;
+		virtual HRESULT CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader) = 0;
+		virtual HRESULT CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader) = 0;
 		virtual HRESULT CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState) = 0;
 		virtual HRESULT CreateDepthStencilState(const DepthStencilStateDesc *pDepthStencilStateDesc, DepthStencilState *pDepthStencilState) = 0;
 		virtual HRESULT CreateRasterizerState(const RasterizerStateDesc *pRasterizerStateDesc, RasterizerState *pRasterizerState) = 0;
@@ -46,7 +46,7 @@ namespace wiGraphicsTypes
 		virtual HRESULT CreateQuery(const GPUQueryDesc *pDesc, GPUQuery *pQuery) = 0;
 		virtual HRESULT CreateGraphicsPSO(const GraphicsPSODesc* pDesc, GraphicsPSO* pso) = 0;
 		virtual HRESULT CreateComputePSO(const ComputePSODesc* pDesc, ComputePSO* pso) = 0;
-
+        virtual HRESULT CreateRenderPass(const RenderPassDesc *pDesc, RenderPass *pRenderPass) = 0;
 
 		virtual void DestroyResource(GPUResource* pResource) = 0;
 		virtual void DestroyBuffer(GPUBuffer *pBuffer) = 0;
@@ -70,6 +70,8 @@ namespace wiGraphicsTypes
 
 		virtual void SetName(GPUResource* pResource, const std::string& name) = 0;
 
+        virtual void BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID) = 0;
+        virtual void EndRenderPass(GRAPHICSTHREAD threadID) = 0;
 		virtual void PresentBegin() = 0;
 		virtual void PresentEnd() = 0;
 
@@ -90,7 +92,7 @@ namespace wiGraphicsTypes
 
 		virtual void SetResolution(int width, int height) = 0;
 
-		virtual Texture2D GetBackBuffer() = 0;
+		virtual const Texture2D &GetBackBuffer() = 0;
 
 		enum GRAPHICSDEVICE_CAPABILITY
 		{
@@ -108,7 +110,7 @@ namespace wiGraphicsTypes
 
 		inline XMMATRIX GetScreenProjection() const
 		{
-			return XMMatrixOrthographicOffCenterLH(0, (float)GetScreenWidth(), (float)GetScreenHeight(), 0, -1, 1);
+            return XMMatrixOrthographicOffCenterLH(0, (float)GetScreenWidth(), (float)GetScreenHeight(), 0, -1, 1);
 		}
 		inline FORMAT GetBackBufferFormat() const { return BACKBUFFER_FORMAT; }
 		inline static UINT GetBackBufferCount() { return BACKBUFFER_COUNT; }

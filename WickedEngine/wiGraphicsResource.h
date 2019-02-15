@@ -5,6 +5,7 @@
 #include "wiGraphicsDescriptors.h"
 
 #include <vector>
+#include <string>
 
 namespace wiGraphicsTypes
 {
@@ -23,6 +24,7 @@ namespace wiGraphicsTypes
 	{
 		BYTE* data;
 		size_t size;
+        std::string ShaderName;
 		ShaderByteCode() :data(nullptr), size(0) {}
 		~ShaderByteCode() { SAFE_DELETE_ARRAY(data); }
 	};
@@ -238,7 +240,16 @@ namespace wiGraphicsTypes
 		const GPUQueryDesc& GetDesc() const { return desc; }
 	};
 
-
+    struct RenderPass : public GraphicsDeviceChild
+    {
+        wiCPUHandle resource = WI_NULL_HANDLE;
+        RenderPassDesc desc;
+        
+        const RenderPassDesc& GetDesc() const { return desc; }
+        
+        RenderPass();
+        ~RenderPass();
+    };
 	struct GraphicsPSO : public GraphicsDeviceChild
 	{
 		wiCPUHandle	pipeline;

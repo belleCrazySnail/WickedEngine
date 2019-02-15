@@ -5,7 +5,9 @@
 // Do not include engine features in this file!
 
 
+#ifdef _WIN32
 // Platform specific:
+#define NOMINMAX
 #include <SDKDDKVer.h>
 #include <windows.h>
 
@@ -17,16 +19,50 @@
 #define WICKEDENGINE_BUILD_VULKAN
 #endif // HAS VULKAN
 
-
+#define ALIGN_16 void* operator new(size_t i){return _mm_malloc(i, 16);} void operator delete(void* p){_mm_free(p);}
 
 
 // Platform agnostic:
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>
-using namespace DirectX;
-using namespace DirectX::PackedVector;
+#include <DirectXCollision.h>
 
-#define ALIGN_16 void* operator new(size_t i){return _mm_malloc(i, 16);} void operator delete(void* p){_mm_free(p);}
+#elif __APPLE__
+
+#include <stddef.h>
+#include <stdint.h>
+typedef char BYTE;
+typedef unsigned char UINT8;
+typedef unsigned int UINT;
+typedef int INT;
+typedef long LONG;
+typedef uint64_t UINT64;
+typedef size_t SIZE_T;
+typedef float FLOAT;
+
+#include <float.h>
+typedef uint32_t HRESULT;
+#define S_OK 0x00000000
+#define E_FAIL 0x80004005
+
+#define SUCCEEDED(hr) (((HRESULT)(hr)) == 0)
+#define FAILED(hr) (((HRESULT)(hr)) != 0)
+
+#define ARRAYSIZE(x) (sizeof(x)/sizeof(0[x]))
+#define ZeroMemory(d, l) memset((d), 0, (l))
+
+#define _getcwd getcwd
+#define _chdir chdir
+
+#define ALIGN_16
+
+#define _XM_NO_INTRINSICS_
+#include "DX/DirectXMath.h"
+#include "DX/DirectXPackedVector.h"
+#include "DX/DirectXCollision.h"
+
+#endif //_WIN32
+
 #define SAFE_RELEASE(a) if((a)!=nullptr){(a)->Release();(a)=nullptr;}
 #define SAFE_DELETE(a) if((a)!=nullptr){delete (a);(a)=nullptr;}
 #define SAFE_DELETE_ARRAY(a) if((a)!=nullptr){delete[](a);(a)=nullptr;}
@@ -48,6 +84,8 @@ inline void RECREATE(T*& myObject)
 	myObject = new T;
 }
 
+using namespace DirectX;
+using namespace DirectX::PackedVector;
 static const XMFLOAT4X4 IDENTITYMATRIX = XMFLOAT4X4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 
 

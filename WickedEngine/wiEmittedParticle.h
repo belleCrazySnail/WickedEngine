@@ -61,7 +61,7 @@ public:
 	enum FLAGS
 	{
 		EMPTY = 0,
-		DEBUG = 1 << 0,
+		DEBUG_FLAG = 1 << 0,
 		PAUSED = 1 << 1,
 		SORTING = 1 << 2,
 		DEPTHCOLLISION = 1 << 3,

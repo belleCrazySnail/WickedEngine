@@ -11,11 +11,13 @@ namespace wiWindowRegistration
 		window = wnd;
 	}
 	bool IsWindowActive() {
-#ifndef WINSTORE_SUPPORT
+#ifdef _WIN32
 		HWND fgw = GetForegroundWindow();
 		return fgw == window;
-#else
+#elif WINSTORE_SUPPORT
 		return true;
+#elif __APPLE__
+        return true;
 #endif
 	}
 }

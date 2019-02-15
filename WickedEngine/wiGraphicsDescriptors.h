@@ -2,6 +2,7 @@
 #define _GRAPHICS_DESCRIPTORS_H_
 
 #include "CommonInclude.h"
+#include <string>
 
 namespace wiGraphicsTypes
 {
@@ -36,6 +37,13 @@ namespace wiGraphicsTypes
 		LINELIST,
 		PATCHLIST,
 	};
+    enum ACCESS_TYPE
+    {
+        ACCESS_TYPE_DISCARD,
+        ACCESS_TYPE_PRESERVE,
+        ACCESS_TYPE_CLEAR,
+        ACCESS_TYPE_NO_ACCESS,
+    };
 	enum COMPARISON_FUNC
 	{
 		COMPARISON_NEVER,
@@ -376,7 +384,7 @@ namespace wiGraphicsTypes
 	{
 		static const UINT APPEND_ALIGNED_ELEMENT = 0xffffffff; // automatically figure out AlignedByteOffset depending on Format
 
-		char* SemanticName = nullptr;
+        std::string SemanticName;
 		UINT SemanticIndex = 0;
 		FORMAT Format = FORMAT_UNKNOWN;
 		UINT InputSlot = 0;
@@ -481,12 +489,41 @@ namespace wiGraphicsTypes
 	};
 	struct GPUQueryResult
 	{
-		BOOL	result_passed = FALSE;
+		bool	result_passed = false;
 		UINT64	result_passed_sample_count = 0;
 		UINT64	result_timestamp = 0;
 		UINT64	result_timestamp_frequency = 0;
-		BOOL	result_disjoint = FALSE;
+		bool	result_disjoint = false;
 	};
+    struct DepthStencilValue
+    {
+        FLOAT Depth;
+        UINT8 Stencil;
+    };
+    struct ClearValue
+    {
+        union {
+            FLOAT Color[4];
+            DepthStencilValue DepthStencil;
+        };
+    };
+    struct AccessDesc
+    {
+        ACCESS_TYPE Type;
+        ClearValue Clear;
+    };
+    struct RenderTargetAccessDesc
+    {
+        AccessDesc BeginningAccess;
+        ACCESS_TYPE EndingAccess;
+    };
+    struct RenderPassDesc
+    {
+        UINT NumRenderTargets;
+        RenderTargetAccessDesc RenderTargets[8] = {};
+        RenderTargetAccessDesc Depth;
+        RenderTargetAccessDesc Stencil;
+    };
 	struct GraphicsPSODesc
 	{
 		VertexShader*			vs = nullptr;

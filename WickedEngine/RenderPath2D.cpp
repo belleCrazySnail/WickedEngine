@@ -9,7 +9,7 @@ using namespace wiGraphicsTypes;
 RenderPath2D::RenderPath2D() : RenderPath()
 {
 	addLayer(DEFAULT_RENDERLAYER);
-	GUI = wiGUI(GRAPHICSTHREAD_IMMEDIATE);
+//    GUI = wiGUI(GRAPHICSTHREAD_IMMEDIATE);
 }
 
 
@@ -82,7 +82,7 @@ void RenderPath2D::Start()
 }
 void RenderPath2D::Update(float dt)
 {
-	GetGUI().Update(dt);
+//    GetGUI().Update(dt);
 
 	for (auto& x : layers)
 	{
@@ -133,7 +133,7 @@ void RenderPath2D::Render()
 	}
 	wiRenderer::GetDevice()->EventEnd(GRAPHICSTHREAD_IMMEDIATE);
 
-	GetGUI().Render();
+//    GetGUI().Render();
 
 	RenderPath::Render();
 }

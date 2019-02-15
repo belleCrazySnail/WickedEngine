@@ -81,7 +81,7 @@ void wiHairParticle::UpdateRenderData(const MeshComponent& mesh, const MaterialC
 	hcb.xStiffness = stiffness;
 	hcb.xHairRandomness = randomness;
 	hcb.xHairStrandCount = strandCount;
-	hcb.xHairSegmentCount = max(segmentCount, 1);
+	hcb.xHairSegmentCount = std::max(segmentCount, 1u);
 	hcb.xHairParticleCount = hcb.xHairStrandCount * hcb.xHairSegmentCount;
 	hcb.xHairRandomSeed = randomSeed;
 	hcb.xHairViewDistance = viewDistance;
@@ -149,7 +149,7 @@ void wiHairParticle::Draw(const CameraComponent& camera, const MaterialComponent
 
 	device->BindResource(VS, particleBuffer.get(), 0, threadID);
 
-	device->Draw(strandCount * 12 * max(segmentCount, 1), 0, threadID);
+    device->Draw(strandCount * 12 * std::max(segmentCount, 1u), 0, threadID);
 
 	device->EventEnd(threadID);
 }

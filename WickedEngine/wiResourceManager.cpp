@@ -1,6 +1,6 @@
 #include "wiResourceManager.h"
 #include "wiRenderer.h"
-#include "wiSound.h"
+//#include "wiSound.h"
 #include "wiHelper.h"
 #include "wiTextureHelper.h"
 
@@ -34,7 +34,7 @@ wiResourceManager& wiResourceManager::GetShaderManager()
 const wiResourceManager::Resource* wiResourceManager::get(const wiHashString& name, bool incRefCount)
 {
 	lock.lock();
-	auto& it = resources.find(name);
+	auto it = resources.find(name);
 	if (it != resources.end())
 	{
 		if(incRefCount)
@@ -58,7 +58,7 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 
 		// dynamic type selection:
 		if(newType==Data_Type::DYNAMIC){
-			auto& it = types.find(ext);
+			auto it = types.find(ext);
 			if(it!=types.end())
 				type = it->second;
 			else 
@@ -252,7 +252,7 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 					{
 						InitData[mip].pSysMem = rgb;
 						InitData[mip].SysMemPitch = static_cast<UINT>(mipwidth * channelCount);
-						mipwidth = max(1, mipwidth / 2);
+                        mipwidth = std::max(1u, mipwidth / 2);
 					}
 
 					Texture2D* image = new Texture2D;
@@ -276,12 +276,12 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 		break;
 		case Data_Type::SOUND:
 		{
-			success = new wiSoundEffect(name.GetString());
+//            success = new wiSoundEffect(name.GetString());
 		}
 		break;
 		case Data_Type::MUSIC:
 		{
-			success = new wiMusic(name.GetString());
+//            success = new wiMusic(name.GetString());
 		}
 		break;
 		case Data_Type::VERTEXSHADER:
@@ -289,7 +289,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)) {
 				VertexShader* shader = new VertexShader;
-				wiRenderer::GetDevice()->CreateVertexShader(buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateVertexShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -299,7 +303,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				PixelShader* shader = new PixelShader;
-				wiRenderer::GetDevice()->CreatePixelShader(buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreatePixelShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -309,7 +317,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				GeometryShader* shader = new GeometryShader;
-				wiRenderer::GetDevice()->CreateGeometryShader(buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateGeometryShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -319,7 +331,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				HullShader* shader = new HullShader;
-				wiRenderer::GetDevice()->CreateHullShader(buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateHullShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -329,7 +345,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				DomainShader* shader = new DomainShader;
-				wiRenderer::GetDevice()->CreateDomainShader(buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateDomainShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -339,7 +359,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)) {
 				ComputeShader* shader = new ComputeShader;
-				wiRenderer::GetDevice()->CreateComputeShader(buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateComputeShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -365,7 +389,7 @@ bool wiResourceManager::del(const wiHashString& name, bool forceDelete)
 {
 	lock.lock();
 	Resource* res = nullptr;
-	auto& it = resources.find(name);
+	auto it = resources.find(name);
 	if (it != resources.end())
 		res = it->second;
 	else
@@ -411,7 +435,7 @@ bool wiResourceManager::del(const wiHashString& name, bool forceDelete)
 				break;
 			case Data_Type::SOUND:
 			case Data_Type::MUSIC:
-				SAFE_DELETE(reinterpret_cast<wiSound*&>(res->data));
+//                SAFE_DELETE(reinterpret_cast<wiSound*&>(res->data));
 				break;
 			default:
 				success=false;

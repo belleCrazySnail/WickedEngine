@@ -90,4 +90,3 @@ bool GraphicsDevice::IsFormatUnorm(FORMAT value) const
 
 	return false;
 }
-

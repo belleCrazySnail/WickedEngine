@@ -1,7 +1,8 @@
 #pragma once
 #include "CommonInclude.h"
+#include <algorithm>
 
-#define saturate(x) min(max(x,0),1)
+#define saturate(x) std::min(std::max(x,0.f),1.f)
 
 namespace wiMath
 {
@@ -15,8 +16,8 @@ namespace wiMath
 	}
 	inline float Distance(const XMVECTOR& v1, const XMVECTOR& v2)
 	{
-		XMVECTOR& vectorSub = XMVectorSubtract(v1, v2);
-		XMVECTOR& length = XMVector3Length(vectorSub);
+		XMVECTOR vectorSub = XMVectorSubtract(v1, v2);
+		XMVECTOR length = XMVector3Length(vectorSub);
 
 		float Distance = 0.0f;
 		XMStoreFloat(&Distance, length);
@@ -24,8 +25,8 @@ namespace wiMath
 	}
 	inline float DistanceSquared(const XMVECTOR& v1, const XMVECTOR& v2)
 	{
-		XMVECTOR& vectorSub = XMVectorSubtract(v1, v2);
-		XMVECTOR& length = XMVector3LengthSq(vectorSub);
+		XMVECTOR vectorSub = XMVectorSubtract(v1, v2);
+		XMVECTOR length = XMVector3LengthSq(vectorSub);
 
 		float Distance = 0.0f;
 		XMStoreFloat(&Distance, length);
@@ -33,8 +34,8 @@ namespace wiMath
 	}
 	inline float DistanceEstimated(const XMVECTOR& v1, const XMVECTOR& v2)
 	{
-		XMVECTOR& vectorSub = XMVectorSubtract(v1, v2);
-		XMVECTOR& length = XMVector3LengthEst(vectorSub);
+		XMVECTOR vectorSub = XMVectorSubtract(v1, v2);
+		XMVECTOR length = XMVector3LengthEst(vectorSub);
 
 		float Distance = 0.0f;
 		XMStoreFloat(&Distance, length);
@@ -42,26 +43,26 @@ namespace wiMath
 	}
 	inline float Distance(const XMFLOAT2& v1, const XMFLOAT2& v2)
 	{
-		XMVECTOR& vector1 = XMLoadFloat2(&v1);
-		XMVECTOR& vector2 = XMLoadFloat2(&v2);
-		return XMVectorGetX(XMVector2Length(vector2 - vector1));
+		XMVECTOR vector1 = XMLoadFloat2(&v1);
+		XMVECTOR vector2 = XMLoadFloat2(&v2);
+		return Distance(vector1, vector2);
 	}
 	inline float Distance(const XMFLOAT3& v1, const XMFLOAT3& v2)
 	{
-		XMVECTOR& vector1 = XMLoadFloat3(&v1);
-		XMVECTOR& vector2 = XMLoadFloat3(&v2);
+		XMVECTOR vector1 = XMLoadFloat3(&v1);
+		XMVECTOR vector2 = XMLoadFloat3(&v2);
 		return Distance(vector1, vector2);
 	}
 	inline float DistanceSquared(const XMFLOAT3& v1, const XMFLOAT3& v2)
 	{
-		XMVECTOR& vector1 = XMLoadFloat3(&v1);
-		XMVECTOR& vector2 = XMLoadFloat3(&v2);
+		XMVECTOR vector1 = XMLoadFloat3(&v1);
+		XMVECTOR vector2 = XMLoadFloat3(&v2);
 		return DistanceSquared(vector1, vector2);
 	}
 	inline float DistanceEstimated(const XMFLOAT3& v1, const XMFLOAT3& v2)
 	{
-		XMVECTOR& vector1 = XMLoadFloat3(&v1);
-		XMVECTOR& vector2 = XMLoadFloat3(&v2);
+		XMVECTOR vector1 = XMLoadFloat3(&v1);
+		XMVECTOR vector2 = XMLoadFloat3(&v2);
 		return DistanceEstimated(vector1, vector2);
 	}
 	inline constexpr XMFLOAT3 getVectorHalfWayPoint(const XMFLOAT3& a, const XMFLOAT3& b)
@@ -98,10 +99,10 @@ namespace wiMath
 		return retVal;
 	}
 	inline constexpr XMFLOAT3 Max(const XMFLOAT3& a, const XMFLOAT3& b) {
-		return XMFLOAT3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
+        return XMFLOAT3(std::max(a.x, b.x), std::max(a.y, b.y), std::max(a.z, b.z));
 	}
 	inline constexpr XMFLOAT3 Min(const XMFLOAT3& a, const XMFLOAT3& b) {
-		return XMFLOAT3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
+		return XMFLOAT3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
 	}
 	inline constexpr float Clamp(float val, float min, float max)
 	{
