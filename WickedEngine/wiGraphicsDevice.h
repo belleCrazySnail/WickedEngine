@@ -29,19 +29,19 @@ namespace wiGraphicsTypes
 	public:
 
 		virtual HRESULT CreateBuffer(const GPUBufferDesc *pDesc, const SubresourceData* pInitialData, GPUBuffer *pBuffer) = 0;
-		virtual HRESULT CreateTexture1D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture1D *pTexture1D);
+		virtual HRESULT CreateTexture1D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture1D *pTexture1D) = 0;
 		virtual HRESULT CreateTexture2D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture2D *pTexture2D) = 0;
-		virtual HRESULT CreateTexture3D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture3D *pTexture3D);
-		virtual HRESULT CreateInputLayout(const VertexLayoutDesc *pInputElementDescs, UINT NumElements, const ShaderByteCode* shaderCode, VertexLayout *pInputLayout);
-        virtual HRESULT CreateVertexShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader);
-		virtual HRESULT CreatePixelShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader);
-		virtual HRESULT CreateGeometryShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader);
-		virtual HRESULT CreateHullShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader);
-		virtual HRESULT CreateDomainShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader);
-		virtual HRESULT CreateComputeShader(const std::string &shaderName, const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader);
-		virtual HRESULT CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState);
-		virtual HRESULT CreateDepthStencilState(const DepthStencilStateDesc *pDepthStencilStateDesc, DepthStencilState *pDepthStencilState);
-		virtual HRESULT CreateRasterizerState(const RasterizerStateDesc *pRasterizerStateDesc, RasterizerState *pRasterizerState);
+		virtual HRESULT CreateTexture3D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture3D *pTexture3D) = 0;
+		virtual HRESULT CreateInputLayout(const VertexLayoutDesc *pInputElementDescs, UINT NumElements, const ShaderByteCode* shaderCode, VertexLayout *pInputLayout) = 0;
+        virtual HRESULT CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader) = 0;
+		virtual HRESULT CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader) = 0;
+		virtual HRESULT CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader) = 0;
+		virtual HRESULT CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader) = 0;
+		virtual HRESULT CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader) = 0;
+		virtual HRESULT CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader) = 0;
+		virtual HRESULT CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState) = 0;
+		virtual HRESULT CreateDepthStencilState(const DepthStencilStateDesc *pDepthStencilStateDesc, DepthStencilState *pDepthStencilState) = 0;
+		virtual HRESULT CreateRasterizerState(const RasterizerStateDesc *pRasterizerStateDesc, RasterizerState *pRasterizerState) = 0;
 		virtual HRESULT CreateSamplerState(const SamplerDesc *pSamplerDesc, Sampler *pSamplerState) = 0;
 		virtual HRESULT CreateQuery(const GPUQueryDesc *pDesc, GPUQuery *pQuery) = 0;
 		virtual HRESULT CreateGraphicsPSO(const GraphicsPSODesc* pDesc, GraphicsPSO* pso) = 0;
@@ -92,7 +92,7 @@ namespace wiGraphicsTypes
 
 		virtual void SetResolution(int width, int height) = 0;
 
-		virtual const Texture2D &GetBackBuffer();
+		virtual const Texture2D &GetBackBuffer() = 0;
 
 		enum GRAPHICSDEVICE_CAPABILITY
 		{

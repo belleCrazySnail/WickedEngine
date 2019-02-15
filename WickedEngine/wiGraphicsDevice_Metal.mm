@@ -780,9 +780,15 @@ namespace wiGraphicsTypes
 			RESOLUTIONCHANGED = true;
 		}
 	}
+    
+    const Texture2D &GraphicsDevice_Metal::GetBackBuffer()
+    {
+        return GetFrameResources().backBuffer;
+    }
 
 	HRESULT GraphicsDevice_Metal::CreateBuffer(const GPUBufferDesc *pDesc, const SubresourceData* pInitialData, GPUBuffer *pBuffer)
 	{
+        pBuffer->type = GPUResource::BUFFER;
 		pBuffer->Register(this);
 		pBuffer->desc = *pDesc;
         MTLResourceOptions option = MTLResourceStorageModeShared;
@@ -794,9 +800,18 @@ namespace wiGraphicsTypes
         pBuffer->resource = RETAIN_RES(buffer);
 		return S_OK;
 	}
+
+    HRESULT GraphicsDevice_Metal::CreateTexture1D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture1D *pTexture1D)
+    {
+        pTexture1D->type = GPUResource::TEXTURE_1D;
+        pTexture1D->Register(this);
+        
+        return S_OK;
+    }
     
 	HRESULT GraphicsDevice_Metal::CreateTexture2D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture2D *pTexture2D)
 	{
+        pTexture2D->type = GPUResource::TEXTURE_2D;
 		pTexture2D->Register(this);
 
 		pTexture2D->desc = *pDesc;
@@ -839,6 +854,103 @@ namespace wiGraphicsTypes
 		return S_OK;
 	}
     
+    HRESULT GraphicsDevice_Metal::CreateTexture3D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture3D *pTexture3D)
+    {
+        pTexture3D->type = GPUResource::TEXTURE_3D;
+        pTexture3D->Register(this);
+
+        return S_OK;
+    }
+    
+    HRESULT GraphicsDevice_Metal::CreateInputLayout(const VertexLayoutDesc *pInputElementDescs, UINT NumElements, const ShaderByteCode* shaderCode, VertexLayout *pInputLayout)
+    {
+        pInputLayout->Register(this);
+        MTLVertexDescriptor *vertexDesc = [[MTLVertexDescriptor alloc] init];
+        for (UINT i = 0; i < NumElements; ++i)
+        {
+            const VertexLayoutDesc &x = pInputElementDescs[i];
+            UINT slot = x.InputSlot;
+            vertexDesc.layouts[slot].stride = x.AlignedByteOffset;
+            vertexDesc.layouts[slot].stepRate = x.InstanceDataStepRate;
+            vertexDesc.layouts[slot].stepFunction = _ConvertInputClassification(x.InputSlotClass);
+        }
+        for (UINT i = 0; i < NumElements; ++i)
+        {
+            const VertexLayoutDesc &x = pInputElementDescs[i];
+            UINT index = x.SemanticIndex;
+            vertexDesc.attributes[index].format = _ConvertVertexFormat(x.Format);
+            vertexDesc.attributes[index].offset = x.AlignedByteOffset;
+            vertexDesc.attributes[index].bufferIndex = x.InputSlot;
+        }
+        pInputLayout->resource = RETAIN_RES(vertexDesc);
+
+        return S_OK;
+    }
+    
+    HRESULT GraphicsDevice_Metal::CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader)
+    {
+        pVertexShader->Register(this);
+        
+        id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
+        pVertexShader->resource = RETAIN_RES(func);
+        
+        return S_OK;
+    }
+    HRESULT GraphicsDevice_Metal::CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader)
+    {
+        pPixelShader->Register(this);
+        
+        id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
+        pPixelShader->resource = RETAIN_RES(func);
+        
+        return S_OK;
+    }
+    HRESULT GraphicsDevice_Metal::CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader)
+    {
+        
+        return E_FAIL;
+    }
+    HRESULT GraphicsDevice_Metal::CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader)
+    {
+        
+        return E_FAIL;
+    }
+    HRESULT GraphicsDevice_Metal::CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader)
+    {
+        
+        return E_FAIL;
+    }
+    HRESULT GraphicsDevice_Metal::CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader)
+    {
+        pComputeShader->Register(this);
+        
+        id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
+        pComputeShader->resource = RETAIN_RES(func);
+        
+        return S_OK;
+    }
+    HRESULT GraphicsDevice_Metal::CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState)
+    {
+        pBlendState->Register(this);
+        
+        pBlendState->desc = *pBlendStateDesc;
+        return S_OK;
+    }
+    HRESULT GraphicsDevice_Metal::CreateDepthStencilState(const DepthStencilStateDesc *pDepthStencilStateDesc, DepthStencilState *pDepthStencilState)
+    {
+        pDepthStencilState->Register(this);
+        
+        pDepthStencilState->desc = *pDepthStencilStateDesc;
+        return S_OK;
+    }
+    HRESULT GraphicsDevice_Metal::CreateRasterizerState(const RasterizerStateDesc *pRasterizerStateDesc, RasterizerState *pRasterizerState)
+    {
+        pRasterizerState->Register(this);
+        
+        pRasterizerState->desc = *pRasterizerStateDesc;
+        return S_OK;
+    }
+
 	HRESULT GraphicsDevice_Metal::CreateSamplerState(const SamplerDesc *pSamplerDesc, Sampler *pSamplerState)
 	{
 		pSamplerState->Register(this);
@@ -991,7 +1103,7 @@ namespace wiGraphicsTypes
         MTLRenderPipelineDescriptor* pipelineDesc = [[MTLRenderPipelineDescriptor alloc] init];
         if (pDesc->vs != nullptr)
         {
-            pipelineDesc.vertexFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->vs->code.ShaderName.c_str()]];
+            pipelineDesc.vertexFunction = BRIDGE_RES(MTLFunction, pDesc->vs->resource);
         }
         if (pDesc->hs != nullptr)
         {
@@ -1004,29 +1116,10 @@ namespace wiGraphicsTypes
         }
         if (pDesc->ps != nullptr)
         {
-            pipelineDesc.fragmentFunction = [_library newFunctionWithName:[NSString stringWithUTF8String:pDesc->ps->code.ShaderName.c_str()]];
+            pipelineDesc.fragmentFunction = BRIDGE_RES(MTLFunction, pDesc->ps->resource);
         }
         
-		// Input layout:
-		if (pDesc->il != nullptr)
-		{
-			MTLVertexDescriptor *vertexDesc = [[MTLVertexDescriptor alloc] init];
-            for (auto& x : pDesc->il->desc)
-			{
-                UINT slot = x.InputSlot;
-                vertexDesc.layouts[slot].stride = x.AlignedByteOffset;
-                vertexDesc.layouts[slot].stepRate = x.InstanceDataStepRate;
-                vertexDesc.layouts[slot].stepFunction = _ConvertInputClassification(x.InputSlotClass);
-			}
-            for (auto &x : pDesc->il->desc)
-            {
-                UINT index = x.SemanticIndex;
-                vertexDesc.attributes[index].format = _ConvertVertexFormat(x.Format);
-                vertexDesc.attributes[index].offset = x.AlignedByteOffset;
-                vertexDesc.attributes[index].bufferIndex = x.InputSlot;
-            }
-            pipelineDesc.vertexDescriptor = vertexDesc;
-		}
+        pipelineDesc.vertexDescriptor = BRIDGE_RES1(MTLVertexDescriptor, pDesc->il->resource);
         //Render target:
         BlendStateDesc pBlendStateDesc = pDesc->bs != nullptr ? pDesc->bs->GetDesc() : BlendStateDesc();
         for (UINT i = 0; i < pDesc->numRTs; ++i)
@@ -1288,24 +1381,24 @@ namespace wiGraphicsTypes
 		}
         [GetDirectCommandList(threadID) setViewports:viewports count:NumViewports];
 	}
-	void GraphicsDevice_Metal::BindRenderTargets(UINT NumViews, Texture2D* const *ppRenderTargets, Texture2D* depthStencilTexture, GRAPHICSTHREAD threadID, int arrayIndex)
+	void GraphicsDevice_Metal::BindRenderTargets(UINT NumViews, const Texture2D* const *ppRenderTargets, const Texture2D* depthStencilTexture, GRAPHICSTHREAD threadID, int arrayIndex)
 	{
 		assert(NumViews <= 8);
 
 	}
-	void GraphicsDevice_Metal::ClearRenderTarget(Texture* pTexture, const FLOAT ColorRGBA[4], GRAPHICSTHREAD threadID, int arrayIndex)
+	void GraphicsDevice_Metal::ClearRenderTarget(const Texture* pTexture, const FLOAT ColorRGBA[4], GRAPHICSTHREAD threadID, int arrayIndex)
 	{
 	}
-	void GraphicsDevice_Metal::ClearDepthStencil(Texture2D* pTexture, UINT ClearFlags, FLOAT Depth, UINT8 Stencil, GRAPHICSTHREAD threadID, int arrayIndex)
+	void GraphicsDevice_Metal::ClearDepthStencil(const Texture2D* pTexture, UINT ClearFlags, FLOAT Depth, UINT8 Stencil, GRAPHICSTHREAD threadID, int arrayIndex)
 	{
 	}
-	void GraphicsDevice_Metal::BindResource(SHADERSTAGE stage, GPUResource* resource, int slot, GRAPHICSTHREAD threadID, int arrayIndex)
+	void GraphicsDevice_Metal::BindResource(SHADERSTAGE stage, const GPUResource* resource, UINT slot, GRAPHICSTHREAD threadID, int arrayIndex)
 	{
 		assert(slot < GPU_RESOURCE_HEAP_SRV_COUNT);
 
         if (resource != nullptr && resource->resource != WI_NULL_HANDLE)
         {
-            Texture* tex = dynamic_cast<Texture*>(resource);
+            const Texture* tex = dynamic_cast<const Texture*>(resource);
             if (tex != nullptr && tex->resource != WI_NULL_HANDLE)
             {
                 id <MTLTexture> mtl_tex = BRIDGE_RES(MTLTexture, tex->resource);
@@ -1322,44 +1415,44 @@ namespace wiGraphicsTypes
                 }
             }
             else {
-                GPUBuffer* buffer = dynamic_cast<GPUBuffer*>(resource);
+                const GPUBuffer* buffer = dynamic_cast<const GPUBuffer*>(resource);
                 if (buffer != nullptr && buffer->resource != WI_NULL_HANDLE)
                     BindConstantBuffer(stage, buffer, slot, threadID);
             }
         }
 	}
-	void GraphicsDevice_Metal::BindResources(SHADERSTAGE stage, GPUResource *const* resources, int slot, int count, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindResources(SHADERSTAGE stage, const GPUResource *const* resources, UINT slot, UINT count, GRAPHICSTHREAD threadID)
 	{
 		if (resources != nullptr)
 		{
-			for (int i = 0; i < count; ++i)
+			for (UINT i = 0; i < count; ++i)
 			{
 				BindResource(stage, resources[i], slot + i, threadID, -1);
 			}
 		}
 	}
-	void GraphicsDevice_Metal::BindUAV(SHADERSTAGE stage, GPUResource* resource, int slot, GRAPHICSTHREAD threadID, int arrayIndex)
+	void GraphicsDevice_Metal::BindUAV(SHADERSTAGE stage, const GPUResource* resource, UINT slot, GRAPHICSTHREAD threadID, int arrayIndex)
 	{
 		assert(slot < GPU_RESOURCE_HEAP_UAV_COUNT);
 
 	}
-	void GraphicsDevice_Metal::BindUAVs(SHADERSTAGE stage, GPUResource *const* resources, int slot, int count, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindUAVs(SHADERSTAGE stage, const GPUResource *const* resources, UINT slot, UINT count, GRAPHICSTHREAD threadID)
 	{
 		if (resources != nullptr)
 		{
-			for (int i = 0; i < count; ++i)
+			for (UINT i = 0; i < count; ++i)
 			{
 				BindUAV(stage, resources[i], slot + i, threadID, -1);
 			}
 		}
 	}
-	void GraphicsDevice_Metal::UnbindResources(int slot, int num, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::UnbindResources(UINT slot, UINT num, GRAPHICSTHREAD threadID)
 	{
 	}
-	void GraphicsDevice_Metal::UnbindUAVs(int slot, int num, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::UnbindUAVs(UINT slot, UINT num, GRAPHICSTHREAD threadID)
 	{
 	}
-	void GraphicsDevice_Metal::BindSampler(SHADERSTAGE stage, Sampler* sampler, int slot, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindSampler(SHADERSTAGE stage, const Sampler* sampler, UINT slot, GRAPHICSTHREAD threadID)
 	{
 		assert(slot < GPU_SAMPLER_HEAP_COUNT);
 
@@ -1379,7 +1472,7 @@ namespace wiGraphicsTypes
             }
 		}
 	}
-	void GraphicsDevice_Metal::BindConstantBuffer(SHADERSTAGE stage, GPUBuffer* buffer, int slot, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindConstantBuffer(SHADERSTAGE stage, const GPUBuffer* buffer, UINT slot, GRAPHICSTHREAD threadID)
 	{
 		assert(slot < GPU_RESOURCE_HEAP_CBV_COUNT);
 
@@ -1399,13 +1492,13 @@ namespace wiGraphicsTypes
             }
 		}
 	}
-	void GraphicsDevice_Metal::BindVertexBuffers(GPUBuffer* const *vertexBuffers, int slot, int count, const UINT* strides, const UINT* offsets, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindVertexBuffers(const GPUBuffer* const *vertexBuffers, UINT slot, UINT count, const UINT* strides, const UINT* offsets, GRAPHICSTHREAD threadID)
 	{
 		NSUInteger voffsets[8] = {};
 		id <MTLBuffer> vbuffers[8] = {};
 		assert(count <= 8);
         bool valid = offsets == nullptr ? false : true;
-		for (int i = 0; i < count; ++i)
+		for (UINT i = 0; i < count; ++i)
 		{
 			if (vertexBuffers[i] != nullptr)
 			{
@@ -1420,7 +1513,7 @@ namespace wiGraphicsTypes
             [GetDirectCommandList(threadID) setVertexBuffers:vbuffers offsets:voffsets withRange:NSMakeRange(slot, count)];
 		}
 	}
-	void GraphicsDevice_Metal::BindIndexBuffer(GPUBuffer* _indexBuffer, const INDEXBUFFER_FORMAT format, UINT offset, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindIndexBuffer(const GPUBuffer* _indexBuffer, const INDEXBUFFER_FORMAT format, UINT offset, GRAPHICSTHREAD threadID)
 	{
 		if (_indexBuffer != nullptr)
 		{
@@ -1434,11 +1527,11 @@ namespace wiGraphicsTypes
 	{
         [GetDirectCommandList(threadID) setStencilReferenceValue:value];
 	}
-	void GraphicsDevice_Metal::BindBlendFactor(XMFLOAT4 value, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindBlendFactor(float r, float g, float b, float a, GRAPHICSTHREAD threadID)
 	{
-        [GetDirectCommandList(threadID) setBlendColorRed:value.x green:value.y blue:value.z alpha:value.w];
+        [GetDirectCommandList(threadID) setBlendColorRed:r green:g blue:b alpha:a];
 	}
-	void GraphicsDevice_Metal::BindGraphicsPSO(GraphicsPSO* pso, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindGraphicsPSO(const GraphicsPSO* pso, GRAPHICSTHREAD threadID)
 	{
         switch (pso->desc.pt) {
             case TRIANGLELIST:
@@ -1458,37 +1551,37 @@ namespace wiGraphicsTypes
         }
         [GetDirectCommandList(threadID) setRenderPipelineState:BRIDGE_RES(MTLRenderPipelineState, pso->pipeline)];
 	}
-	void GraphicsDevice_Metal::BindComputePSO(ComputePSO* pso, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::BindComputePSO(const ComputePSO* pso, GRAPHICSTHREAD threadID)
 	{
         [_computeEnc setComputePipelineState:BRIDGE_RES(MTLComputePipelineState, pso->pipeline)];
 	}
-	void GraphicsDevice_Metal::Draw(int vertexCount, UINT startVertexLocation, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::Draw(UINT vertexCount, UINT startVertexLocation, GRAPHICSTHREAD threadID)
 	{
         FrameResources::DrawInfo &info = GetFrameResources().drawInfo[threadID];
         [info.commandLists drawPrimitives:info.primType vertexStart:startVertexLocation vertexCount:vertexCount];
 	}
-	void GraphicsDevice_Metal::DrawIndexed(int indexCount, UINT startIndexLocation, UINT baseVertexLocation, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::DrawIndexed(UINT indexCount, UINT startIndexLocation, UINT baseVertexLocation, GRAPHICSTHREAD threadID)
 	{
         FrameResources::DrawInfo &info = GetFrameResources().drawInfo[threadID];
         [info.commandLists drawIndexedPrimitives:info.primType indexCount:indexCount indexType:info.indexType indexBuffer:info.indexBuffer indexBufferOffset:info.indexOffset instanceCount:1 baseVertex:baseVertexLocation baseInstance:0];
 	}
-	void GraphicsDevice_Metal::DrawInstanced(int vertexCount, int instanceCount, UINT startVertexLocation, UINT startInstanceLocation, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::DrawInstanced(UINT vertexCount, UINT instanceCount, UINT startVertexLocation, UINT startInstanceLocation, GRAPHICSTHREAD threadID)
 	{
         FrameResources::DrawInfo &info = GetFrameResources().drawInfo[threadID];
         [info.commandLists drawPrimitives:info.primType vertexStart:startVertexLocation vertexCount:vertexCount instanceCount:instanceCount baseInstance:startInstanceLocation];
 	}
-	void GraphicsDevice_Metal::DrawIndexedInstanced(int indexCount, int instanceCount, UINT startIndexLocation, UINT baseVertexLocation, UINT startInstanceLocation, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::DrawIndexedInstanced(UINT indexCount, UINT instanceCount, UINT startIndexLocation, UINT baseVertexLocation, UINT startInstanceLocation, GRAPHICSTHREAD threadID)
 	{
         FrameResources::DrawInfo &info = GetFrameResources().drawInfo[threadID];
         [info.commandLists drawIndexedPrimitives:info.primType indexCount:indexCount indexType:info.indexType indexBuffer:info.indexBuffer indexBufferOffset:info.indexOffset instanceCount:instanceCount baseVertex:baseVertexLocation baseInstance:startInstanceLocation];
 	}
-	void GraphicsDevice_Metal::DrawInstancedIndirect(GPUBuffer* args, UINT args_offset, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::DrawInstancedIndirect(const GPUBuffer* args, UINT args_offset, GRAPHICSTHREAD threadID)
 	{
         if (args == nullptr) return;
         FrameResources::DrawInfo &info = GetFrameResources().drawInfo[threadID];
         [info.commandLists drawPrimitives:info.primType indirectBuffer:BRIDGE_RES(MTLBuffer, args->resource) indirectBufferOffset:args_offset];
 	}
-	void GraphicsDevice_Metal::DrawIndexedInstancedIndirect(GPUBuffer* args, UINT args_offset, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::DrawIndexedInstancedIndirect(const GPUBuffer* args, UINT args_offset, GRAPHICSTHREAD threadID)
 	{
         if (args == nullptr) return;
         FrameResources::DrawInfo &info = GetFrameResources().drawInfo[threadID];
@@ -1498,27 +1591,27 @@ namespace wiGraphicsTypes
 	{
         [_computeEnc dispatchThreadgroups:MTLSizeMake(threadGroupCountX, threadGroupCountY, threadGroupCountZ) threadsPerThreadgroup:MTLSizeMake(1, 1, 1)];
 	}
-	void GraphicsDevice_Metal::DispatchIndirect(GPUBuffer* args, UINT args_offset, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::DispatchIndirect(const GPUBuffer* args, UINT args_offset, GRAPHICSTHREAD threadID)
 	{
         if (args == nullptr) return;
         [_computeEnc dispatchThreadgroupsWithIndirectBuffer:BRIDGE_RES(MTLBuffer, args->resource) indirectBufferOffset:args_offset threadsPerThreadgroup:MTLSizeMake(1, 1, 1)];
 	}
-	void GraphicsDevice_Metal::CopyTexture2D(Texture2D* pDst, Texture2D* pSrc, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::CopyTexture2D(const Texture2D* pDst, const Texture2D* pSrc, GRAPHICSTHREAD threadID)
 	{
         id <MTLBlitCommandEncoder> blitEnc = [_commandBuffer blitCommandEncoder];
         [blitEnc copyFromTexture:BRIDGE_RES(MTLTexture, pSrc->resource) sourceSlice:0 sourceLevel:0 sourceOrigin:{0,0,0} sourceSize:MTLSizeMake(pSrc->desc.Width, pSrc->desc.Height, 1) toTexture:BRIDGE_RES(MTLTexture, pDst->resource) destinationSlice:0 destinationLevel:0 destinationOrigin:{0,0,0}];
         [blitEnc endEncoding];
 	}
-	void GraphicsDevice_Metal::CopyTexture2D_Region(Texture2D* pDst, UINT dstMip, UINT dstX, UINT dstY, Texture2D* pSrc, UINT srcMip, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::CopyTexture2D_Region(const Texture2D* pDst, UINT dstMip, UINT dstX, UINT dstY, const Texture2D* pSrc, UINT srcMip, GRAPHICSTHREAD threadID)
 	{
         id <MTLBlitCommandEncoder> blitEnc = [_commandBuffer blitCommandEncoder];
         [blitEnc copyFromTexture:BRIDGE_RES(MTLTexture, pSrc->resource) sourceSlice:0 sourceLevel:srcMip sourceOrigin:{0,0,0} sourceSize:MTLSizeMake(pSrc->desc.Width, pSrc->desc.Height, 1) toTexture:BRIDGE_RES(MTLTexture, pDst->resource) destinationSlice:0 destinationLevel:dstMip destinationOrigin:{dstX,dstY,0}];
         [blitEnc endEncoding];
 	}
-	void GraphicsDevice_Metal::MSAAResolve(Texture2D* pDst, Texture2D* pSrc, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::MSAAResolve(const Texture2D* pDst, const Texture2D* pSrc, GRAPHICSTHREAD threadID)
 	{
 	}
-	void GraphicsDevice_Metal::UpdateBuffer(GPUBuffer* buffer, const void* data, GRAPHICSTHREAD threadID, int dataSize)
+	void GraphicsDevice_Metal::UpdateBuffer(const GPUBuffer* buffer, const void* data, GRAPHICSTHREAD threadID, int dataSize)
 	{
 		assert(buffer->desc.Usage != USAGE_IMMUTABLE && "Cannot update IMMUTABLE GPUBuffer!");
 		assert((int)buffer->desc.ByteWidth >= dataSize || dataSize < 0 && "Data size is too big!");
@@ -1536,26 +1629,26 @@ namespace wiGraphicsTypes
         memcpy(handle, data, trueSize);
         
 	}
-	bool GraphicsDevice_Metal::DownloadResource(GPUResource* resourceToDownload, GPUResource* resourceDest, void* dataDest, GRAPHICSTHREAD threadID)
+	bool GraphicsDevice_Metal::DownloadResource(const GPUResource* resourceToDownload, const GPUResource* resourceDest, void* dataDest, GRAPHICSTHREAD threadID)
 	{
 		return false;
 	}
 
-	void GraphicsDevice_Metal::QueryBegin(GPUQuery *query, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::QueryBegin(const GPUQuery *query, GRAPHICSTHREAD threadID)
 	{
 	}
-	void GraphicsDevice_Metal::QueryEnd(GPUQuery *query, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::QueryEnd(const GPUQuery *query, GRAPHICSTHREAD threadID)
 	{
 	}
-	bool GraphicsDevice_Metal::QueryRead(GPUQuery *query, GRAPHICSTHREAD threadID)
+	bool GraphicsDevice_Metal::QueryRead(const GPUQuery *query, GPUQueryResult* result)
 	{
 		return true;
 	}
 
-	void GraphicsDevice_Metal::UAVBarrier(GPUResource *const* uavs, UINT NumBarriers, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::UAVBarrier(const GPUResource *const* uavs, UINT NumBarriers, GRAPHICSTHREAD threadID)
 	{
 	}
-	void GraphicsDevice_Metal::TransitionBarrier(GPUResource *const* resources, UINT NumBarriers, RESOURCE_STATES stateBefore, RESOURCE_STATES stateAfter, GRAPHICSTHREAD threadID)
+	void GraphicsDevice_Metal::TransitionBarrier(const GPUResource *const* resources, UINT NumBarriers, RESOURCE_STATES stateBefore, RESOURCE_STATES stateAfter, GRAPHICSTHREAD threadID)
 	{
 
 	}

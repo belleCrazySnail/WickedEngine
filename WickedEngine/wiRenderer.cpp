@@ -7917,7 +7917,7 @@ void UpdateFrameCB(GRAPHICSTHREAD threadID)
 	cb.g_xFrame_VoxelRadianceDataRes = GetVoxelRadianceEnabled() ? (uint)voxelSceneData.res : 0;
 	cb.g_xFrame_VoxelRadianceDataRes_Inverse = 1.0f / (float)cb.g_xFrame_VoxelRadianceDataRes;
 	cb.g_xFrame_VoxelRadianceDataMIPs = voxelSceneData.mips;
-	cb.g_xFrame_VoxelRadianceNumCones = max(min(voxelSceneData.numCones, 16), 1);
+    cb.g_xFrame_VoxelRadianceNumCones = std::max(std::min(voxelSceneData.numCones, 16u), 1u);
 	cb.g_xFrame_VoxelRadianceNumCones_Inverse = 1.0f / (float)cb.g_xFrame_VoxelRadianceNumCones;
 	cb.g_xFrame_VoxelRadianceRayStepSize = voxelSceneData.rayStepSize;
 	cb.g_xFrame_VoxelRadianceReflectionsEnabled = voxelSceneData.reflectionsEnabled;

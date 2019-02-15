@@ -289,7 +289,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)) {
 				VertexShader* shader = new VertexShader;
-				wiRenderer::GetDevice()->CreateVertexShader(nameStr, buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateVertexShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -299,7 +303,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				PixelShader* shader = new PixelShader;
-				wiRenderer::GetDevice()->CreatePixelShader(nameStr, buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreatePixelShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -309,7 +317,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				GeometryShader* shader = new GeometryShader;
-				wiRenderer::GetDevice()->CreateGeometryShader(nameStr, buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateGeometryShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -319,7 +331,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				HullShader* shader = new HullShader;
-				wiRenderer::GetDevice()->CreateHullShader(nameStr, buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateHullShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -329,7 +345,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)){
 				DomainShader* shader = new DomainShader;
-				wiRenderer::GetDevice()->CreateDomainShader(nameStr, buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateDomainShader(&code, shader);
 				success = shader;
 			}
 		}
@@ -339,7 +359,11 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			vector<uint8_t> buffer;
 			if (wiHelper::readByteData(nameStr, buffer)) {
 				ComputeShader* shader = new ComputeShader;
-				wiRenderer::GetDevice()->CreateComputeShader(nameStr, buffer.data(), buffer.size(), shader);
+                ShaderByteCode code;
+                code.ShaderName = nameStr;
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+				wiRenderer::GetDevice()->CreateComputeShader(&code, shader);
 				success = shader;
 			}
 		}

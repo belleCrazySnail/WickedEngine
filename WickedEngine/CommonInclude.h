@@ -7,6 +7,7 @@
 
 #ifdef _WIN32
 // Platform specific:
+#define NOMINMAX
 #include <SDKDDKVer.h>
 #include <windows.h>
 
