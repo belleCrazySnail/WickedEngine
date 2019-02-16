@@ -10,7 +10,6 @@
 #include <iostream>
 #include <set>
 
-
 #ifdef WICKEDENGINE_BUILD_VULKAN
 #pragma comment(lib,"vulkan-1.lib")
 
@@ -1985,8 +1984,8 @@ namespace wiGraphicsTypes
 			VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
 
 			swapChainExtent = { static_cast<uint32_t>(SCREENWIDTH), static_cast<uint32_t>(SCREENHEIGHT) };
-			swapChainExtent.width = max(swapChainSupport.capabilities.minImageExtent.width, min(swapChainSupport.capabilities.maxImageExtent.width, swapChainExtent.width));
-			swapChainExtent.height = max(swapChainSupport.capabilities.minImageExtent.height, min(swapChainSupport.capabilities.maxImageExtent.height, swapChainExtent.height));
+			swapChainExtent.width = std::max(swapChainSupport.capabilities.minImageExtent.width, std::min(swapChainSupport.capabilities.maxImageExtent.width, swapChainExtent.width));
+			swapChainExtent.height = std::max(swapChainSupport.capabilities.minImageExtent.height, std::min(swapChainSupport.capabilities.maxImageExtent.height, swapChainExtent.height));
 
 			//uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
 			//if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
@@ -2438,7 +2437,7 @@ namespace wiGraphicsTypes
 		}
 	}
 
-	Texture2D GraphicsDevice_Vulkan::GetBackBuffer()
+	const Texture2D &GraphicsDevice_Vulkan::GetBackBuffer()
 	{
 		return Texture2D();
 	}
@@ -2656,7 +2655,7 @@ namespace wiGraphicsTypes
 
 		if (pTexture2D->desc.MipLevels == 0)
 		{
-			pTexture2D->desc.MipLevels = static_cast<UINT>(log2(max(pTexture2D->desc.Width, pTexture2D->desc.Height)));
+			pTexture2D->desc.MipLevels = static_cast<UINT>(log2(std::max(pTexture2D->desc.Width, pTexture2D->desc.Height)));
 		}
 
 
@@ -2775,8 +2774,8 @@ namespace wiGraphicsTypes
 							1
 						};
 
-						width = max(1, width / 2);
-						height /= max(1, height / 2);
+						width = std::max(1u, width / 2);
+						height /= std::max(1u, height / 2);
 
 						copyRegions.push_back(copyRegion);
 					}
@@ -3194,63 +3193,70 @@ namespace wiGraphicsTypes
 
 		return S_OK;
 	}
-	HRESULT GraphicsDevice_Vulkan::CreateVertexShader(const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader)
+	HRESULT GraphicsDevice_Vulkan::CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader)
 	{
 		pVertexShader->Register(this);
 
-		pVertexShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pVertexShader->code.data, pShaderBytecode, BytecodeLength);
-		pVertexShader->code.size = BytecodeLength;
+		VkShaderModuleCreateInfo moduleInfo = {};
+		moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+		moduleInfo.codeSize = pCode->size;
+		moduleInfo.pCode = reinterpret_cast<const uint32_t*>(pCode->data);
+		VkShaderModule shaderModule;
+		if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create shader module!");
+		}
+		pVertexShader->resource = shaderModule;
+		pVertexShader->code.ShaderName = pCode->ShaderName;
 
 		return (pVertexShader->code.data != nullptr && pVertexShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_Vulkan::CreatePixelShader(const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader)
+	HRESULT GraphicsDevice_Vulkan::CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader)
 	{
 		pPixelShader->Register(this);
 
-		pPixelShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pPixelShader->code.data, pShaderBytecode, BytecodeLength);
-		pPixelShader->code.size = BytecodeLength;
+		pPixelShader->code.data = new BYTE[pCode->size];
+		memcpy(pPixelShader->code.data, pCode->data, pCode->size);
+		pPixelShader->code.size = pCode->size;
 
 		return (pPixelShader->code.data != nullptr && pPixelShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_Vulkan::CreateGeometryShader(const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader)
+	HRESULT GraphicsDevice_Vulkan::CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader)
 	{
 		pGeometryShader->Register(this);
 
-		pGeometryShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pGeometryShader->code.data, pShaderBytecode, BytecodeLength);
-		pGeometryShader->code.size = BytecodeLength;
+		pGeometryShader->code.data = new BYTE[pCode->size];
+		memcpy(pGeometryShader->code.data, pCode->data, pCode->size);
+		pGeometryShader->code.size = pCode->size;
 
 		return (pGeometryShader->code.data != nullptr && pGeometryShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_Vulkan::CreateHullShader(const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader)
+	HRESULT GraphicsDevice_Vulkan::CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader)
 	{
 		pHullShader->Register(this);
 
-		pHullShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pHullShader->code.data, pShaderBytecode, BytecodeLength);
-		pHullShader->code.size = BytecodeLength;
+		pHullShader->code.data = new BYTE[pCode->size];
+		memcpy(pHullShader->code.data, pCode->data, pCode->size);
+		pHullShader->code.size = pCode->size;
 
 		return (pHullShader->code.data != nullptr && pHullShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_Vulkan::CreateDomainShader(const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader)
+	HRESULT GraphicsDevice_Vulkan::CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader)
 	{
 		pDomainShader->Register(this);
 
-		pDomainShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pDomainShader->code.data, pShaderBytecode, BytecodeLength);
-		pDomainShader->code.size = BytecodeLength;
+		pDomainShader->code.data = new BYTE[pCode->size];
+		memcpy(pDomainShader->code.data, pCode->data, pCode->size);
+		pDomainShader->code.size = pCode->size;
 
 		return (pDomainShader->code.data != nullptr && pDomainShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_Vulkan::CreateComputeShader(const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader)
+	HRESULT GraphicsDevice_Vulkan::CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader)
 	{
 		pComputeShader->Register(this);
 
-		pComputeShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pComputeShader->code.data, pShaderBytecode, BytecodeLength);
-		pComputeShader->code.size = BytecodeLength;
+		pComputeShader->code.data = new BYTE[pCode->size];
+		memcpy(pComputeShader->code.data, pCode->data, pCode->size);
+		pComputeShader->code.size = pCode->size;
 
 		return (pComputeShader->code.data != nullptr && pComputeShader->code.size > 0 ? S_OK : E_FAIL);
 	}
@@ -3558,20 +3564,12 @@ namespace wiGraphicsTypes
 
 		if (pDesc->vs != nullptr)
 		{
-			VkShaderModuleCreateInfo moduleInfo = {}; 
-			moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-			moduleInfo.codeSize = pDesc->vs->code.size;
-			moduleInfo.pCode = reinterpret_cast<const uint32_t*>(pDesc->vs->code.data);
-			VkShaderModule shaderModule;
-			if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create shader module!");
-			}
 
 			VkPipelineShaderStageCreateInfo stageInfo = {}; 
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-			stageInfo.module = shaderModule;
-			stageInfo.pName = "main";
+			stageInfo.module = pDesc->vs->resource;
+			stageInfo.pName = pDesc->vs->code.ShaderName.c_str();
 
 			shaderStages.push_back(stageInfo);
 		}
@@ -3991,6 +3989,11 @@ namespace wiGraphicsTypes
 		return hr;
 	}
 
+	HRESULT GraphicsDevice_Vulkan::CreateRenderPass(const RenderPassDesc *pDesc, RenderPass *pRenderPass)
+	{
+
+		return S_OK;
+	}
 
 	void GraphicsDevice_Vulkan::DestroyResource(GPUResource* pResource)
 	{
@@ -4147,6 +4150,13 @@ namespace wiGraphicsTypes
 
 	}
 
+	void GraphicsDevice_Vulkan::BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID)
+	{
+	}
+
+	void GraphicsDevice_Vulkan::EndRenderPass(GRAPHICSTHREAD threadID)
+	{
+	}
 
 	void GraphicsDevice_Vulkan::PresentBegin()
 	{
@@ -4435,8 +4445,8 @@ namespace wiGraphicsTypes
 		for(UINT i = 0; i < numRects; ++i) {
 			scissors[i].extent.width = abs(rects[i].right - rects[i].left);
 			scissors[i].extent.height = abs(rects[i].top - rects[i].bottom);
-			scissors[i].offset.x = max(0, rects[i].left);
-			scissors[i].offset.y = max(0, rects[i].top);
+			scissors[i].offset.x = std::max(0l, rects[i].left);
+			scissors[i].offset.y = std::max(0l, rects[i].top);
 		}
 		vkCmdSetScissor(GetDirectCommandList(threadID), 0, numRects, scissors);
 	}
@@ -4965,7 +4975,7 @@ namespace wiGraphicsTypes
 			return;
 		}
 
-		dataSize = min((int)buffer->desc.ByteWidth, dataSize);
+		dataSize = std::min((int)buffer->desc.ByteWidth, dataSize);
 		dataSize = (dataSize >= 0 ? dataSize : buffer->desc.ByteWidth);
 
 

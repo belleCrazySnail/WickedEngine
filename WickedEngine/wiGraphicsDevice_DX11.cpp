@@ -1576,7 +1576,7 @@ void GraphicsDevice_DX11::SetResolution(int width, int height)
 	}
 }
 
-Texture2D GraphicsDevice_DX11::GetBackBuffer()
+const Texture2D &GraphicsDevice_DX11::GetBackBuffer()
 {
 	Texture2D result;
 	result.resource = (wiCPUHandle)backBuffer;
@@ -1771,7 +1771,7 @@ HRESULT GraphicsDevice_DX11::CreateTexture2D(const TextureDesc* pDesc, const Sub
 	D3D11_SUBRESOURCE_DATA* data = nullptr;
 	if (pInitialData != nullptr)
 	{
-		UINT dataCount = pDesc->ArraySize * max(1, pDesc->MipLevels);
+		UINT dataCount = pDesc->ArraySize * std::max(1u, pDesc->MipLevels);
 		data = new D3D11_SUBRESOURCE_DATA[dataCount];
 		for (UINT slice = 0; slice < dataCount; ++slice)
 		{
@@ -1789,7 +1789,7 @@ HRESULT GraphicsDevice_DX11::CreateTexture2D(const TextureDesc* pDesc, const Sub
 
 	if (pTexture2D->desc.MipLevels == 0)
 	{
-		pTexture2D->desc.MipLevels = (UINT)log2(max(pTexture2D->desc.Width, pTexture2D->desc.Height));
+		pTexture2D->desc.MipLevels = (UINT)log2(std::max(pTexture2D->desc.Width, pTexture2D->desc.Height));
 	}
 
 	CreateRenderTargetView(pTexture2D);
@@ -1890,7 +1890,7 @@ HRESULT GraphicsDevice_DX11::CreateTexture3D(const TextureDesc* pDesc, const Sub
 
 	if (pTexture3D->desc.MipLevels == 0)
 	{
-		pTexture3D->desc.MipLevels = (UINT)log2(max(pTexture3D->desc.Width, max(pTexture3D->desc.Height, pTexture3D->desc.Depth)));
+		pTexture3D->desc.MipLevels = (UINT)log2(std::max(pTexture3D->desc.Width, std::max(pTexture3D->desc.Height, pTexture3D->desc.Depth)));
 	}
 
 	CreateShaderResourceView(pTexture3D);
@@ -2552,7 +2552,7 @@ HRESULT GraphicsDevice_DX11::CreateInputLayout(const VertexLayoutDesc *pInputEle
 	D3D11_INPUT_ELEMENT_DESC* desc = new D3D11_INPUT_ELEMENT_DESC[NumElements];
 	for (UINT i = 0; i < NumElements; ++i)
 	{
-		desc[i].SemanticName = pInputElementDescs[i].SemanticName;
+		desc[i].SemanticName = pInputElementDescs[i].SemanticName.c_str();
 		desc[i].SemanticIndex = pInputElementDescs[i].SemanticIndex;
 		desc[i].Format = _ConvertFormat(pInputElementDescs[i].Format);
 		desc[i].InputSlot = pInputElementDescs[i].InputSlot;
@@ -2571,59 +2571,59 @@ HRESULT GraphicsDevice_DX11::CreateInputLayout(const VertexLayoutDesc *pInputEle
 
 	return hr;
 }
-HRESULT GraphicsDevice_DX11::CreateVertexShader(const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader)
+HRESULT GraphicsDevice_DX11::CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader)
 {
 	pVertexShader->Register(this);
 
-	pVertexShader->code.data = new BYTE[BytecodeLength];
-	memcpy(pVertexShader->code.data, pShaderBytecode, BytecodeLength);
-	pVertexShader->code.size = BytecodeLength;
-	return device->CreateVertexShader(pShaderBytecode, BytecodeLength, nullptr, (ID3D11VertexShader**)&pVertexShader->resource);
+	pVertexShader->code.data = new BYTE[pCode->size];
+	memcpy(pVertexShader->code.data, pCode->data, pCode->size);
+	pVertexShader->code.size = pCode->size;
+	return device->CreateVertexShader(pCode->data, pCode->size, nullptr, (ID3D11VertexShader**)&pVertexShader->resource);
 }
-HRESULT GraphicsDevice_DX11::CreatePixelShader(const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader)
+HRESULT GraphicsDevice_DX11::CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader)
 {
 	pPixelShader->Register(this);
 
-	pPixelShader->code.data = new BYTE[BytecodeLength];
-	memcpy(pPixelShader->code.data, pShaderBytecode, BytecodeLength);
-	pPixelShader->code.size = BytecodeLength;
-	return device->CreatePixelShader(pShaderBytecode, BytecodeLength, nullptr, (ID3D11PixelShader**)&pPixelShader->resource);
+	pPixelShader->code.data = new BYTE[pCode->size];
+	memcpy(pPixelShader->code.data, pCode->data, pCode->size);
+	pPixelShader->code.size = pCode->size;
+	return device->CreatePixelShader(pCode->data, pCode->size, nullptr, (ID3D11PixelShader**)&pPixelShader->resource);
 }
-HRESULT GraphicsDevice_DX11::CreateGeometryShader(const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader)
+HRESULT GraphicsDevice_DX11::CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader)
 {
 	pGeometryShader->Register(this);
 
-	pGeometryShader->code.data = new BYTE[BytecodeLength];
-	memcpy(pGeometryShader->code.data, pShaderBytecode, BytecodeLength);
-	pGeometryShader->code.size = BytecodeLength;
-	return device->CreateGeometryShader(pShaderBytecode, BytecodeLength, nullptr, (ID3D11GeometryShader**)&pGeometryShader->resource);
+	pGeometryShader->code.data = new BYTE[pCode->size];
+	memcpy(pGeometryShader->code.data, pCode->data, pCode->size);
+	pGeometryShader->code.size = pCode->size;
+	return device->CreateGeometryShader(pCode->data, pCode->size, nullptr, (ID3D11GeometryShader**)&pGeometryShader->resource);
 }
-HRESULT GraphicsDevice_DX11::CreateHullShader(const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader)
+HRESULT GraphicsDevice_DX11::CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader)
 {
 	pHullShader->Register(this);
 
-	pHullShader->code.data = new BYTE[BytecodeLength];
-	memcpy(pHullShader->code.data, pShaderBytecode, BytecodeLength);
-	pHullShader->code.size = BytecodeLength;
-	return device->CreateHullShader(pShaderBytecode, BytecodeLength, nullptr, (ID3D11HullShader**)&pHullShader->resource);
+	pHullShader->code.data = new BYTE[pCode->size];
+	memcpy(pHullShader->code.data, pCode->data, pCode->size);
+	pHullShader->code.size = pCode->size;
+	return device->CreateHullShader(pCode->data, pCode->size, nullptr, (ID3D11HullShader**)&pHullShader->resource);
 }
-HRESULT GraphicsDevice_DX11::CreateDomainShader(const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader)
+HRESULT GraphicsDevice_DX11::CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader)
 {
 	pDomainShader->Register(this);
 
-	pDomainShader->code.data = new BYTE[BytecodeLength];
-	memcpy(pDomainShader->code.data, pShaderBytecode, BytecodeLength);
-	pDomainShader->code.size = BytecodeLength;
-	return device->CreateDomainShader(pShaderBytecode, BytecodeLength, nullptr, (ID3D11DomainShader**)&pDomainShader->resource);
+	pDomainShader->code.data = new BYTE[pCode->size];
+	memcpy(pDomainShader->code.data, pCode->data, pCode->size);
+	pDomainShader->code.size = pCode->size;
+	return device->CreateDomainShader(pCode->data, pCode->size, nullptr, (ID3D11DomainShader**)&pDomainShader->resource);
 }
-HRESULT GraphicsDevice_DX11::CreateComputeShader(const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader)
+HRESULT GraphicsDevice_DX11::CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader)
 {
 	pComputeShader->Register(this);
 
-	pComputeShader->code.data = new BYTE[BytecodeLength];
-	memcpy(pComputeShader->code.data, pShaderBytecode, BytecodeLength);
-	pComputeShader->code.size = BytecodeLength;
-	return device->CreateComputeShader(pShaderBytecode, BytecodeLength, nullptr, (ID3D11ComputeShader**)&pComputeShader->resource);
+	pComputeShader->code.data = new BYTE[pCode->size];
+	memcpy(pComputeShader->code.data, pCode->data, pCode->size);
+	pComputeShader->code.size = pCode->size;
+	return device->CreateComputeShader(pCode->data, pCode->size, nullptr, (ID3D11ComputeShader**)&pComputeShader->resource);
 }
 HRESULT GraphicsDevice_DX11::CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState)
 {
@@ -2823,6 +2823,11 @@ HRESULT GraphicsDevice_DX11::CreateComputePSO(const ComputePSODesc* pDesc, Compu
 	return S_OK;
 }
 
+HRESULT GraphicsDevice_DX11::CreateRenderPass(const RenderPassDesc *pDesc, RenderPass *pRenderPass)
+{
+
+	return S_OK;
+}
 
 void GraphicsDevice_DX11::DestroyResource(GPUResource* pResource)
 {
@@ -3008,6 +3013,14 @@ void GraphicsDevice_DX11::SetName(GPUResource* pResource, const std::string& nam
 	((ID3D11Resource*)pResource->resource)->SetPrivateData(WKPDID_D3DDebugObjectName, (UINT)name.length(), name.c_str());
 }
 
+void GraphicsDevice_DX11::BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID)
+{
+}
+
+void GraphicsDevice_DX11::EndRenderPass(GRAPHICSTHREAD threadID)
+{
+}
+
 void GraphicsDevice_DX11::PresentBegin()
 {
 	ViewPort viewPort;
@@ -3182,7 +3195,7 @@ void GraphicsDevice_DX11::BindRenderTargets(UINT NumViews, const Texture2D* cons
 	// RTVs:
 	ID3D11RenderTargetView* renderTargetViews[8];
 	ZeroMemory(renderTargetViews, sizeof(renderTargetViews));
-	for (UINT i = 0; i < min(NumViews, 8); ++i)
+	for (UINT i = 0; i < std::min(NumViews, 8u); ++i)
 	{
 		if (arrayIndex < 0 || ppRenderTargets[i]->additionalRTVs.empty())
 		{
@@ -3355,8 +3368,8 @@ void GraphicsDevice_DX11::BindUAV(SHADERSTAGE stage, const GPUResource* resource
 		else
 		{
 			raster_uavs[threadID][slot] = (ID3D11UnorderedAccessView*)resource->UAV;
-			raster_uavs_slot[threadID] = min(raster_uavs_slot[threadID], slot);
-			raster_uavs_count[threadID] = max(raster_uavs_count[threadID], 1);
+			raster_uavs_slot[threadID] = std::min(raster_uavs_slot[threadID], (uint8_t)slot);
+			raster_uavs_count[threadID] = std::max(raster_uavs_count[threadID], (uint8_t)1);
 		}
 	}
 }
@@ -3380,8 +3393,8 @@ void GraphicsDevice_DX11::BindUAVs(SHADERSTAGE stage, const GPUResource *const* 
 	}
 	else
 	{
-		raster_uavs_slot[threadID] = min(raster_uavs_slot[threadID], slot);
-		raster_uavs_count[threadID] = max(raster_uavs_count[threadID], count);
+		raster_uavs_slot[threadID] = std::min(raster_uavs_slot[threadID], (uint8_t)slot);
+		raster_uavs_count[threadID] = std::max(raster_uavs_count[threadID], (uint8_t)count);
 	}
 }
 void GraphicsDevice_DX11::UnbindResources(UINT slot, UINT num, GRAPHICSTHREAD threadID)
@@ -3750,7 +3763,7 @@ bool GraphicsDevice_DX11::DownloadResource(const GPUResource* resourceToDownload
 			bool result = SUCCEEDED(hr);
 			if (result)
 			{
-				UINT cpycount = max(1, textureToDownload->desc.Width) * max(1, textureToDownload->desc.Height) * max(1, textureToDownload->desc.Depth);
+				UINT cpycount = std::max(1u, textureToDownload->desc.Width) * std::max(1u, textureToDownload->desc.Height) * std::max(1u, textureToDownload->desc.Depth);
 				UINT cpystride = GetFormatStride(textureToDownload->desc.Format);
 				UINT cpysize = cpycount * cpystride;
 				memcpy(dataDest, mappedResource.pData, cpysize);

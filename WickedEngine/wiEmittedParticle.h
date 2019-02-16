@@ -99,13 +99,13 @@ public:
 	// Non-serialized attributes:
 	XMFLOAT3 center;
 
-	inline bool IsDebug() const { return _flags & DEBUG; }
+	inline bool IsDebug() const { return _flags & DEBUG_FLAG; }
 	inline bool IsPaused() const { return _flags & PAUSED; }
 	inline bool IsSorted() const { return _flags & SORTING; }
 	inline bool IsDepthCollisionEnabled() const { return _flags & DEPTHCOLLISION; }
 	inline bool IsSPHEnabled() const { return _flags & SPH_FLUIDSIMULATION; }
 
-	inline void SetDebug(bool value) { if (value) { _flags |= DEBUG; } else { _flags &= ~DEBUG; } }
+	inline void SetDebug(bool value) { if (value) { _flags |= DEBUG_FLAG; } else { _flags &= ~DEBUG_FLAG; } }
 	inline void SetPaused(bool value) { if (value) { _flags |= PAUSED; } else { _flags &= ~PAUSED; } }
 	inline void SetSorted(bool value) { if (value) { _flags |= SORTING; } else { _flags &= ~SORTING; } }
 	inline void SetDepthCollisionEnabled(bool value) { if (value) { _flags |= DEPTHCOLLISION; } else { _flags &= ~DEPTHCOLLISION; } }

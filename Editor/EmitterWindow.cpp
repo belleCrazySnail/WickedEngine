@@ -520,7 +520,7 @@ void EmitterWindow::UpdateData()
 	ss << "Memort Budget: " << emitter->GetMemorySizeInBytes() / 1024.0f / 1024.0f << " MB" << endl;
 	ss << endl;
 
-	if (emitter->DEBUG)
+	if (emitter->DEBUG_FLAG)
 	{
 		auto data = emitter->GetDebugData();
 

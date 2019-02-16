@@ -32,7 +32,6 @@
 #include "wiJobSystem.h"
 #include "wiSpinLock.h"
 
-#include <algorithm>
 #include <unordered_set>
 #include <deque>
 

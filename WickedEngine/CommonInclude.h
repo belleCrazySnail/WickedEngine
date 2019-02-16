@@ -53,6 +53,7 @@ typedef uint32_t HRESULT;
 
 #define _getcwd getcwd
 #define _chdir chdir
+#define strcpy_s strcpy
 
 #define ALIGN_16
 
@@ -62,6 +63,8 @@ typedef uint32_t HRESULT;
 #include "DX/DirectXCollision.h"
 
 #endif //_WIN32
+
+#include <algorithm>
 
 #define SAFE_RELEASE(a) if((a)!=nullptr){(a)->Release();(a)=nullptr;}
 #define SAFE_DELETE(a) if((a)!=nullptr){delete (a);(a)=nullptr;}

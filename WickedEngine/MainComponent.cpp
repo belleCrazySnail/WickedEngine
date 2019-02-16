@@ -126,7 +126,7 @@ void MainComponent::Run()
 
 	wiInputManager::Update();
 
-	deltaTime = float(max(0, timer.elapsed() / 1000.0));
+	deltaTime = float(std::max(0., timer.elapsed() / 1000.0));
 	timer.record();
 
 	if (wiWindowRegistration::IsWindowActive())

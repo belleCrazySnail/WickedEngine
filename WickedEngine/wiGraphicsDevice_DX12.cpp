@@ -2058,7 +2058,7 @@ namespace wiGraphicsTypes
 		}
 	}
 
-	Texture2D GraphicsDevice_DX12::GetBackBuffer()
+	const Texture2D &GraphicsDevice_DX12::GetBackBuffer()
 	{
 		Texture2D result;
 		result.resource = (wiCPUHandle)GetFrameResources().backBuffer;
@@ -2321,14 +2321,14 @@ namespace wiGraphicsTypes
 
 		if (pTexture2D->desc.MipLevels == 0)
 		{
-			pTexture2D->desc.MipLevels = (UINT)log2(max(pTexture2D->desc.Width, pTexture2D->desc.Height));
+			pTexture2D->desc.MipLevels = (UINT)log2(std::max(pTexture2D->desc.Width, pTexture2D->desc.Height));
 		}
 
 
 		// Issue data copy on request:
 		if (pInitialData != nullptr)
 		{
-			UINT dataCount = pDesc->ArraySize * max(1, pDesc->MipLevels);
+			UINT dataCount = pDesc->ArraySize * std::max(1u, pDesc->MipLevels);
 			D3D12_SUBRESOURCE_DATA* data = new D3D12_SUBRESOURCE_DATA[dataCount];
 			for (UINT slice = 0; slice < dataCount; ++slice)
 			{
@@ -2887,63 +2887,63 @@ namespace wiGraphicsTypes
 
 		return S_OK;
 	}
-	HRESULT GraphicsDevice_DX12::CreateVertexShader(const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader)
+	HRESULT GraphicsDevice_DX12::CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader)
 	{
 		pVertexShader->Register(this);
 
-		pVertexShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pVertexShader->code.data, pShaderBytecode, BytecodeLength);
-		pVertexShader->code.size = BytecodeLength;
+		pVertexShader->code.data = new BYTE[pCode->size];
+		memcpy(pVertexShader->code.data, pCode->data, pCode->size);
+		pVertexShader->code.size = pCode->size;
 
 		return (pVertexShader->code.data != nullptr && pVertexShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_DX12::CreatePixelShader(const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader)
+	HRESULT GraphicsDevice_DX12::CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader)
 	{
 		pPixelShader->Register(this);
 
-		pPixelShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pPixelShader->code.data, pShaderBytecode, BytecodeLength);
-		pPixelShader->code.size = BytecodeLength;
+		pPixelShader->code.data = new BYTE[pCode->size];
+		memcpy(pPixelShader->code.data, pCode->data, pCode->size);
+		pPixelShader->code.size = pCode->size;
 
 		return (pPixelShader->code.data != nullptr && pPixelShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_DX12::CreateGeometryShader(const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader)
+	HRESULT GraphicsDevice_DX12::CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader)
 	{
 		pGeometryShader->Register(this);
 
-		pGeometryShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pGeometryShader->code.data, pShaderBytecode, BytecodeLength);
-		pGeometryShader->code.size = BytecodeLength;
+		pGeometryShader->code.data = new BYTE[pCode->size];
+		memcpy(pGeometryShader->code.data, pCode->data, pCode->size);
+		pGeometryShader->code.size = pCode->size;
 
 		return (pGeometryShader->code.data != nullptr && pGeometryShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_DX12::CreateHullShader(const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader)
+	HRESULT GraphicsDevice_DX12::CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader)
 	{
 		pHullShader->Register(this);
 
-		pHullShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pHullShader->code.data, pShaderBytecode, BytecodeLength);
-		pHullShader->code.size = BytecodeLength;
+		pHullShader->code.data = new BYTE[pCode->size];
+		memcpy(pHullShader->code.data, pCode->data, pCode->size);
+		pHullShader->code.size = pCode->size;
 
 		return (pHullShader->code.data != nullptr && pHullShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_DX12::CreateDomainShader(const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader)
+	HRESULT GraphicsDevice_DX12::CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader)
 	{
 		pDomainShader->Register(this);
 
-		pDomainShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pDomainShader->code.data, pShaderBytecode, BytecodeLength);
-		pDomainShader->code.size = BytecodeLength;
+		pDomainShader->code.data = new BYTE[pCode->size];
+		memcpy(pDomainShader->code.data, pCode->data, pCode->size);
+		pDomainShader->code.size = pCode->size;
 
 		return (pDomainShader->code.data != nullptr && pDomainShader->code.size > 0 ? S_OK : E_FAIL);
 	}
-	HRESULT GraphicsDevice_DX12::CreateComputeShader(const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader)
+	HRESULT GraphicsDevice_DX12::CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader)
 	{
 		pComputeShader->Register(this);
 
-		pComputeShader->code.data = new BYTE[BytecodeLength];
-		memcpy(pComputeShader->code.data, pShaderBytecode, BytecodeLength);
-		pComputeShader->code.size = BytecodeLength;
+		pComputeShader->code.data = new BYTE[pCode->size];
+		memcpy(pComputeShader->code.data, pCode->data, pCode->size);
+		pComputeShader->code.size = pCode->size;
 
 		return (pComputeShader->code.data != nullptr && pComputeShader->code.size > 0 ? S_OK : E_FAIL);
 	}
@@ -3091,7 +3091,7 @@ namespace wiGraphicsTypes
 			elements = new D3D12_INPUT_ELEMENT_DESC[desc.InputLayout.NumElements];
 			for (UINT i = 0; i < desc.InputLayout.NumElements; ++i)
 			{
-				elements[i].SemanticName = pDesc->il->desc[i].SemanticName;
+				elements[i].SemanticName = pDesc->il->desc[i].SemanticName.c_str();
 				elements[i].SemanticIndex = pDesc->il->desc[i].SemanticIndex;
 				elements[i].Format = _ConvertFormat(pDesc->il->desc[i].Format);
 				elements[i].InputSlot = pDesc->il->desc[i].InputSlot;
@@ -3168,6 +3168,11 @@ namespace wiGraphicsTypes
 		return hr;
 	}
 
+	HRESULT GraphicsDevice_DX12::CreateRenderPass(const RenderPassDesc *pDesc, RenderPass *pRenderPass)
+	{
+
+		return S_OK;
+	}
 
 	void GraphicsDevice_DX12::DestroyResource(GPUResource* pResource)
 	{
@@ -3291,6 +3296,13 @@ namespace wiGraphicsTypes
 		((ID3D12Resource*)pResource->resource)->SetName(wstring(name.begin(), name.end()).c_str());
 	}
 
+	void GraphicsDevice_DX12::BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID)
+	{
+	}
+
+	void GraphicsDevice_DX12::EndRenderPass(GRAPHICSTHREAD threadID)
+	{
+	}
 
 	void GraphicsDevice_DX12::PresentBegin()
 	{
@@ -3384,7 +3396,7 @@ namespace wiGraphicsTypes
 		result = directQueue->Signal(frameFence, FRAMECOUNT);
 
 		// Determine the last frame that we should not wait on:
-		const uint64_t lastFrameToAllowLatency = max(BACKBUFFER_COUNT - 1, FRAMECOUNT) - (BACKBUFFER_COUNT - 1);
+		const uint64_t lastFrameToAllowLatency = std::max((uint64_t)BACKBUFFER_COUNT - 1, FRAMECOUNT) - (BACKBUFFER_COUNT - 1);
 
 		// Wait if too many frames are being incomplete:
 		if (frameFence->GetCompletedValue() < lastFrameToAllowLatency)

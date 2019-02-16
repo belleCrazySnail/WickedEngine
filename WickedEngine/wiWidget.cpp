@@ -660,7 +660,7 @@ void wiTextInputField::DeleteFromInput()
 
 
 wiSlider::wiSlider(float start, float end, float defaultValue, float step, const std::string& name) :wiWidget()
-, start(start), end(end), value(defaultValue), step(max(step, 1))
+, start(start), end(end), value(defaultValue), step(std::max(step, 1.f))
 {
 	SetName(name);
 	SetText(fastName.GetString());

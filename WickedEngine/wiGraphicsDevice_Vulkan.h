@@ -206,12 +206,12 @@ namespace wiGraphicsTypes
 		HRESULT CreateTexture2D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture2D *pTexture2D) override;
 		HRESULT CreateTexture3D(const TextureDesc* pDesc, const SubresourceData *pInitialData, Texture3D *pTexture3D) override;
 		HRESULT CreateInputLayout(const VertexLayoutDesc *pInputElementDescs, UINT NumElements, const ShaderByteCode* shaderCode, VertexLayout *pInputLayout) override;
-		HRESULT CreateVertexShader(const void *pShaderBytecode, SIZE_T BytecodeLength, VertexShader *pVertexShader) override;
-		HRESULT CreatePixelShader(const void *pShaderBytecode, SIZE_T BytecodeLength, PixelShader *pPixelShader) override;
-		HRESULT CreateGeometryShader(const void *pShaderBytecode, SIZE_T BytecodeLength, GeometryShader *pGeometryShader) override;
-		HRESULT CreateHullShader(const void *pShaderBytecode, SIZE_T BytecodeLength, HullShader *pHullShader) override;
-		HRESULT CreateDomainShader(const void *pShaderBytecode, SIZE_T BytecodeLength, DomainShader *pDomainShader) override;
-		HRESULT CreateComputeShader(const void *pShaderBytecode, SIZE_T BytecodeLength, ComputeShader *pComputeShader) override;
+		HRESULT CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader) override;
+		HRESULT CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader) override;
+		HRESULT CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader) override;
+		HRESULT CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader) override;
+		HRESULT CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader) override;
+		HRESULT CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader) override;
 		HRESULT CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState) override;
 		HRESULT CreateDepthStencilState(const DepthStencilStateDesc *pDepthStencilStateDesc, DepthStencilState *pDepthStencilState) override;
 		HRESULT CreateRasterizerState(const RasterizerStateDesc *pRasterizerStateDesc, RasterizerState *pRasterizerState) override;
@@ -219,7 +219,7 @@ namespace wiGraphicsTypes
 		HRESULT CreateQuery(const GPUQueryDesc *pDesc, GPUQuery *pQuery) override;
 		HRESULT CreateGraphicsPSO(const GraphicsPSODesc* pDesc, GraphicsPSO* pso) override;
 		HRESULT CreateComputePSO(const ComputePSODesc* pDesc, ComputePSO* pso) override;
-
+		HRESULT CreateRenderPass(const RenderPassDesc *pDesc, RenderPass *pRenderPass) override;
 
 		void DestroyResource(GPUResource* pResource) override;
 		void DestroyBuffer(GPUBuffer *pBuffer) override;
@@ -243,6 +243,8 @@ namespace wiGraphicsTypes
 
 		void SetName(GPUResource* pResource, const std::string& name) override;
 
+		void BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID) override;
+		void EndRenderPass(GRAPHICSTHREAD threadID) override;
 		void PresentBegin() override;
 		void PresentEnd() override;
 
@@ -254,7 +256,7 @@ namespace wiGraphicsTypes
 
 		void SetResolution(int width, int height) override;
 
-		Texture2D GetBackBuffer() override;
+		const Texture2D &GetBackBuffer() override;
 
 		///////////////Thread-sensitive////////////////////////
 

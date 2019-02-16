@@ -20,7 +20,7 @@ namespace wiSceneSystem
 	{
 		char name[128];
 
-		inline void operator=(const std::string& str) { strcpy(name, str.c_str()); }
+		inline void operator=(const std::string& str) { strcpy_s(name, str.c_str()); }
 		inline bool operator==(const std::string& str) const { return strcmp(name, str.c_str()) == 0; }
 
 		void Serialize(wiArchive& archive, uint32_t seed = 0);
