@@ -1,7 +1,7 @@
 #include "wiGraphicsDevice_Metal.h"
 #include "wiGraphicsDevice_SharedInternals.h"
 //#include "wiHelper.h"
-#include "ShaderInterop_Vulkan.h"
+//#include "ShaderInterop_Metal.h"
 #include "wiBackLog.h"
 
 #include <sstream>
@@ -866,21 +866,35 @@ namespace wiGraphicsTypes
     {
         pInputLayout->Register(this);
         MTLVertexDescriptor *vertexDesc = [[MTLVertexDescriptor alloc] init];
+        uint32_t offset = 0;
+        uint32_t lastBuffer = 0;
+        std::vector<uint32_t> vertex_stride;
+        for (UINT i = 0; i < NumElements; ++i)
+        {
+            const VertexLayoutDesc &x = pInputElementDescs[i];
+            vertexDesc.attributes[i].bufferIndex = x.InputSlot;
+            if (x.InputSlot != lastBuffer) {
+                vertex_stride.push_back(offset);
+                lastBuffer = x.InputSlot;
+                offset = 0;
+            }
+            vertexDesc.attributes[i].format = _ConvertVertexFormat(x.Format);
+            vertexDesc.attributes[i].offset = x.AlignedByteOffset;
+            if (vertexDesc.attributes[i].offset == VertexLayoutDesc::APPEND_ALIGNED_ELEMENT)
+            {
+                // need to manually resolve this from the format spec.
+                vertexDesc.attributes[i].offset = offset;
+            }
+            offset += GetFormatStride(x.Format);
+        }
+        vertex_stride.push_back(offset);
         for (UINT i = 0; i < NumElements; ++i)
         {
             const VertexLayoutDesc &x = pInputElementDescs[i];
             UINT slot = x.InputSlot;
-            vertexDesc.layouts[slot].stride = x.AlignedByteOffset;
+            vertexDesc.layouts[slot].stride = vertex_stride[slot];
             vertexDesc.layouts[slot].stepRate = x.InstanceDataStepRate;
             vertexDesc.layouts[slot].stepFunction = _ConvertInputClassification(x.InputSlotClass);
-        }
-        for (UINT i = 0; i < NumElements; ++i)
-        {
-            const VertexLayoutDesc &x = pInputElementDescs[i];
-            UINT index = x.SemanticIndex;
-            vertexDesc.attributes[index].format = _ConvertVertexFormat(x.Format);
-            vertexDesc.attributes[index].offset = x.AlignedByteOffset;
-            vertexDesc.attributes[index].bufferIndex = x.InputSlot;
         }
         pInputLayout->resource = RETAIN_RES(vertexDesc);
 

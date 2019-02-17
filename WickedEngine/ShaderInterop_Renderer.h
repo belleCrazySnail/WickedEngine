@@ -2,7 +2,11 @@
 #define _SHADERINTEROP_RENDERER_H_
 #include "ShaderInterop.h"
 
+#ifdef __METAL_VERSION__
+static constant int impostorCaptureAngles = 12;
+#else
 static const int impostorCaptureAngles = 12;
+#endif
 
 // ---------- Persistent: -----------------
 
@@ -149,8 +153,17 @@ CBUFFER(APICB, CBSLOT_API)
 	float3		g_xPadding0_APICB;
 };
 
+#ifdef __METAL_VERSION__
 
+struct GlobalData
+{
+    constant FrameCB &frame [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_FRAME)]];
+    constant CameraCB &camera [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_CAMERA)]];
+    constant MiscCB &misc [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_MISC)]];
+    constant APICB &api [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_API)]];
+};
 
+#endif
 
 // ------- On demand: ----------
 

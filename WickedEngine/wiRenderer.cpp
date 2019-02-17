@@ -7993,7 +7993,7 @@ void UpdateFrameCB(GRAPHICSTHREAD threadID)
 	XMStoreFloat4x4(&cb.g_xFrame_MainCamera_View, XMMatrixTranspose(camera.GetView()));
 	XMStoreFloat4x4(&cb.g_xFrame_MainCamera_Proj, XMMatrixTranspose(camera.GetProjection()));
 	cb.g_xFrame_MainCamera_CamPos = camera.Eye;
-	cb.g_xFrame_MainCamera_DistanceFromOrigin, XMVectorGetX(XMVector3Length(XMLoadFloat3(&cb.g_xFrame_MainCamera_CamPos)));
+	cb.g_xFrame_MainCamera_DistanceFromOrigin = XMVectorGetX(XMVector3Length(XMLoadFloat3(&cb.g_xFrame_MainCamera_CamPos)));
 	XMStoreFloat4x4(&cb.g_xFrame_MainCamera_PrevV, XMMatrixTranspose(prevCam.GetView()));
 	XMStoreFloat4x4(&cb.g_xFrame_MainCamera_PrevP, XMMatrixTranspose(prevCam.GetProjection()));
 	XMStoreFloat4x4(&cb.g_xFrame_MainCamera_PrevVP, XMMatrixTranspose(prevCam.GetViewProjection()));

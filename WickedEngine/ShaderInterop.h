@@ -2,12 +2,23 @@
 #define _WICKEDENGINE_SHADERINTEROP_H_
 
 #include "ShaderInterop_Vulkan.h"
+#include "ShaderInterop_Metal.h"
 #include "ConstantBufferMapping.h"
 #include "SamplerMapping.h"
 #include "ResourceMapping.h"
 
+// Shader - side types:
+#ifdef __METAL_VERSION__
+//metal is based on c++ and has __cplusplus defined, so need to come before __cplusplus
 
-#ifdef __cplusplus // not invoking shader compiler, but included in engine source
+#import <metal_stdlib>
+using namespace metal;
+
+#define getUpper3x3(m) (simd::float3x3((m)[0].xyz, (m)[1].xyz, (m)[2].xyz))
+
+#define CBUFFER(name, slot) struct name
+
+#elif __cplusplus // not invoking shader compiler, but included in engine source
 
 // Application-side types:
 
@@ -27,11 +38,7 @@ typedef XMINT4 int4;
 #define CB_GETBINDSLOT(name) __CBUFFERBINDSLOT__##name##__
 #define CBUFFER(name, slot) static const int CB_GETBINDSLOT(name) = slot; struct alignas(16) name
 
-#else
-
-// Shader - side types:
-
-#ifdef SHADERCOMPILER_SPIRV // invoking Vulkan shader compiler (HLSL -> SPIRV)
+#elif SHADERCOMPILER_SPIRV // invoking Vulkan shader compiler (HLSL -> SPIRV)
 
 #if defined(SPIRV_SHADERTYPE_VS)
 #define VULKAN_DESCRIPTOR_SET_ID 0
@@ -126,9 +133,7 @@ typedef XMINT4 int4;
 #define SAMPLERSTATE(name, slot) SamplerState name : register(s ## slot);
 #define SAMPLERCOMPARISONSTATE(name, slot) SamplerComparisonState name : register(s ## slot);
 
-#endif // invoking vulkan/directx
-
-#endif // __cplusplus
+#endif
 
 
 #define ENTITY_TYPE_DIRECTIONALLIGHT	0

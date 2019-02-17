@@ -93,6 +93,8 @@
 		6853C3012215E0CF000F7B58 /* RenderPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2F02215E0CF000F7B58 /* RenderPath.cpp */; };
 		6853C3082215E2D1000F7B58 /* wiFadeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */; };
 		6853C3092215E2D1000F7B58 /* wiFadeManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */; };
+		6853C31B221891E3000F7B58 /* objectVS_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 6853C31A221891E3000F7B58 /* objectVS_common.metal */; };
+		6853C31C221891E3000F7B58 /* objectVS_common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 6853C31A221891E3000F7B58 /* objectVS_common.metal */; };
 		685F8BCC2209C30800A516B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BCB2209C30800A516B4 /* AppDelegate.m */; };
 		685F8BCF2209C30800A516B4 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BCE2209C30800A516B4 /* GameViewController.m */; };
 		685F8BD22209C30800A516B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685F8BD02209C30800A516B4 /* Main.storyboard */; };
@@ -211,6 +213,9 @@
 		6853C2F12215E0CF000F7B58 /* RenderPath3D_TiledForward.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RenderPath3D_TiledForward.h; path = WickedEngine/RenderPath3D_TiledForward.h; sourceTree = "<group>"; };
 		6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiFadeManager.cpp; path = WickedEngine/wiFadeManager.cpp; sourceTree = "<group>"; };
 		6853C3072215E2D0000F7B58 /* wiFadeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiFadeManager.h; path = WickedEngine/wiFadeManager.h; sourceTree = "<group>"; };
+		6853C31922188238000F7B58 /* objectInputLayoutHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = objectInputLayoutHF.h; path = WickedEngine/metal/objectInputLayoutHF.h; sourceTree = "<group>"; };
+		6853C31A221891E3000F7B58 /* objectVS_common.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_common.metal; path = WickedEngine/metal/objectVS_common.metal; sourceTree = "<group>"; };
+		6853C31D2219D29E000F7B58 /* ShaderInterop_Metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderInterop_Metal.h; path = WickedEngine/ShaderInterop_Metal.h; sourceTree = "<group>"; };
 		685F8BBE2209C30600A516B4 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		685F8BBF2209C30600A516B4 /* Renderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		685F8BC02209C30600A516B4 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
@@ -241,7 +246,6 @@
 		685F8C3D2209E0F400A516B4 /* wiGraphicsResource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiGraphicsResource.cpp; path = WickedEngine/wiGraphicsResource.cpp; sourceTree = "<group>"; };
 		685F8C3E2209E0F400A516B4 /* wiGraphicsDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiGraphicsDescriptors.h; path = WickedEngine/wiGraphicsDescriptors.h; sourceTree = "<group>"; };
 		685F8C452209E11E00A516B4 /* ShaderInterop_GPUSortLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderInterop_GPUSortLib.h; path = WickedEngine/ShaderInterop_GPUSortLib.h; sourceTree = "<group>"; };
-		685F8C462209E11E00A516B4 /* ShaderInterop_Vulkan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderInterop_Vulkan.h; path = WickedEngine/ShaderInterop_Vulkan.h; sourceTree = "<group>"; };
 		685F8C472209E11E00A516B4 /* ShaderInterop_BVH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderInterop_BVH.h; path = WickedEngine/ShaderInterop_BVH.h; sourceTree = "<group>"; };
 		685F8C482209E11E00A516B4 /* ShaderInterop_EmittedParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderInterop_EmittedParticle.h; path = WickedEngine/ShaderInterop_EmittedParticle.h; sourceTree = "<group>"; };
 		685F8C492209E11E00A516B4 /* ShaderInterop_Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderInterop_Renderer.h; path = WickedEngine/ShaderInterop_Renderer.h; sourceTree = "<group>"; };
@@ -313,6 +317,8 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				6853C31A221891E3000F7B58 /* objectVS_common.metal */,
+				6853C31922188238000F7B58 /* objectInputLayoutHF.h */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -474,6 +480,7 @@
 		685F8C2F2209DEB200A516B4 /* GPUMapping */ = {
 			isa = PBXGroup;
 			children = (
+				6853C31D2219D29E000F7B58 /* ShaderInterop_Metal.h */,
 				685F8C552209E15800A516B4 /* ConstantBufferMapping.h */,
 				685F8C562209E15800A516B4 /* ResourceMapping.h */,
 				685F8C542209E15800A516B4 /* SamplerMapping.h */,
@@ -490,7 +497,6 @@
 				685F8C4D2209E11E00A516B4 /* ShaderInterop_Skinning.h */,
 				685F8C532209E11F00A516B4 /* ShaderInterop_TracedRendering.h */,
 				685F8C512209E11E00A516B4 /* ShaderInterop_Utility.h */,
-				685F8C462209E11E00A516B4 /* ShaderInterop_Vulkan.h */,
 				685F8C522209E11E00A516B4 /* ShaderInterop.h */,
 			);
 			name = GPUMapping;
@@ -717,6 +723,7 @@
 				6853C29522154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				685F8C442209E0F400A516B4 /* wiGraphicsResource.cpp in Sources */,
 				6853C2F62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
+				6853C31B221891E3000F7B58 /* objectVS_common.metal in Sources */,
 				6853C28822153EA2000F7B58 /* wiRenderTarget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -771,6 +778,7 @@
 				6853C29622154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				685F8C582209F50700A516B4 /* wiGraphicsDevice.cpp in Sources */,
 				6853C2F72215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
+				6853C31C221891E3000F7B58 /* objectVS_common.metal in Sources */,
 				6853C28922153EA2000F7B58 /* wiRenderTarget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -969,6 +977,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_HEADER_SEARCH_PATHS = WickedEngine/;
 				PRODUCT_BUNDLE_IDENTIFIER = org.CrazySnail.wicked;
 				PRODUCT_NAME = WickedEngine;
 				SDKROOT = macosx;
@@ -991,6 +1000,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_HEADER_SEARCH_PATHS = WickedEngine/;
 				PRODUCT_BUNDLE_IDENTIFIER = org.CrazySnail.wicked;
 				PRODUCT_NAME = WickedEngine;
 				SDKROOT = macosx;
