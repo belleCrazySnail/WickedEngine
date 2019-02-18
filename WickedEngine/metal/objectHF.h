@@ -18,66 +18,64 @@
 #define LIGHTMAP_QUALITY_BICUBIC
 
 
-#include "globals.hlsli"
-#include "objectInputLayoutHF.hlsli"
-#include "ditherHF.hlsli"
-#include "tangentComputeHF.hlsli"
-#include "depthConvertHF.hlsli"
-#include "fogHF.hlsli"
-#include "brdf.hlsli"
-#include "packHF.hlsli"
-#include "lightingHF.hlsli"
+#include "globals.h"
+#include "objectInputLayoutHF.h"
+#include "ditherHF.h"
+#include "brdf.h"
+#include "packHF.h"
+#include "lightingHF.h"
 
 // DEFINITIONS
 //////////////////
 
 // These are bound by wiRenderer (based on Material):
-#define xBaseColorMap			texture_0	// rgb: baseColor, a: opacity
-#define xNormalMap				texture_1	// rgb: normal, a: roughness
-#define xSurfaceMap				texture_2	// r: reflectance, g: metalness, b: emissive, a: subsurface scattering
-#define xDisplacementMap		texture_3	// r: heightmap
+#define xBaseColorMap			gd.texture_0	// rgb: baseColor, a: opacity
+#define xNormalMap				gd.texture_1	// rgb: normal, a: roughness
+#define xSurfaceMap				gd.texture_2	// r: reflectance, g: metalness, b: emissive, a: subsurface scattering
+#define xDisplacementMap		gd.texture_3	// r: heightmap
 
 // These are bound by RenderPath (based on Render Path):
-#define xReflection				texture_6	// rgba: scene color from reflected camera angle
-#define xRefraction				texture_7	// rgba: scene color from primary camera angle
-#define	xWaterRipples			texture_8	// rgb: snorm8 water ripple normal map
-#define	xSSAO					texture_8	// r: screen space ambient occlusion
-#define	xSSR					texture_9	// rgb: screen space ray-traced reflections, a: reflection blend based on ray hit or miss
+#define xReflection				gd.texture_6	// rgba: scene color from reflected camera angle
+#define xRefraction				gd.texture_7	// rgba: scene color from primary camera angle
+#define	xWaterRipples			gd.texture_8	// rgb: snorm8 water ripple normal map
+#define	xSSAO					gd.texture_8	// r: screen space ambient occlusion
+#define	xSSR					gd.texture_9	// rgb: screen space ray-traced reflections, a: reflection blend based on ray hit or miss
 
 
 struct PixelInputType_Simple
 {
-	float4 pos								: SV_POSITION;
-	float  clip								: SV_ClipDistance0;
-	float2 tex								: TEXCOORD0;
-	nointerpolation float  dither			: DITHER;
-	nointerpolation float3 instanceColor	: INSTANCECOLOR;
+	float4 pos [[position]];
+	float  clip	[[clip_distance]];
+	float2 tex;
+	float  dither [[flat]];
+	float3 instanceColor [[flat]];
 };
+
 struct PixelInputType
 {
-	float4 pos								: SV_POSITION;
-	float  clip								: SV_ClipDistance0;
-	float2 tex								: TEXCOORD0;
-	nointerpolation float  dither			: DITHER;
-	nointerpolation float3 instanceColor	: INSTANCECOLOR;
-	float3 nor								: NORMAL;
-	float4 pos2D							: SCREENPOSITION;
-	float3 pos3D							: WORLDPOSITION;
-	float4 pos2DPrev						: SCREENPOSITIONPREV;
-	float4 ReflectionMapSamplingPos			: TEXCOORD1;
-	float2 nor2D							: NORMAL2D;
-	float2 atl								: ATLAS;
+    simd::float4 pos [[position]];
+    float  clip [[clip_distance]];
+    simd::float2 tex;
+    float  dither [[flat]];
+    simd::float3 instanceColor [[flat]];
+    simd::float3 nor;
+    simd::float4 pos2D;
+    simd::float3 pos3D;
+    simd::float4 pos2DPrev;
+    simd::float4 ReflectionMapSamplingPos;
+    simd::float2 nor2D;
+    simd::float2 atl;
 };
 
 struct GBUFFEROutputType
 {
-	float4 g0	: SV_Target0;		// texture_gbuffer0
-	float4 g1	: SV_Target1;		// texture_gbuffer1
-	float4 g2	: SV_Target2;		// texture_gbuffer2
-	float4 diffuse	: SV_Target3;
-	float4 specular	: SV_Target4;
+	float4 g0 [[color(0)]];		// texture_gbuffer0
+	float4 g1 [[color(1)]];		// texture_gbuffer1
+	float4 g2 [[color(2)]];		// texture_gbuffer2
+	float4 diffuse [[color(3)]];
+	float4 specular [[color(4)]];
 };
-inline GBUFFEROutputType CreateGbuffer(in float4 color, in Surface surface, in float2 velocity, in float3 diffuse, in float3 specular, in float ao)
+inline GBUFFEROutputType CreateGbuffer(float4 color, Surface surface, float2 velocity, float3 diffuse, float3 specular, float ao)
 {
 	GBUFFEROutputType Out;
 	Out.g0 = float4(color.rgb, ao);																/*FORMAT_R8G8B8A8_UNORM*/
@@ -90,10 +88,10 @@ inline GBUFFEROutputType CreateGbuffer(in float4 color, in Surface surface, in f
 
 struct GBUFFEROutputType_Thin
 {
-	float4 g0	: SV_Target0;		// texture_gbuffer0
-	float4 g1	: SV_Target1;		// texture_gbuffer1
+	float4 g0 [[color(0)]];		// texture_gbuffer0
+	float4 g1 [[color(0)]];		// texture_gbuffer1
 };
-inline GBUFFEROutputType_Thin CreateGbuffer_Thin(in float4 color, in Surface surface, in float2 velocity)
+inline GBUFFEROutputType_Thin CreateGbuffer_Thin(float4 color, Surface surface, float2 velocity)
 {
 	GBUFFEROutputType_Thin Out;
 	Out.g0 = color;																		/*FORMAT_R16G16B16A16_FLOAT*/
@@ -105,148 +103,175 @@ inline GBUFFEROutputType_Thin CreateGbuffer_Thin(in float4 color, in Surface sur
 // METHODS
 ////////////
 
-inline void ApplyEmissive(in Surface surface, inout float3 specular)
+inline float getLinearDepth(float c, constant GlobalCBuffer &cb)
+{
+    float z_b = c;
+    float z_n = 2.0 * z_b - 1.0;
+    //float lin = 2.0 * g_xFrame_MainCamera_ZNearP * g_xFrame_MainCamera_ZFarP / (g_xFrame_MainCamera_ZFarP + g_xFrame_MainCamera_ZNearP - z_n * (g_xFrame_MainCamera_ZFarP - g_xFrame_MainCamera_ZNearP));
+    float lin = 2.0 * cb.frame.g_xFrame_MainCamera_ZFarP * cb.frame.g_xFrame_MainCamera_ZNearP / (cb.frame.g_xFrame_MainCamera_ZNearP + cb.frame.g_xFrame_MainCamera_ZFarP - z_n * (cb.frame.g_xFrame_MainCamera_ZNearP - cb.frame.g_xFrame_MainCamera_ZFarP));
+    return lin;
+}
+
+inline float GetFog(float dist, constant GlobalCBuffer &cb)
+{
+    return saturate((dist - cb.frame.g_xFrame_Fog.x) / (cb.frame.g_xFrame_Fog.y - cb.frame.g_xFrame_Fog.x));
+}
+
+inline float3x3 compute_tangent_frame(float3 N, float3 P, float2 UV, thread float3 &T, thread float3 &B)
+{
+    float3 dp1 = dfdx(P);
+    float3 dp2 = dfdy(P);
+    float2 duv1 = dfdx(UV);
+    float2 duv2 = dfdy(UV);
+    
+    float3x3 M = float3x3(dp1, dp2, cross(dp1, dp2));
+    float2x3 inverseM = float2x3(cross(M[1], M[2]), cross(M[2], M[0]));
+    T = normalize(inverseM * float2(duv1.x, duv2.x));
+    B = normalize(inverseM * float2(duv1.y, duv2.y));
+    
+    return float3x3(T, B, N);
+}
+
+inline void ApplyEmissive(Surface surface, thread float3 &specular)
 {
 	specular += surface.baseColor.rgb * surface.emissive;
 }
 
-inline void LightMapping(in float2 ATLAS, inout float3 diffuse, inout float3 specular, inout float ao, in float ssao)
+inline void LightMapping(float2 ATLAS, thread float3 &diffuse, thread float3 &specular, thread float &ao, float ssao, constant GlobalData &gd)
 {
-	if (any(ATLAS))
+	if (any(bool2(ATLAS)))
 	{
 #ifdef LIGHTMAP_QUALITY_BICUBIC
-		float4 lightmap = SampleTextureCatmullRom(texture_globallightmap, ATLAS);
+		float4 lightmap = SampleTextureCatmullRom(gd, gd.texture_globallightmap, ATLAS);
 #else
-		float4 lightmap = texture_globallightmap.SampleLevel(sampler_linear_clamp, ATLAS, 0);
+		float4 lightmap = gd.texture_globallightmap.SampleLevel(gd.sampler_linear_clamp, ATLAS, 0);
 #endif // LIGHTMAP_QUALITY_BICUBIC
 		diffuse += lightmap.rgb * ssao;
 		ao *= saturate(1 - lightmap.a);
 	}
 }
 
-inline void NormalMapping(in float2 UV, in float3 V, inout float3 N, in float3x3 TBN, inout float3 bumpColor, inout float roughness)
+inline void NormalMapping(float2 UV, float3 V, thread float3 &N, float3x3 TBN, thread float3 &bumpColor, thread float &roughness, CB_GD)
 {
-	float4 normal_roughness = xNormalMap.Sample(sampler_objectshader, UV);
+	float4 normal_roughness = xNormalMap.sample(gd.sampler_objectshader, UV);
 	bumpColor = 2.0f * normal_roughness.rgb - 1.0f;
-	N = normalize(lerp(N, mul(bumpColor, TBN), g_xMat_normalMapStrength));
-	bumpColor *= g_xMat_normalMapStrength;
+	N = normalize(mix(N, bumpColor * TBN, cb.material.g_xMat_normalMapStrength));
+	bumpColor *= cb.material.g_xMat_normalMapStrength;
 	roughness *= normal_roughness.a;
 }
 
-inline void SpecularAA(in float3 N, inout float roughness)
+inline void SpecularAA(float3 N, thread float &roughness, constant GlobalCBuffer &cb)
 {
-	[branch]
-	if (g_xFrame_SpecularAA > 0)
+//    [branch]
+	if (cb.frame.g_xFrame_SpecularAA > 0)
 	{
-		float3 ddxN = ddx_coarse(N);
-		float3 ddyN = ddy_coarse(N);
-		float curve = pow(max(dot(ddxN, ddxN), dot(ddyN, ddyN)), 1 - g_xFrame_SpecularAA);
+		float3 ddxN = dfdx(N);
+		float3 ddyN = dfdy(N);
+		float curve = pow(max(dot(ddxN, ddxN), dot(ddyN, ddyN)), 1 - cb.frame.g_xFrame_SpecularAA);
 		roughness = max(roughness, curve);
 	}
 }
 
-inline float3 PlanarReflection(in float2 reflectionUV, in Surface surface)
+inline float3 PlanarReflection(float2 reflectionUV, Surface surface, CB_GD)
 {
-	return xReflection.SampleLevel(sampler_linear_clamp, reflectionUV + surface.N.xz*g_xMat_normalMapStrength, 0).rgb;
+	return xReflection.SampleLevel(gd.sampler_linear_clamp, reflectionUV + surface.N.xz*cb.material.g_xMat_normalMapStrength, 0).rgb;
 }
 
 #define NUM_PARALLAX_OCCLUSION_STEPS 32
-inline void ParallaxOcclusionMapping(inout float2 UV, in float3 V, in float3x3 TBN)
+inline void ParallaxOcclusionMapping(thread float2 &UV, float3 V, float3x3 TBN, CB_GD)
 {
-	V = mul(TBN, V);
+	V = TBN * V;
 	float layerHeight = 1.0 / NUM_PARALLAX_OCCLUSION_STEPS;
 	float curLayerHeight = 0;
-	float2 dtex = g_xMat_parallaxOcclusionMapping * V.xy / NUM_PARALLAX_OCCLUSION_STEPS;
+	float2 dtex = cb.material.g_xMat_parallaxOcclusionMapping * V.xy / NUM_PARALLAX_OCCLUSION_STEPS;
 	float2 currentTextureCoords = UV;
-	float2 derivX = ddx_coarse(UV);
-	float2 derivY = ddy_coarse(UV);
-	float heightFromTexture = 1 - xDisplacementMap.SampleGrad(sampler_linear_wrap, currentTextureCoords, derivX, derivY).r;
+	float2 derivX = dfdx(UV);
+	float2 derivY = dfdy(UV);
+	float heightFromTexture = 1 - xDisplacementMap.SampleGrad(gd.sampler_linear_wrap, currentTextureCoords, gradient2d(derivX, derivY)).r;
 	uint iter = 0;
-	[loop]
+//    [loop]
 	while (heightFromTexture > curLayerHeight && iter < NUM_PARALLAX_OCCLUSION_STEPS)
 	{
 		curLayerHeight += layerHeight;
 		currentTextureCoords -= dtex;
-		heightFromTexture = 1 - xDisplacementMap.SampleGrad(sampler_linear_wrap, currentTextureCoords, derivX, derivY).r;
+		heightFromTexture = 1 - xDisplacementMap.SampleGrad(gd.sampler_linear_wrap, currentTextureCoords, gradient2d(derivX, derivY)).r;
 		iter++;
 	}
 	float2 prevTCoords = currentTextureCoords + dtex;
 	float nextH = heightFromTexture - curLayerHeight;
-	float prevH = 1 - xDisplacementMap.SampleGrad(sampler_linear_wrap, prevTCoords, derivX, derivY).r - curLayerHeight + layerHeight;
+	float prevH = 1 - xDisplacementMap.SampleGrad(gd.sampler_linear_wrap, prevTCoords, gradient2d(derivX, derivY)).r - curLayerHeight + layerHeight;
 	float weight = nextH / (nextH - prevH);
 	float2 finalTexCoords = prevTCoords * weight + currentTextureCoords * (1.0 - weight);
 	UV = finalTexCoords;
 }
 
-inline void Refraction(in float2 ScreenCoord, in float2 normal2D, in float3 bumpColor, inout Surface surface, inout float4 color, inout float3 diffuse)
+inline void Refraction(float2 ScreenCoord, float2 normal2D, float3 bumpColor, thread Surface &surface, thread float4 &color, thread float3 &diffuse, CB_GD)
 {
-	if (g_xMat_refractionIndex > 0)
+	if (cb.material.g_xMat_refractionIndex > 0)
 	{
-		float2 size;
-		float mipLevels;
-		xRefraction.GetDimensions(0, size.x, size.y, mipLevels);
-		float2 perturbatedRefrTexCoords = ScreenCoord.xy + (normal2D + bumpColor.rg) * g_xMat_refractionIndex;
-		float4 refractiveColor = xRefraction.SampleLevel(sampler_linear_clamp, perturbatedRefrTexCoords, (g_xFrame_AdvancedRefractions ? surface.roughness * mipLevels : 0));
-		surface.albedo.rgb = lerp(refractiveColor.rgb, surface.albedo.rgb, color.a);
-		diffuse = lerp(1, diffuse, color.a);
+		float mipLevels = xRefraction.get_num_mip_levels();
+		float2 perturbatedRefrTexCoords = ScreenCoord.xy + (normal2D + bumpColor.rg) * cb.material.g_xMat_refractionIndex;
+		float4 refractiveColor = xRefraction.SampleLevel(gd.sampler_linear_clamp, perturbatedRefrTexCoords, level((cb.frame.g_xFrame_AdvancedRefractions ? surface.roughness * mipLevels : 0)));
+		surface.albedo.rgb = mix(refractiveColor.rgb, surface.albedo.rgb, color.a);
+		diffuse = mix(1, diffuse, color.a);
 		color.a = 1;
 	}
 }
 
-inline void ForwardLighting(inout Surface surface, inout float3 diffuse, inout float3 specular, inout float3 reflection)
+inline void ForwardLighting(thread Surface &surface, thread float3 &diffuse, thread float3 &specular, thread float3 &reflection, CB_GD)
 {
 #ifndef DISABLE_ENVMAPS
-	const float envMapMIP = surface.roughness * g_xFrame_EnvProbeMipCount;
-	reflection = max(0, EnvironmentReflection_Global(surface, envMapMIP));
+	const float envMapMIP = surface.roughness * cb.frame.g_xFrame_EnvProbeMipCount;
+	reflection = max(float3(0.f), EnvironmentReflection_Global(surface, envMapMIP, cb, gd));
 #endif // DISABLE_ENVMAPS
 
-	[loop]
-	for (uint iterator = 0; iterator < g_xFrame_LightArrayCount; iterator++)
+//    [loop]
+	for (uint iterator = 0; iterator < cb.frame.g_xFrame_LightArrayCount; iterator++)
 	{
-		ShaderEntityType light = EntityArray[g_xFrame_LightArrayOffset + iterator];
+		ShaderEntityType light = gd.EntityArray[cb.frame.g_xFrame_LightArrayOffset + iterator];
 
 		if (light.GetFlags() & ENTITY_FLAG_LIGHT_STATIC)
 		{
 			continue; // static lights will be skipped (they are used in lightmap baking)
 		}
 
-		LightingResult result = (LightingResult)0;
+        LightingResult result = {};
 
 		switch (light.GetType())
 		{
 		case ENTITY_TYPE_DIRECTIONALLIGHT:
 		{
-			result = DirectionalLight(light, surface);
+			result = DirectionalLight(light, surface, cb, gd);
 		}
 		break;
 		case ENTITY_TYPE_POINTLIGHT:
 		{
-			result = PointLight(light, surface);
+			result = PointLight(light, surface, cb, gd);
 		}
 		break;
 		case ENTITY_TYPE_SPOTLIGHT:
 		{
-			result = SpotLight(light, surface);
+			result = SpotLight(light, surface, cb, gd);
 		}
 		break;
 		case ENTITY_TYPE_SPHERELIGHT:
 		{
-			result = SphereLight(light, surface);
+			result = SphereLight(light, surface, gd);
 		}
 		break;
 		case ENTITY_TYPE_DISCLIGHT:
 		{
-			result = DiscLight(light, surface);
+			result = DiscLight(light, surface, gd);
 		}
 		break;
 		case ENTITY_TYPE_RECTANGLELIGHT:
 		{
-			result = RectangleLight(light, surface);
+			result = RectangleLight(light, surface, gd);
 		}
 		break;
 		case ENTITY_TYPE_TUBELIGHT:
 		{
-			result = TubeLight(light, surface);
+			result = TubeLight(light, surface, gd);
 		}
 		break;
 		}
@@ -256,29 +281,29 @@ inline void ForwardLighting(inout Surface surface, inout float3 diffuse, inout f
 	}
 }
 
-inline void TiledLighting(in float2 pixel, inout Surface surface, inout float3 diffuse, inout float3 specular, inout float3 reflection)
+inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &diffuse, thread float3 &specular, thread float3 &reflection, CB_GD)
 {
 	const uint2 tileIndex = uint2(floor(pixel / TILED_CULLING_BLOCKSIZE));
-	const uint flatTileIndex = flatten2D(tileIndex, g_xFrame_EntityCullingTileCount.xy) * SHADER_ENTITY_TILE_BUCKET_COUNT;
+	const uint flatTileIndex = flatten2D(tileIndex, cb.frame.g_xFrame_EntityCullingTileCount.xy) * SHADER_ENTITY_TILE_BUCKET_COUNT;
 
 #ifndef DISABLE_DECALS
 	// decals are enabled, loop through them first:
 	float4 decalAccumulation = 0;
-	const float3 P_dx = ddx_coarse(surface.P);
-	const float3 P_dy = ddy_coarse(surface.P);
+	const float3 P_dx = dfdx(surface.P);
+	const float3 P_dy = dfdy(surface.P);
 #endif // DISABLE_DECALS
 
 #ifndef DISABLE_ENVMAPS
 	// Apply environment maps:
 	float4 envmapAccumulation = 0;
-	const float envMapMIP = surface.roughness * g_xFrame_EnvProbeMipCount;
+	const float envMapMIP = surface.roughness * cb.frame.g_xFrame_EnvProbeMipCount;
 #endif // DISABLE_ENVMAPS
 
 	// Loop through entity buckets in the tile (but only up to the last bucket that contains a light):
-	const uint last_bucket = min((g_xFrame_LightArrayOffset + g_xFrame_LightArrayCount) / 32, max(0, SHADER_ENTITY_TILE_BUCKET_COUNT - 1));
+	const uint last_bucket = min((cb.frame.g_xFrame_LightArrayOffset + cb.frame.g_xFrame_LightArrayCount) / 32, max(0u, SHADER_ENTITY_TILE_BUCKET_COUNT - 1));
 	for (uint bucket = 0; bucket <= last_bucket; ++bucket)
 	{
-		uint bucket_bits = EntityTiles[flatTileIndex + bucket];
+		uint bucket_bits = gd.EntityTiles[flatTileIndex + bucket];
 		
 		//// This is the wave scalarizer from Improved Culling - Siggraph 2017 [Drobot]:
 		// bucket_bits = WaveReadFirstLane(WaveAllBitOr(bucket_bits));
@@ -286,29 +311,29 @@ inline void TiledLighting(in float2 pixel, inout Surface surface, inout float3 d
 		while (bucket_bits != 0)
 		{
 			// Retrieve global entity index from local bucket, then remove bit from local bucket:
-			const uint bucket_bit_index = firstbitlow(bucket_bits);
+			const uint bucket_bit_index = clz(bucket_bits);
 			const uint entity_index = bucket * 32 + bucket_bit_index;
 			bucket_bits ^= 1 << bucket_bit_index;
 
 
 #ifndef DISABLE_DECALS
 			// Check if it is a decal, and process:
-			if (entity_index >= g_xFrame_DecalArrayOffset && 
-				entity_index < g_xFrame_DecalArrayOffset + g_xFrame_DecalArrayCount && 
+			if (entity_index >= cb.frame.g_xFrame_DecalArrayOffset &&
+				entity_index < cb.frame.g_xFrame_DecalArrayOffset + cb.frame.g_xFrame_DecalArrayCount &&
 				decalAccumulation.a < 1)
 			{
-				ShaderEntityType decal = EntityArray[entity_index];
+				ShaderEntityType decal = gd.EntityArray[entity_index];
 
-				const float4x4 decalProjection = MatrixArray[decal.userdata];
-				const float3 clipSpacePos = mul(float4(surface.P, 1), decalProjection).xyz;
+				const float4x4 decalProjection = gd.MatrixArray[decal.userdata];
+				const float3 clipSpacePos = (float4(surface.P, 1) * decalProjection).xyz;
 				const float3 uvw = clipSpacePos.xyz*float3(0.5f, -0.5f, 0.5f) + 0.5f;
-				[branch]
-				if (!any(uvw - saturate(uvw)))
+//                [branch]
+				if (!any(bool3(uvw - saturate(uvw))))
 				{
 					// mipmapping needs to be performed by hand:
-					const float2 decalDX = mul(P_dx, (float3x3)decalProjection).xy * decal.texMulAdd.xy;
-					const float2 decalDY = mul(P_dy, (float3x3)decalProjection).xy * decal.texMulAdd.xy;
-					float4 decalColor = texture_decalatlas.SampleGrad(sampler_linear_clamp, uvw.xy*decal.texMulAdd.xy + decal.texMulAdd.zw, decalDX, decalDY);
+					const float2 decalDX = (P_dx * getUpper3x3(decalProjection)).xy * decal.texMulAdd.xy;
+					const float2 decalDY = (P_dy * getUpper3x3(decalProjection)).xy * decal.texMulAdd.xy;
+					float4 decalColor = gd.texture_decalatlas.SampleGrad(gd.sampler_linear_clamp, uvw.xy*decal.texMulAdd.xy + decal.texMulAdd.zw, gradient2d(decalDX, decalDY));
 					// blend out if close to cube Z:
 					float edgeBlend = 1 - pow(saturate(abs(clipSpacePos.z)), 8);
 					decalColor.a *= edgeBlend;
@@ -329,19 +354,19 @@ inline void TiledLighting(in float2 pixel, inout Surface surface, inout float3 d
 #ifndef DISABLE_ENVMAPS
 #ifndef DISABLE_LOCALENVPMAPS
 			// Check if it is an envprobe and process:
-			if (entity_index >= g_xFrame_EnvProbeArrayOffset && 
-				entity_index < g_xFrame_EnvProbeArrayOffset + g_xFrame_EnvProbeArrayCount && 
+			if (entity_index >= cb.frame.g_xFrame_EnvProbeArrayOffset &&
+				entity_index < cb.frame.g_xFrame_EnvProbeArrayOffset + cb.frame.g_xFrame_EnvProbeArrayCount &&
 				envmapAccumulation.a < 1)
 			{
-				ShaderEntityType probe = EntityArray[entity_index];
+				ShaderEntityType probe = gd.EntityArray[entity_index];
 
-				const float4x4 probeProjection = MatrixArray[probe.userdata];
-				const float3 clipSpacePos = mul(float4(surface.P, 1), probeProjection).xyz;
+				const float4x4 probeProjection = gd.MatrixArray[probe.userdata];
+				const float3 clipSpacePos = (float4(surface.P, 1) * probeProjection).xyz;
 				const float3 uvw = clipSpacePos.xyz*float3(0.5f, -0.5f, 0.5f) + 0.5f;
-				[branch]
-				if (!any(uvw - saturate(uvw)))
+//                [branch]
+				if (!any(bool3(uvw - saturate(uvw))))
 				{
-					const float4 envmapColor = EnvironmentReflection_Local(surface, probe, probeProjection, clipSpacePos, envMapMIP);
+					const float4 envmapColor = EnvironmentReflection_Local(surface, probe, probeProjection, clipSpacePos, envMapMIP, gd);
 					// perform manual blending of probes:
 					//  NOTE: they are sorted top-to-bottom, but blending is performed bottom-to-top
 					envmapAccumulation.rgb = (1 - envmapAccumulation.a) * (envmapColor.a * envmapColor.rgb) + envmapAccumulation.rgb;
@@ -355,53 +380,53 @@ inline void TiledLighting(in float2 pixel, inout Surface surface, inout float3 d
 			
 
 			// Check if it is a light and process:
-			if (entity_index >= g_xFrame_LightArrayOffset && 
-				entity_index < g_xFrame_LightArrayOffset + g_xFrame_LightArrayCount)
+			if (entity_index >= cb.frame.g_xFrame_LightArrayOffset &&
+				entity_index < cb.frame.g_xFrame_LightArrayOffset + cb.frame.g_xFrame_LightArrayCount)
 			{
-				ShaderEntityType light = EntityArray[entity_index];
+				ShaderEntityType light = gd.EntityArray[entity_index];
 
 				if (light.GetFlags() & ENTITY_FLAG_LIGHT_STATIC)
 				{
 					continue; // static lights will be skipped (they are used in lightmap baking)
 				}
 
-				LightingResult result = (LightingResult)0;
+                LightingResult result = {};
 
 				switch (light.GetType())
 				{
 				case ENTITY_TYPE_DIRECTIONALLIGHT:
 				{
-					result = DirectionalLight(light, surface);
+					result = DirectionalLight(light, surface, cb, gd);
 				}
 				break;
 				case ENTITY_TYPE_POINTLIGHT:
 				{
-					result = PointLight(light, surface);
+					result = PointLight(light, surface, cb, gd);
 				}
 				break;
 				case ENTITY_TYPE_SPOTLIGHT:
 				{
-					result = SpotLight(light, surface);
+					result = SpotLight(light, surface, cb, gd);
 				}
 				break;
 				case ENTITY_TYPE_SPHERELIGHT:
 				{
-					result = SphereLight(light, surface);
+					result = SphereLight(light, surface, gd);
 				}
 				break;
 				case ENTITY_TYPE_DISCLIGHT:
 				{
-					result = DiscLight(light, surface);
+					result = DiscLight(light, surface, gd);
 				}
 				break;
 				case ENTITY_TYPE_RECTANGLELIGHT:
 				{
-					result = RectangleLight(light, surface);
+					result = RectangleLight(light, surface, gd);
 				}
 				break;
 				case ENTITY_TYPE_TUBELIGHT:
 				{
-					result = TubeLight(light, surface);
+					result = TubeLight(light, surface, gd);
 				}
 				break;
 				}
@@ -416,28 +441,28 @@ inline void TiledLighting(in float2 pixel, inout Surface surface, inout float3 d
 	}
 
 #ifndef DISABLE_DECALS
-	surface.albedo.rgb = lerp(surface.albedo.rgb, decalAccumulation.rgb, decalAccumulation.a);
+	surface.albedo.rgb = mix(surface.albedo.rgb, decalAccumulation.rgb, decalAccumulation.a);
 #endif // DISABLE_DECALS
 
 #ifndef DISABLE_ENVMAPS
 	// Apply global envmap where there is no local envmap information:
 	if (envmapAccumulation.a < 0.99f)
 	{
-		envmapAccumulation.rgb = lerp(EnvironmentReflection_Global(surface, envMapMIP), envmapAccumulation.rgb, envmapAccumulation.a);
+		envmapAccumulation.rgb = mix(EnvironmentReflection_Global(surface, envMapMIP, cb, gd), envmapAccumulation.rgb, envmapAccumulation.a);
 	}
 	reflection = max(0, envmapAccumulation.rgb);
 #endif // DISABLE_ENVMAPS
 
 }
 
-inline void ApplyLighting(in Surface surface, in float3 diffuse, in float3 specular, in float ao, inout float4 color)
+inline void ApplyLighting(Surface surface, float3 diffuse, float3 specular, float ao, thread float4 &color, constant GlobalCBuffer &cb)
 {
-	color.rgb = (GetAmbient(surface.N) * ao + diffuse) * surface.albedo + specular;
+	color.rgb = (GetAmbient(surface.N, cb) * ao + diffuse) * surface.albedo + specular;
 }
 
-inline void ApplyFog(in float dist, inout float4 color)
+inline void ApplyFog(float dist, thread float4 &color, constant GlobalCBuffer &cb)
 {
-	color.rgb = lerp(color.rgb, GetHorizonColor(), GetFog(dist));
+	color.rgb = mix(color.rgb, GetHorizonColor(cb), GetFog(dist, cb));
 }
 
 
@@ -475,18 +500,18 @@ inline void ApplyFog(in float dist, inout float4 color)
 #if defined(ALPHATESTONLY)
 void main(PIXELINPUT input)
 #elif defined(TEXTUREONLY)
-float4 main(PIXELINPUT input) : SV_TARGET
+fragment float4 main(PIXELINPUT input)
 #elif defined(TRANSPARENT)
-float4 main(PIXELINPUT input) : SV_TARGET
+fragment float4 main(PIXELINPUT input)
 #elif defined(ENVMAPRENDERING)
-float4 main(PSIn_EnvmapRendering input) : SV_TARGET
+fragment float4 main(PSIn_EnvmapRendering input)
 #elif defined(DEFERRED)
-GBUFFEROutputType main(PIXELINPUT input)
+fragment GBUFFEROutputType main(PIXELINPUT input)
 #elif defined(FORWARD)
-GBUFFEROutputType_Thin main(PIXELINPUT input)
+fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 #elif defined(TILEDFORWARD)
-[earlydepthstencil]
-GBUFFEROutputType_Thin main(PIXELINPUT input)
+[early_fragment_tests]
+fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 #endif // ALPHATESTONLY
 
 

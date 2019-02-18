@@ -1,6 +1,6 @@
 #ifndef _BRDF_HF_
 #define _BRDF_HF_
-#include "globals.hlsli"
+#include "globals.h"
 
 
 // BRDF from Frostbite presentation:
@@ -9,7 +9,7 @@
 // Charles de Rousiers - Electronic Arts Frostbite
 // SIGGRAPH 2014
 
-float3 F_Schlick(in float3 f0, in float f90, in float u)
+float3 F_Schlick(float3 f0, float f90, float u)
 {
 	return f0 + (f90 - f0) * pow(1.f - u, 5.f);
 }
@@ -24,8 +24,8 @@ float3 F_Fresnel(float3 SpecularColor, float VoH)
 
 float Fr_DisneyDiffuse(float NdotV, float NdotL, float LdotH, float linearRoughness)
 {
-	float energyBias = lerp(0, 0.5, linearRoughness);
-	float energyFactor = lerp(1.0, 1.0 / 1.51, linearRoughness);
+	float energyBias = mix(0, 0.5, linearRoughness);
+	float energyFactor = mix(1.0, 1.0 / 1.51, linearRoughness);
 	float fd90 = energyBias + 2.0 * LdotH*LdotH * linearRoughness;
 	float3 f0 = float3(1.0f, 1.0f, 1.0f);
 	float lightScatter = F_Schlick(f0, fd90, NdotL).r;
@@ -63,13 +63,13 @@ float D_GGX(float NdotH, float m2)
 
 
 
-float3 ComputeAlbedo(in float4 baseColor, in float reflectance, in float metalness)
+float3 ComputeAlbedo(float4 baseColor, float reflectance, float metalness)
 {
-	return lerp(lerp(baseColor.rgb, float3(0, 0, 0), reflectance), float3(0, 0, 0), metalness);
+	return mix(mix(baseColor.rgb, float3(0, 0, 0), reflectance), float3(0, 0, 0), metalness);
 }
-float3 ComputeF0(in float4 baseColor, in float reflectance, in float metalness)
+float3 ComputeF0(float4 baseColor, float reflectance, float metalness)
 {
-	return lerp(lerp(float3(0, 0, 0), float3(1, 1, 1), reflectance), baseColor.rgb, metalness);
+	return mix(mix(float3(0, 0, 0), float3(1, 1, 1), reflectance), baseColor.rgb, metalness);
 }
 
 
@@ -105,7 +105,7 @@ struct Surface
 		F = F_Schlick(f0, f90, NdotV);
 	}
 };
-inline Surface CreateSurface(in float3 P, in float3 N, in float3 V, in float4 baseColor, in float roughness, in float reflectance, in float metalness, in float emissive = 0, in float sss = 0)
+inline Surface CreateSurface(float3 P, float3 N, float3 V, float4 baseColor, float roughness, float reflectance, float metalness, float emissive = 0, float sss = 0)
 {
 	Surface surface;
 
@@ -133,7 +133,7 @@ struct SurfaceToLight
 	float HdotV;			// cos(angle between H and V) = HdotL = cos(angle between H and L)
 	float NdotH;			// cos(angle between N and H)
 };
-inline SurfaceToLight CreateSurfaceToLight(in Surface surface, in float3 L)
+inline SurfaceToLight CreateSurfaceToLight(Surface surface, float3 L)
 {
 	SurfaceToLight surfaceToLight;
 
@@ -148,7 +148,7 @@ inline SurfaceToLight CreateSurfaceToLight(in Surface surface, in float3 L)
 }
 
 
-float3 BRDF_GetSpecular(in Surface surface, in SurfaceToLight surfaceToLight)
+float3 BRDF_GetSpecular(Surface surface, SurfaceToLight surfaceToLight)
 {
 	float f90 = saturate(50.0 * dot(surface.f0, 0.33));
 	float3 F = F_Schlick(surface.f0, f90, surfaceToLight.HdotV);
@@ -158,7 +158,7 @@ float3 BRDF_GetSpecular(in Surface surface, in SurfaceToLight surfaceToLight)
 
 	return Fr;
 }
-float BRDF_GetDiffuse(in Surface surface, in SurfaceToLight surfaceToLight)
+float BRDF_GetDiffuse(Surface surface, SurfaceToLight surfaceToLight)
 {
 	float Fd = Fr_DisneyDiffuse(surface.NdotV, surfaceToLight.NdotL, surfaceToLight.HdotV, surface.roughness) / PI;
 

@@ -1,6 +1,6 @@
 #ifndef _PACK_HF_
 #define _PACK_HF_
-#include "globals.hlsli"
+#include "globals.h"
 
 // Helper functions to compress and uncompress two floats
 
@@ -17,7 +17,7 @@ float2 Unpack(float input, int precision = 4096)
 {
 	float2 output = float2(0, 0);
 
-	output.y = input % precision;
+	output.y = int(input) % precision;
 	output.x = floor(input / precision);
 
 	return output / (precision - 1);
@@ -53,7 +53,9 @@ float3 decode(float2 enc)
 {
 	float2 ang = enc * 2 - 1;
 	float2 scth;
-	sincos(ang.x * PI, scth.x, scth.y);
+    float cos_v;
+	scth.x = sincos(ang.x * PI, cos_v);
+    scth.y = cos_v;
 	float2 scphi = float2(sqrt(1.0 - ang.y*ang.y), ang.y);
 	return float3(scth.y*scphi.x, scth.x*scphi.x, scphi.y);
 }

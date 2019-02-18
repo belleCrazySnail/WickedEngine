@@ -1,20 +1,20 @@
 #ifndef DITHER_HF
 #define DITHER_HF
 
-static const float2x2 BayerMatrix2 = 
+static constant float2x2 BayerMatrix2 =
 {
 	1.0 / 5.0, 3.0 / 5.0,
 	4.0 / 5.0, 2.0 / 5.0
 };
 
-static const float3x3 BayerMatrix3 = 
+static constant float3x3 BayerMatrix3 =
 {
 	3.0 / 10.0, 7.0 / 10.0, 4.0 / 10.0,
 	6.0 / 10.0, 1.0 / 10.0, 9.0 / 10.0,
 	2.0 / 10.0, 8.0 / 10.0, 5.0 / 10.0
 };
 
-static const float4x4 BayerMatrix4 =
+static constant float4x4 BayerMatrix4 =
 {
 	1.0 / 17.0, 9.0 / 17.0, 3.0 / 17.0, 11.0 / 17.0,
 	13.0 / 17.0, 5.0 / 17.0, 15.0 / 17.0, 7.0 / 17.0,
@@ -22,7 +22,7 @@ static const float4x4 BayerMatrix4 =
 	16.0 / 17.0, 8.0 / 17.0, 14.0 / 17.0, 6.0 / 17.0
 };
 
-static const float BayerMatrix8[8][8] =
+static constant float BayerMatrix8[8][8] =
 {
 	{ 1.0 / 65.0, 49.0 / 65.0, 13.0 / 65.0, 61.0 / 65.0, 4.0 / 65.0, 52.0 / 65.0, 16.0 / 65.0, 64.0 / 65.0 },
 	{ 33.0 / 65.0, 17.0 / 65.0, 45.0 / 65.0, 29.0 / 65.0, 36.0 / 65.0, 20.0 / 65.0, 48.0 / 65.0, 32.0 / 65.0 },
@@ -35,27 +35,27 @@ static const float BayerMatrix8[8][8] =
 };
 
 
-inline float ditherMask2(in float2 pixel)
+inline float ditherMask2(float2 pixel)
 {
-	return BayerMatrix2[pixel.x % 2][pixel.y % 2];
+	return BayerMatrix2[uint(pixel.x) % 2][uint(pixel.y) % 2];
 }
 
-inline float ditherMask3(in float2 pixel)
+inline float ditherMask3(float2 pixel)
 {
-	return BayerMatrix3[pixel.x % 3][pixel.y % 3];
+	return BayerMatrix3[uint(pixel.x) % 3][uint(pixel.y) % 3];
 }
 
-inline float ditherMask4(in float2 pixel)
+inline float ditherMask4(float2 pixel)
 {
-	return BayerMatrix4[pixel.x % 4][pixel.y % 4];
+	return BayerMatrix4[uint(pixel.x) % 4][uint(pixel.y) % 4];
 }
 
-inline float ditherMask8(in float2 pixel)
+inline float ditherMask8(float2 pixel)
 {
-	return BayerMatrix8[pixel.x % 8][pixel.y % 8];
+	return BayerMatrix8[uint(pixel.x) % 8][uint(pixel.y) % 8];
 }
 
-inline float dither(in float2 pixel)
+inline float dither(float2 pixel)
 {
 	return ditherMask8(pixel);
 }
