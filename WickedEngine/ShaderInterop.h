@@ -18,6 +18,39 @@ using namespace metal;
 
 #define CBUFFER(name, slot) struct name
 
+#define RAWBUFFER(name,slot)
+#define RWRAWBUFFER(name,slot)
+
+#define TYPEDBUFFER(name, type, slot) constant type &name [[buffer(slot)]]
+#define RWTYPEDBUFFER(name, type, slot)
+
+#define STRUCTUREDBUFFER(name, type, slot) device type *name [[buffer(slot)]]
+#define RWSTRUCTUREDBUFFER(name, type, slot)
+#define ROVSTRUCTUREDBUFFER(name, type, slot)
+
+
+#define TEXTURE1D(name, type, slot) texture1d<type> name [[texture(slot)]];
+#define TEXTURE1DARRAY(name, type, slot) texture1d_array<type> name [[texture(slot)]];
+#define RWTEXTURE1D(name, type, slot) texture1d<type, access::read_write> name [[texture(slot)]];
+
+#define TEXTURE2D(name, type, slot) texture2d<type> name [[texture(slot)]];
+#define TEXTURE2DMS(name, type, slot) texture2d_ms<type> name [[texture(slot)]];
+#define TEXTURE2DARRAY(name, type, slot) texture2d_array<type> name [[texture(slot)]];
+#define RWTEXTURE2D(name, type, slot) texture2d<type, access::read_write> name [[texture(slot)]];
+#define RWTEXTURE2DARRAY(name, type, slot) texture2d_array<type, access::read_write> name [[texture(slot)]];
+#define ROVTEXTURE2D(name, type, slot) texture2d<type> name [[texture(slot), raster_order_group()]];
+
+#define TEXTURECUBE(name, type, slot) texturecube<type> name [[texture(slot)]];
+#define TEXTURECUBEARRAY(name, type, slot) texturecube_array<type> name [[texture(slot)]];
+
+#define TEXTURE3D(name, type, slot) texture3d<type> name [[texture(slot)]];
+#define RWTEXTURE3D(name, type, slot) texture3d<type, access::read_write> name [[texture(slot)]];
+#define ROVTEXTURE3D(name, type, slot) texture3d<type> name [[texture(slot), raster_order_group()]];
+
+
+#define SAMPLERSTATE(name, slot) sampler name [[sampler(slot)]];
+#define SAMPLERCOMPARISONSTATE(name, slot) 
+
 #elif __cplusplus // not invoking shader compiler, but included in engine source
 
 // Application-side types:
