@@ -498,22 +498,22 @@ inline void ApplyFog(float dist, thread float4 &color, constant GlobalCBuffer &c
 
 // entry point:
 #if defined(ALPHATESTONLY)
-void main(PIXELINPUT input)
+fragment void main(PIXELINPUT input
 #elif defined(TEXTUREONLY)
-fragment float4 main(PIXELINPUT input)
+fragment float4 main(PIXELINPUT input
 #elif defined(TRANSPARENT)
-fragment float4 main(PIXELINPUT input)
+fragment float4 main(PIXELINPUT input
 #elif defined(ENVMAPRENDERING)
-fragment float4 main(PSIn_EnvmapRendering input)
+fragment float4 main(PSIn_EnvmapRendering input
 #elif defined(DEFERRED)
-fragment GBUFFEROutputType main(PIXELINPUT input)
+fragment GBUFFEROutputType main(PIXELINPUT input
 #elif defined(FORWARD)
-fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
+fragment GBUFFEROutputType_Thin main(PIXELINPUT input
 #elif defined(TILEDFORWARD)
 [early_fragment_tests]
-fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
+fragment GBUFFEROutputType_Thin main(PIXELINPUT input
 #endif // ALPHATESTONLY
-
+, CB_GD)
 
 
 // shader base:
@@ -522,18 +522,19 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 #if !(defined(TILEDFORWARD) && !defined(TRANSPARENT)) && !defined(ENVMAPRENDERING)
 	// apply dithering:
-	clip(dither(pixel + GetTemporalAASampleRotation()) - input.dither);
+	if (dither(pixel + GetTemporalAASampleRotation()) < input.dither)
+        discard_fragment();
 #endif
 
 
 
-	float2 UV = input.tex * g_xMat_texMulAdd.xy + g_xMat_texMulAdd.zw;
+	float2 UV = input.tex * cb.material.g_xMat_texMulAdd.xy + cb.material.g_xMat_texMulAdd.zw;
 
 	Surface surface;
 
 #ifndef SIMPLE_INPUT
 	surface.P = input.pos3D;
-	surface.V = g_xCamera_CamPos - surface.P;
+	surface.V = cb.frame.g_xCamera_CamPos - surface.P;
 	float dist = length(surface.V);
 	surface.V /= dist;
 	surface.N = normalize(input.nor);
@@ -543,10 +544,10 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 #endif // SIMPLE_INPUT
 
 #ifdef POM
-	ParallaxOcclusionMapping(UV, surface.V, TBN);
+	ParallaxOcclusionMapping(UV, surface.V, TBN, cb, gd);
 #endif // POM
 
-	float4 color = g_xMat_baseColor * float4(input.instanceColor, 1) * xBaseColorMap.Sample(sampler_objectshader, UV);
+	float4 color = cb.material.g_xMat_baseColor * float4(input.instanceColor, 1) * xBaseColorMap.sample(cb.sampler_objectshader, UV);
 	color.rgb = DEGAMMA(color.rgb);
 	ALPHATEST(color.a);
 
@@ -567,25 +568,25 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 	float2 refUV = input.ReflectionMapSamplingPos.xy * float2(0.5f, -0.5f) + 0.5f;
 	float2 ScreenCoord = input.pos2D.xy * float2(0.5f, -0.5f) + 0.5f;
-	float2 velocity = ((input.pos2DPrev.xy - g_xFrame_TemporalAAJitterPrev) - (input.pos2D.xy - g_xFrame_TemporalAAJitter)) * float2(0.5f, -0.5f);
+	float2 velocity = ((input.pos2DPrev.xy - cb.frame.g_xFrame_TemporalAAJitterPrev) - (input.pos2D.xy - cb.frame.g_xFrame_TemporalAAJitter)) * float2(0.5f, -0.5f);
 	float2 ReprojectedScreenCoord = ScreenCoord + velocity;
 #endif // ENVMAPRENDERING
 #endif // SIMPLE_INPUT
 
-	float roughness = g_xMat_roughness;
+	float roughness = cb.material.g_xMat_roughness;
 
 #ifdef NORMALMAP
-	NormalMapping(UV, surface.P, surface.N, TBN, bumpColor, roughness);
+	NormalMapping(UV, surface.P, surface.N, TBN, bumpColor, roughness, cb, gd);
 #endif // NORMALMAP
 
-	float4 surface_ref_met_emi_sss = xSurfaceMap.Sample(sampler_objectshader, UV);
+	float4 surface_ref_met_emi_sss = xSurfaceMap.sample(gd.sampler_objectshader, UV);
 
 	surface = CreateSurface(
 		surface.P, surface.N, surface.V, color, roughness,
-		g_xMat_reflectance * surface_ref_met_emi_sss.r,
-		g_xMat_metalness * surface_ref_met_emi_sss.g,
-		g_xMat_emissive * surface_ref_met_emi_sss.b,
-		g_xMat_subsurfaceScattering * surface_ref_met_emi_sss.a
+		cb.material.g_xMat_reflectance * surface_ref_met_emi_sss.r,
+		cb.material.g_xMat_metalness * surface_ref_met_emi_sss.g,
+		cb.material.g_xMat_emissive * surface_ref_met_emi_sss.b,
+		cb.material.g_xMat_subsurfaceScattering * surface_ref_met_emi_sss.a
 	);
 
 
@@ -599,23 +600,23 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 	float2 bumpColor0 = 0;
 	float2 bumpColor1 = 0;
 	float2 bumpColor2 = 0;
-	bumpColor0 = 2.0f * xNormalMap.Sample(sampler_objectshader, UV - g_xMat_texMulAdd.ww).rg - 1.0f;
-	bumpColor1 = 2.0f * xNormalMap.Sample(sampler_objectshader, UV + g_xMat_texMulAdd.zw).rg - 1.0f;
-	bumpColor2 = xWaterRipples.Sample(sampler_objectshader, ScreenCoord).rg;
-	bumpColor = float3(bumpColor0 + bumpColor1 + bumpColor2, 1)  * g_xMat_refractionIndex;
-	surface.N = normalize(lerp(surface.N, mul(normalize(bumpColor), TBN), g_xMat_normalMapStrength));
-	bumpColor *= g_xMat_normalMapStrength;
+	bumpColor0 = 2.0f * xNormalMap.sample(gd.sampler_objectshader, UV - cb.material.g_xMat_texMulAdd.ww).rg - 1.0f;
+	bumpColor1 = 2.0f * xNormalMap.sample(gd.sampler_objectshader, UV + cb.material.g_xMat_texMulAdd.zw).rg - 1.0f;
+	bumpColor2 = xWaterRipples.sample(gd.sampler_objectshader, ScreenCoord).rg;
+	bumpColor = float3(bumpColor0 + bumpColor1 + bumpColor2, 1)  * cb.material.g_xMat_refractionIndex;
+	surface.N = normalize(mix(surface.N, normalize(bumpColor) * TBN, cb.material.g_xMat_normalMapStrength));
+	bumpColor *= cb.material.g_xMat_normalMapStrength;
 
 	//REFLECTION
-	float4 reflectiveColor = xReflection.SampleLevel(sampler_linear_mirror, refUV + bumpColor.rg, 0);
+	float4 reflectiveColor = xReflection.SampleLevel(gd.sampler_linear_mirror, refUV + bumpColor.rg, 0);
 
 
 	//REFRACTION 
 	float2 perturbatedRefrTexCoords = ScreenCoord.xy + bumpColor.rg;
-	float refDepth = texture_lineardepth.Sample(sampler_linear_mirror, ScreenCoord) * g_xFrame_MainCamera_ZFarP;
-	float3 refractiveColor = xRefraction.SampleLevel(sampler_linear_mirror, perturbatedRefrTexCoords, 0).rgb;
+	float refDepth = gd.texture_lineardepth.sample(gd.sampler_linear_mirror, ScreenCoord) * cb.frame.g_xFrame_MainCamera_ZFarP;
+	float3 refractiveColor = xRefraction.SampleLevel(gd.sampler_linear_mirror, perturbatedRefrTexCoords, 0).rgb;
 	float mod = saturate(0.05*(refDepth - lineardepth));
-	refractiveColor = lerp(refractiveColor, surface.baseColor.rgb, mod).rgb;
+	refractiveColor = mix(refractiveColor, surface.baseColor.rgb, mod).rgb;
 
 	//FRESNEL TERM
 	float3 fresnelTerm = F_Fresnel(surface.f0, surface.NdotV);
@@ -625,18 +626,18 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 #ifndef ENVMAPRENDERING
 #ifndef TRANSPARENT
-	ssao = xSSAO.SampleLevel(sampler_linear_clamp, ReprojectedScreenCoord, 0).r;
+	ssao = xSSAO.SampleLevel(gd.sampler_linear_clamp, ReprojectedScreenCoord, 0);
 	ao *= ssao;
 #endif // TRANSPARENT
 #endif // ENVMAPRENDERING
 
 
 
-	SpecularAA(surface.N, surface.roughness);
+	SpecularAA(surface.N, surface.roughness, cb);
 
 	ApplyEmissive(surface, specular);
 
-	LightMapping(input.atl, diffuse, specular, ao, ssao);
+	LightMapping(input.atl, diffuse, specular, ao, ssao, gd);
 
 
 
@@ -644,7 +645,7 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 
 #ifdef PLANARREFLECTION
-	specular += PlanarReflection(refUV, surface) * surface.F;
+	specular += PlanarReflection(refUV, surface, cb, gd) * surface.F;
 #endif
 
 
@@ -652,29 +653,29 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 #else // not DEFERRED
 
 #ifdef FORWARD
-	ForwardLighting(surface, diffuse, specular, reflection);
+	ForwardLighting(surface, diffuse, specular, reflection, cb, gd);
 #endif // FORWARD
 
 #ifdef TILEDFORWARD
-	TiledLighting(pixel, surface, diffuse, specular, reflection);
+	TiledLighting(pixel, surface, diffuse, specular, reflection, cb, gd);
 #endif // TILEDFORWARD
 
 
 #ifndef WATER
 #ifndef ENVMAPRENDERING
 
-	VoxelGI(surface, diffuse, reflection, ao);
+	VoxelGI(surface, diffuse, reflection, ao, cb, gd);
 
 #ifdef PLANARREFLECTION
-	reflection = PlanarReflection(refUV, surface);
+	reflection = PlanarReflection(refUV, surface, cb, gd);
 #endif
 
 
 #ifdef TRANSPARENT
-	Refraction(ScreenCoord, input.nor2D, bumpColor, surface, color, diffuse);
+	Refraction(ScreenCoord, input.nor2D, bumpColor, surface, color, diffuse, cb, gd);
 #else
-	float4 ssr = xSSR.SampleLevel(sampler_linear_clamp, ReprojectedScreenCoord, 0);
-	reflection = lerp(reflection, ssr.rgb, ssr.a);
+	float4 ssr = xSSR.SampleLevel(gd.sampler_linear_clamp, ReprojectedScreenCoord, 0);
+	reflection = mix(reflection, ssr.rgb, ssr.a);
 #endif // TRANSPARENT
 
 
@@ -683,7 +684,7 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 	specular += reflection * surface.F;
 
-	ApplyLighting(surface, diffuse, specular, ao, color);
+	ApplyLighting(surface, diffuse, specular, ao, color, cb);
 
 #ifdef WATER
 	// SOFT EDGE
@@ -691,7 +692,7 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input)
 	color.a *= fade;
 #endif // WATER
 
-	ApplyFog(dist, color);
+	ApplyFog(dist, color, cb);
 
 
 #endif // DEFERRED

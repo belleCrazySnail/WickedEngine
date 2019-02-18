@@ -77,12 +77,12 @@ static constant int gaussianOffsets[9] = {
 #ifdef DISABLE_ALPHATEST
 #define ALPHATEST(x)
 #else
-#define ALPHATEST(x)	clip((x) - (1.0f - g_xAlphaRef));
+#define ALPHATEST(x)	if((x) < (1.0f - g_xAlphaRef)) discard_fragment();
 #endif
 
-#define DEGAMMA_SKY(x)	pow(abs(x),g_xFrame_StaticSkyGamma)
-#define DEGAMMA(x)		pow(abs(x),g_xFrame_Gamma)
-#define GAMMA(x)		pow(abs(x),1.0/g_xFrame_Gamma)
+#define DEGAMMA_SKY(x)	pow(abs(x),cb.frame.g_xFrame_StaticSkyGamma)
+#define DEGAMMA(x)		pow(abs(x),cb.frame.g_xFrame_Gamma)
+#define GAMMA(x)		pow(abs(x),1.0/cb.frame.g_xFrame_Gamma)
 
 inline float3 GetSunColor(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_SunColor; }
 inline float3 GetSunDirection(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_SunDirection; }
