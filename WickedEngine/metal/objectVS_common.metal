@@ -1,25 +1,7 @@
-//#include "objectHF.hlsli"
-#include "objectInputLayoutHF.h"
-#include "ShaderInterop_Renderer.h"
-
-struct PixelInputType
-{
-    simd::float4 pos [[position]];
-    float  clip;
-    simd::float2 tex;
-    float  dither [[flat]];
-    simd::float3 instanceColor [[flat]];
-    simd::float3 nor;
-    simd::float4 pos2D;
-    simd::float3 pos3D;
-    simd::float4 pos2DPrev;
-    simd::float4 ReflectionMapSamplingPos;
-    simd::float2 nor2D;
-    simd::float2 atl;
-};
+#include "objectHF.h"
 
 
-vertex PixelInputType objectVS_common(Input_Object_ALL input, GlobalData cb, uint vid [[vertex_id]], uint iid [[instance_id]])
+vertex PixelInputType objectVS_common(Input_Object_ALL input, constant GlobalCBuffer &cb, uint vid [[vertex_id]], uint iid [[instance_id]])
 {
 	PixelInputType Out;
 

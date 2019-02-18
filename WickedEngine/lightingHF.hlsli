@@ -92,7 +92,7 @@ inline LightingResult DirectionalLight(in ShaderEntityType light, in Surface sur
 		if (cascade >= 0)
 		{
 			const float3 cascadeBlend = abs(ShTex[cascade] * 2 - 1);
-			const int2 cascades = uint2(cascade, cascade - 1);
+			const int2 cascades = int2(cascade, cascade - 1);
 			float3 shadows[2] = { float3(1,1,1), float3(1,1,1) };
 
 			// main shadow cascade sampling:

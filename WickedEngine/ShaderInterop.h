@@ -21,11 +21,11 @@ using namespace metal;
 #define RAWBUFFER(name,slot)
 #define RWRAWBUFFER(name,slot)
 
-#define TYPEDBUFFER(name, type, slot) constant type &name [[buffer(slot)]]
-#define RWTYPEDBUFFER(name, type, slot)
+#define TYPEDBUFFER(name, type, slot) device const type *name [[buffer(slot)]]
+#define RWTYPEDBUFFER(name, type, slot) device type *name [[buffer(slot)]]
 
-#define STRUCTUREDBUFFER(name, type, slot) device type *name [[buffer(slot)]]
-#define RWSTRUCTUREDBUFFER(name, type, slot)
+#define STRUCTUREDBUFFER(name, type, slot) device const type *name [[buffer(slot)]]
+#define RWSTRUCTUREDBUFFER(name, type, slot) device type *name [[buffer(slot)]]
 #define ROVSTRUCTUREDBUFFER(name, type, slot)
 
 
@@ -47,9 +47,19 @@ using namespace metal;
 #define RWTEXTURE3D(name, type, slot) texture3d<type, access::read_write> name [[texture(slot)]];
 #define ROVTEXTURE3D(name, type, slot) texture3d<type> name [[texture(slot), raster_order_group()]];
 
+#define DEPTH2D(name, type, slot) depth2d<type> name [[texture(slot)]];
+#define DEPTH2DARRAY(name, type, slot) depth2d_array<type> name [[texture(slot)]];
+#define DEPTHCUBE(name, type, slot) depthcube<type> name [[texture(slot)]];
+#define DEPTHCUBEARRAY(name, type, slot) depthcube_array<type> name [[texture(slot)]];
 
 #define SAMPLERSTATE(name, slot) sampler name [[sampler(slot)]];
-#define SAMPLERCOMPARISONSTATE(name, slot) 
+#define SAMPLERCOMPARISONSTATE(name, slot) sampler name [[sampler(slot)]];
+
+#define SampleLevel sample
+#define SampleCmpLevelZero sample_compare
+#define SampleGrad sample
+
+#define CB_GD constant GlobalCBuffer &cb, constant GlobalData &gd
 
 #elif __cplusplus // not invoking shader compiler, but included in engine source
 

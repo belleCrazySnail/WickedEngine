@@ -123,6 +123,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		68456035221AD0A100345A91 /* packHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = packHF.h; path = WickedEngine/metal/packHF.h; sourceTree = "<group>"; };
 		6853C23022143AE4000F7B58 /* wiRandom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiRandom.h; path = WickedEngine/wiRandom.h; sourceTree = "<group>"; };
 		6853C23122143AE4000F7B58 /* wiArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiArchive.h; path = WickedEngine/wiArchive.h; sourceTree = "<group>"; };
 		6853C23222143AE4000F7B58 /* wiArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiArchive.cpp; path = WickedEngine/wiArchive.cpp; sourceTree = "<group>"; };
@@ -216,6 +217,12 @@
 		6853C31922188238000F7B58 /* objectInputLayoutHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = objectInputLayoutHF.h; path = WickedEngine/metal/objectInputLayoutHF.h; sourceTree = "<group>"; };
 		6853C31A221891E3000F7B58 /* objectVS_common.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_common.metal; path = WickedEngine/metal/objectVS_common.metal; sourceTree = "<group>"; };
 		6853C31D2219D29E000F7B58 /* ShaderInterop_Metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderInterop_Metal.h; path = WickedEngine/ShaderInterop_Metal.h; sourceTree = "<group>"; };
+		6853C31E221A875A000F7B58 /* globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = globals.h; path = WickedEngine/metal/globals.h; sourceTree = "<group>"; };
+		6853C31F221A99F6000F7B58 /* brdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = brdf.h; path = WickedEngine/metal/brdf.h; sourceTree = "<group>"; };
+		6853C320221A9BA6000F7B58 /* voxelConeTracingHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = voxelConeTracingHF.h; path = WickedEngine/metal/voxelConeTracingHF.h; sourceTree = "<group>"; };
+		6853C321221AA514000F7B58 /* lightingHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lightingHF.h; path = WickedEngine/metal/lightingHF.h; sourceTree = "<group>"; };
+		6853C322221ABE2B000F7B58 /* ditherHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ditherHF.h; path = WickedEngine/metal/ditherHF.h; sourceTree = "<group>"; };
+		6853C324221AC005000F7B58 /* objectHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = objectHF.h; path = WickedEngine/metal/objectHF.h; sourceTree = "<group>"; };
 		685F8BBE2209C30600A516B4 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		685F8BBF2209C30600A516B4 /* Renderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
 		685F8BC02209C30600A516B4 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
@@ -317,6 +324,13 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				68456035221AD0A100345A91 /* packHF.h */,
+				6853C324221AC005000F7B58 /* objectHF.h */,
+				6853C322221ABE2B000F7B58 /* ditherHF.h */,
+				6853C321221AA514000F7B58 /* lightingHF.h */,
+				6853C320221A9BA6000F7B58 /* voxelConeTracingHF.h */,
+				6853C31F221A99F6000F7B58 /* brdf.h */,
+				6853C31E221A875A000F7B58 /* globals.h */,
 				6853C31A221891E3000F7B58 /* objectVS_common.metal */,
 				6853C31922188238000F7B58 /* objectInputLayoutHF.h */,
 			);
