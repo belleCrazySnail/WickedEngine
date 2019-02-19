@@ -3,9 +3,9 @@
 #include "wiRenderer.h"
 #include "wiHelper.h"
 #include "wiTimer.h"
-#include "wiInputManager.h"
+//#include "wiInputManager.h"
 #include "wiBackLog.h"
-#include "MainComponent_BindLua.h"
+//#include "MainComponent_BindLua.h"
 #include "wiVersion.h"
 #include "wiEnums.h"
 #include "wiTextureHelper.h"
@@ -15,9 +15,13 @@
 #include "wiFont.h"
 #include "wiImage.h"
 
+#ifdef __APPLE__
+#include "wiObjCHelper.h"
+#else
 #include "wiGraphicsDevice_DX11.h"
 #include "wiGraphicsDevice_DX12.h"
 #include "wiGraphicsDevice_Vulkan.h"
+#endif
 
 #include <sstream>
 
@@ -44,6 +48,9 @@ void MainComponent::Initialize()
 		auto window = wiWindowRegistration::GetRegisteredWindow();
 
 		bool debugdevice = wiStartupArguments::HasArgument("debugdevice");
+#ifdef __APPLE__
+        wiRenderer::SetDevice(wiObjCHelper::createMetalGraphicsDevice(window, fullscreen, debugdevice));
+#else
 
 		if (wiStartupArguments::HasArgument("vulkan"))
 		{
@@ -68,13 +75,13 @@ void MainComponent::Initialize()
 		{
 			wiRenderer::SetDevice(new GraphicsDevice_DX11(window, fullscreen, debugdevice));
 		}
-
+#endif
 	}
 
 
 	wiInitializer::InitializeComponentsAsync();
 
-	wiLua::GetGlobal()->RegisterObject(MainComponent_BindLua::className, "main", new MainComponent_BindLua(this));
+//    wiLua::GetGlobal()->RegisterObject(MainComponent_BindLua::className, "main", new MainComponent_BindLua(this));
 }
 
 void MainComponent::ActivatePath(RenderPath* component, float fadeSeconds, const wiColor& fadeColor)
@@ -124,7 +131,7 @@ void MainComponent::Run()
 	wiProfiler::BeginFrame();
 	wiProfiler::BeginRange("CPU Frame", wiProfiler::DOMAIN_CPU);
 
-	wiInputManager::Update();
+//    wiInputManager::Update();
 
 	deltaTime = float(std::max(0., timer.elapsed() / 1000.0));
 	timer.record();
@@ -161,7 +168,7 @@ void MainComponent::Run()
 		}
 		wiProfiler::EndRange(); // Fixed Update
 
-		wiLua::GetGlobal()->SetDeltaTime(double(deltaTime));
+//        wiLua::GetGlobal()->SetDeltaTime(double(deltaTime));
 
 		// Variable-timed update:
 		wiProfiler::BeginRange("Update", wiProfiler::DOMAIN_CPU);
@@ -172,7 +179,7 @@ void MainComponent::Run()
 	{
 		// If the application is not active, disable Update loops:
 		deltaTimeAccumulator = 0;
-		wiLua::GetGlobal()->SetDeltaTime(0);
+//        wiLua::GetGlobal()->SetDeltaTime(0);
 	}
 
 	wiProfiler::BeginRange("Render", wiProfiler::DOMAIN_CPU);
@@ -192,7 +199,7 @@ void MainComponent::Run()
 
 	static bool startupScriptProcessed = false;
 	if (!startupScriptProcessed) {
-		wiLua::GetGlobal()->RunFile("startup.lua");
+//        wiLua::GetGlobal()->RunFile("startup.lua");
 		startupScriptProcessed = true;
 	}
 
@@ -206,13 +213,13 @@ void MainComponent::Update(float dt)
 		GetActivePath()->Update(dt);
 	}
 
-	wiLua::GetGlobal()->Update();
+//    wiLua::GetGlobal()->Update();
 }
 
 void MainComponent::FixedUpdate()
 {
 	wiBackLog::Update();
-	wiLua::GetGlobal()->FixedUpdate();
+//    wiLua::GetGlobal()->FixedUpdate();
 
 	if (GetActivePath() != nullptr)
 	{
@@ -222,7 +229,7 @@ void MainComponent::FixedUpdate()
 
 void MainComponent::Render()
 {
-	wiLua::GetGlobal()->Render();
+//    wiLua::GetGlobal()->Render();
 
 	wiProfiler::BeginRange("GPU Frame", wiProfiler::DOMAIN_GPU, GRAPHICSTHREAD_IMMEDIATE);
 	wiRenderer::BindPersistentState(GRAPHICSTHREAD_IMMEDIATE);
@@ -260,6 +267,9 @@ void MainComponent::Compose()
 		{
 			ss << string("Wicked Engine ") + wiVersion::GetVersionString() + " ";
 
+#ifdef __APPLE__
+            ss << "[Metal]";
+#else
 			if (dynamic_cast<GraphicsDevice_DX11*>(wiRenderer::GetDevice()))
 			{
 				ss << "[DX11]";
@@ -273,6 +283,7 @@ void MainComponent::Compose()
 			{
 				ss << "[Vulkan]";
 			}
+#endif
 #endif
 
 #ifdef _DEBUG
@@ -298,7 +309,14 @@ void MainComponent::Compose()
 	wiBackLog::Draw();
 }
 
-#ifndef WINSTORE_SUPPORT
+#ifdef _WIN32
+bool MainComponent::SetWindow(wiWindowRegistration::window_type window)
+{
+    wiWindowRegistration::RegisterWindow(window);
+    
+    return true;
+}
+#elif WINSTORE_SUPPORT
 bool MainComponent::SetWindow(wiWindowRegistration::window_type window, HINSTANCE hInst)
 {
 	this->hInst = hInst;
@@ -307,12 +325,12 @@ bool MainComponent::SetWindow(wiWindowRegistration::window_type window, HINSTANC
 
 	return true;
 }
-#else
+#elif __APPLE__
 bool MainComponent::SetWindow(wiWindowRegistration::window_type window)
 {
-	wiWindowRegistration::RegisterWindow(window);
-
-	return true;
+    wiWindowRegistration::RegisterWindow(window);
+    
+    return true;
 }
 #endif
 

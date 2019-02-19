@@ -9,6 +9,8 @@
 #ifdef _WIN32
 #include <direct.h>
 #elif __APPLE__
+#include "wiObjCHelper.h"
+
 #include <unistd.h>
 #endif
 #include <chrono>
@@ -65,7 +67,7 @@ namespace wiHelper
 		}
 		stringstream ss("");
 		ss << "File not found: " << fileName;
-		messageBox(ss.str());
+//        messageBox(ss.str());
 		return false;
 	}
 
@@ -77,7 +79,7 @@ namespace wiHelper
 		wstring wcaption(caption.begin(), caption.end());
 		Windows::UI::Popups::MessageDialog(ref new Platform::String(wmsg.c_str()), ref new Platform::String(wcaption.c_str())).ShowAsync();
 #elif __APPLE__
-        
+        wiObjCHelper::logMessage(caption + msg);
 #endif
 	}
 

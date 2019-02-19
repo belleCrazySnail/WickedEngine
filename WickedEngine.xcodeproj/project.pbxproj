@@ -18,15 +18,10 @@
 		6853C25622144F8A000F7B58 /* utility_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C25522144F8A000F7B58 /* utility_common.cpp */; };
 		6853C25722144F8A000F7B58 /* utility_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C25522144F8A000F7B58 /* utility_common.cpp */; };
 		6853C264221484A5000F7B58 /* DirectXMathMisc.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C25F221484A5000F7B58 /* DirectXMathMisc.inl */; };
-		6853C265221484A5000F7B58 /* DirectXMathMisc.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C25F221484A5000F7B58 /* DirectXMathMisc.inl */; };
 		6853C266221484A5000F7B58 /* DirectXMathMatrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C260221484A5000F7B58 /* DirectXMathMatrix.inl */; };
-		6853C267221484A5000F7B58 /* DirectXMathMatrix.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C260221484A5000F7B58 /* DirectXMathMatrix.inl */; };
 		6853C268221484A5000F7B58 /* DirectXMathConvert.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C261221484A5000F7B58 /* DirectXMathConvert.inl */; };
-		6853C269221484A5000F7B58 /* DirectXMathConvert.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C261221484A5000F7B58 /* DirectXMathConvert.inl */; };
 		6853C26A221484A5000F7B58 /* DirectXMathVector.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C263221484A5000F7B58 /* DirectXMathVector.inl */; };
-		6853C26B221484A5000F7B58 /* DirectXMathVector.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C263221484A5000F7B58 /* DirectXMathVector.inl */; };
 		6853C26E221531B0000F7B58 /* DirectXCollision.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C26D221531AF000F7B58 /* DirectXCollision.inl */; };
-		6853C26F221531B0000F7B58 /* DirectXCollision.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C26D221531AF000F7B58 /* DirectXCollision.inl */; };
 		6853C27422153E17000F7B58 /* wiGPUBVH.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C27122153E17000F7B58 /* wiGPUBVH.cpp */; };
 		6853C27522153E17000F7B58 /* wiGPUBVH.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C27122153E17000F7B58 /* wiGPUBVH.cpp */; };
 		6853C27622153E17000F7B58 /* wiGPUSortLib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C27222153E17000F7B58 /* wiGPUSortLib.cpp */; };
@@ -58,13 +53,10 @@
 		6853C2AE22154C31000F7B58 /* wiCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2AC22154C31000F7B58 /* wiCube.cpp */; };
 		6853C2AF22154C31000F7B58 /* wiCube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2AC22154C31000F7B58 /* wiCube.cpp */; };
 		6853C2B3221561CA000F7B58 /* DirectXPackedVector.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C2B1221561CA000F7B58 /* DirectXPackedVector.inl */; };
-		6853C2B4221561CA000F7B58 /* DirectXPackedVector.inl in Resources */ = {isa = PBXBuildFile; fileRef = 6853C2B1221561CA000F7B58 /* DirectXPackedVector.inl */; };
 		6853C2B9221580B9000F7B58 /* wiRectPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2B5221580B9000F7B58 /* wiRectPacker.cpp */; };
 		6853C2BA221580B9000F7B58 /* wiRectPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2B5221580B9000F7B58 /* wiRectPacker.cpp */; };
 		6853C2BB221580B9000F7B58 /* wiProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2B6221580B9000F7B58 /* wiProfiler.cpp */; };
 		6853C2BC221580B9000F7B58 /* wiProfiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2B6221580B9000F7B58 /* wiProfiler.cpp */; };
-		6853C2BF22158143000F7B58 /* wiTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2BE22158142000F7B58 /* wiTimer.mm */; };
-		6853C2C022158143000F7B58 /* wiTimer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2BE22158142000F7B58 /* wiTimer.mm */; };
 		6853C2C722158478000F7B58 /* wiOcean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2C222158477000F7B58 /* wiOcean.cpp */; };
 		6853C2C822158478000F7B58 /* wiOcean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2C222158477000F7B58 /* wiOcean.cpp */; };
 		6853C2C922158478000F7B58 /* wiLensFlare.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6853C2C322158478000F7B58 /* wiLensFlare.cpp */; };
@@ -101,7 +93,7 @@
 		685F8BD52209C30800A516B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685F8BD32209C30800A516B4 /* LaunchScreen.storyboard */; };
 		685F8BD82209C30800A516B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BD72209C30800A516B4 /* main.m */; };
 		685F8BE12209C30800A516B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BE02209C30800A516B4 /* AppDelegate.m */; };
-		685F8BE42209C30800A516B4 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BE32209C30800A516B4 /* GameViewController.m */; };
+		685F8BE42209C30800A516B4 /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BE32209C30800A516B4 /* GameViewController.mm */; };
 		685F8BE72209C30800A516B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 685F8BE52209C30800A516B4 /* Main.storyboard */; };
 		685F8BEA2209C30800A516B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BE92209C30800A516B4 /* main.m */; };
 		685F8BEB2209C30800A516B4 /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 685F8BBF2209C30600A516B4 /* Renderer.m */; };
@@ -206,6 +198,22 @@
 		688D39F3221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E8221BD5EF0005B1F9 /* objectVS_simple_tessellation.metal */; };
 		688D39F4221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */; };
 		688D39F5221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */; };
+		688D39F8221BDFD00005B1F9 /* wiInitializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D39F6221BDFD00005B1F9 /* wiInitializer.cpp */; };
+		688D39F9221BDFD00005B1F9 /* wiInitializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D39F6221BDFD00005B1F9 /* wiInitializer.cpp */; };
+		688D39FD221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D39FC221BE0A00005B1F9 /* wiStartupArguments.cpp */; };
+		688D39FE221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D39FC221BE0A00005B1F9 /* wiStartupArguments.cpp */; };
+		688D3A01221BE1400005B1F9 /* LoadingScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D39FF221BE1400005B1F9 /* LoadingScreen.cpp */; };
+		688D3A02221BE1400005B1F9 /* LoadingScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D39FF221BE1400005B1F9 /* LoadingScreen.cpp */; };
+		688D3A05221BE1720005B1F9 /* MainComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A03221BE1720005B1F9 /* MainComponent.cpp */; };
+		688D3A06221BE1720005B1F9 /* MainComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A03221BE1720005B1F9 /* MainComponent.cpp */; };
+		688D3A09221BE7290005B1F9 /* wiVersion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A07221BE7290005B1F9 /* wiVersion.cpp */; };
+		688D3A0A221BE7290005B1F9 /* wiVersion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A07221BE7290005B1F9 /* wiVersion.cpp */; };
+		688D3A0D221BEBEF0005B1F9 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 688D3A0C221BEBEF0005B1F9 /* fonts */; };
+		688D3A0E221BEBEF0005B1F9 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 688D3A0C221BEBEF0005B1F9 /* fonts */; };
+		688D3A11221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A0F221C05EE0005B1F9 /* wiObjCHelper.mm */; };
+		688D3A12221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A0F221C05EE0005B1F9 /* wiObjCHelper.mm */; };
+		688D3A14221C07290005B1F9 /* wiTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A13221C07290005B1F9 /* wiTimer.cpp */; };
+		688D3A15221C07290005B1F9 /* wiTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A13221C07290005B1F9 /* wiTimer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -272,7 +280,6 @@
 		6853C2B7221580B9000F7B58 /* wiRectPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiRectPacker.h; path = WickedEngine/wiRectPacker.h; sourceTree = "<group>"; };
 		6853C2B8221580B9000F7B58 /* wiProfiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiProfiler.h; path = WickedEngine/wiProfiler.h; sourceTree = "<group>"; };
 		6853C2BD22158142000F7B58 /* wiTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiTimer.h; path = WickedEngine/wiTimer.h; sourceTree = "<group>"; };
-		6853C2BE22158142000F7B58 /* wiTimer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = wiTimer.mm; path = WickedEngine/wiTimer.mm; sourceTree = "<group>"; };
 		6853C2C122158477000F7B58 /* wiLensFlare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiLensFlare.h; path = WickedEngine/wiLensFlare.h; sourceTree = "<group>"; };
 		6853C2C222158477000F7B58 /* wiOcean.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiOcean.cpp; path = WickedEngine/wiOcean.cpp; sourceTree = "<group>"; };
 		6853C2C322158478000F7B58 /* wiLensFlare.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiLensFlare.cpp; path = WickedEngine/wiLensFlare.cpp; sourceTree = "<group>"; };
@@ -327,7 +334,7 @@
 		685F8BDF2209C30800A516B4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		685F8BE02209C30800A516B4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		685F8BE22209C30800A516B4 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		685F8BE32209C30800A516B4 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		685F8BE32209C30800A516B4 /* GameViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewController.mm; sourceTree = "<group>"; };
 		685F8BE62209C30800A516B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		685F8BE82209C30800A516B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		685F8BE92209C30800A516B4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -407,6 +414,21 @@
 		688D39E7221BD5EF0005B1F9 /* objectVS_common_tessellation.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_common_tessellation.metal; path = WickedEngine/metal/objectVS_common_tessellation.metal; sourceTree = "<group>"; };
 		688D39E8221BD5EF0005B1F9 /* objectVS_simple_tessellation.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_simple_tessellation.metal; path = WickedEngine/metal/objectVS_simple_tessellation.metal; sourceTree = "<group>"; };
 		688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_voxelizer.metal; path = WickedEngine/metal/objectVS_voxelizer.metal; sourceTree = "<group>"; };
+		688D39F6221BDFD00005B1F9 /* wiInitializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiInitializer.cpp; path = WickedEngine/wiInitializer.cpp; sourceTree = "<group>"; };
+		688D39F7221BDFD00005B1F9 /* wiInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiInitializer.h; path = WickedEngine/wiInitializer.h; sourceTree = "<group>"; };
+		688D39FA221BDFF10005B1F9 /* WickedEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WickedEngine.h; path = WickedEngine/WickedEngine.h; sourceTree = "<group>"; };
+		688D39FB221BE09F0005B1F9 /* wiStartupArguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiStartupArguments.h; path = WickedEngine/wiStartupArguments.h; sourceTree = "<group>"; };
+		688D39FC221BE0A00005B1F9 /* wiStartupArguments.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiStartupArguments.cpp; path = WickedEngine/wiStartupArguments.cpp; sourceTree = "<group>"; };
+		688D39FF221BE1400005B1F9 /* LoadingScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LoadingScreen.cpp; path = WickedEngine/LoadingScreen.cpp; sourceTree = "<group>"; };
+		688D3A00221BE1400005B1F9 /* LoadingScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingScreen.h; path = WickedEngine/LoadingScreen.h; sourceTree = "<group>"; };
+		688D3A03221BE1720005B1F9 /* MainComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MainComponent.cpp; path = WickedEngine/MainComponent.cpp; sourceTree = "<group>"; };
+		688D3A04221BE1720005B1F9 /* MainComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainComponent.h; path = WickedEngine/MainComponent.h; sourceTree = "<group>"; };
+		688D3A07221BE7290005B1F9 /* wiVersion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiVersion.cpp; path = WickedEngine/wiVersion.cpp; sourceTree = "<group>"; };
+		688D3A08221BE7290005B1F9 /* wiVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiVersion.h; path = WickedEngine/wiVersion.h; sourceTree = "<group>"; };
+		688D3A0C221BEBEF0005B1F9 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = WickedEngine/fonts; sourceTree = "<group>"; };
+		688D3A0F221C05EE0005B1F9 /* wiObjCHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = wiObjCHelper.mm; path = WickedEngine/wiObjCHelper.mm; sourceTree = "<group>"; };
+		688D3A10221C05EE0005B1F9 /* wiObjCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiObjCHelper.h; path = WickedEngine/wiObjCHelper.h; sourceTree = "<group>"; };
+		688D3A13221C07290005B1F9 /* wiTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiTimer.cpp; path = WickedEngine/wiTimer.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -563,7 +585,7 @@
 				685F8BDF2209C30800A516B4 /* AppDelegate.h */,
 				685F8BE02209C30800A516B4 /* AppDelegate.m */,
 				685F8BE22209C30800A516B4 /* GameViewController.h */,
-				685F8BE32209C30800A516B4 /* GameViewController.m */,
+				685F8BE32209C30800A516B4 /* GameViewController.mm */,
 				685F8BE52209C30800A516B4 /* Main.storyboard */,
 				685F8BE82209C30800A516B4 /* Info.plist */,
 				685F8BE92209C30800A516B4 /* main.m */,
@@ -582,6 +604,8 @@
 			isa = PBXGroup;
 			children = (
 				685F8C302209DF5D00A516B4 /* CommonInclude.h */,
+				688D39FA221BDFF10005B1F9 /* WickedEngine.h */,
+				688D3A0B221BEBD50005B1F9 /* Resource */,
 				6853C30A2215E468000F7B58 /* Shaders */,
 				6853C25E2214848E000F7B58 /* DXUtil */,
 				685F8C63220B545C00A516B4 /* Helpers */,
@@ -691,6 +715,10 @@
 		685F8C5E220B53CA00A516B4 /* System */ = {
 			isa = PBXGroup;
 			children = (
+				688D3A03221BE1720005B1F9 /* MainComponent.cpp */,
+				688D3A04221BE1720005B1F9 /* MainComponent.h */,
+				688D39F6221BDFD00005B1F9 /* wiInitializer.cpp */,
+				688D39F7221BDFD00005B1F9 /* wiInitializer.h */,
 				6853C29F2215410C000F7B58 /* wiEmittedParticle.cpp */,
 				6853C29D2215410C000F7B58 /* wiEmittedParticle.h */,
 				6853C29E2215410C000F7B58 /* wiHairParticle.cpp */,
@@ -711,9 +739,17 @@
 		685F8C63220B545C00A516B4 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				688D3A10221C05EE0005B1F9 /* wiObjCHelper.h */,
+				688D3A0F221C05EE0005B1F9 /* wiObjCHelper.mm */,
+				688D3A07221BE7290005B1F9 /* wiVersion.cpp */,
+				688D3A08221BE7290005B1F9 /* wiVersion.h */,
+				688D39FF221BE1400005B1F9 /* LoadingScreen.cpp */,
+				688D3A00221BE1400005B1F9 /* LoadingScreen.h */,
+				688D39FC221BE0A00005B1F9 /* wiStartupArguments.cpp */,
+				688D39FB221BE09F0005B1F9 /* wiStartupArguments.h */,
 				6853C3062215E2D0000F7B58 /* wiFadeManager.cpp */,
 				6853C3072215E2D0000F7B58 /* wiFadeManager.h */,
-				6853C2BE22158142000F7B58 /* wiTimer.mm */,
+				688D3A13221C07290005B1F9 /* wiTimer.cpp */,
 				6853C2BD22158142000F7B58 /* wiTimer.h */,
 				6853C2B6221580B9000F7B58 /* wiProfiler.cpp */,
 				6853C2B8221580B9000F7B58 /* wiProfiler.h */,
@@ -749,6 +785,14 @@
 				6853C25522144F8A000F7B58 /* utility_common.cpp */,
 			);
 			name = Helpers;
+			sourceTree = "<group>";
+		};
+		688D3A0B221BEBD50005B1F9 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				688D3A0C221BEBEF0005B1F9 /* fonts */,
+			);
+			name = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -830,6 +874,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6853C2B3221561CA000F7B58 /* DirectXPackedVector.inl in Resources */,
+				688D3A0D221BEBEF0005B1F9 /* fonts in Resources */,
 				6853C266221484A5000F7B58 /* DirectXMathMatrix.inl in Resources */,
 				6853C268221484A5000F7B58 /* DirectXMathConvert.inl in Resources */,
 				685F8BD22209C30800A516B4 /* Main.storyboard in Resources */,
@@ -845,14 +890,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6853C269221484A5000F7B58 /* DirectXMathConvert.inl in Resources */,
-				6853C26F221531B0000F7B58 /* DirectXCollision.inl in Resources */,
-				6853C267221484A5000F7B58 /* DirectXMathMatrix.inl in Resources */,
 				685F8BF02209C30800A516B4 /* Assets.xcassets in Resources */,
 				685F8BE72209C30800A516B4 /* Main.storyboard in Resources */,
-				6853C26B221484A5000F7B58 /* DirectXMathVector.inl in Resources */,
-				6853C2B4221561CA000F7B58 /* DirectXPackedVector.inl in Resources */,
-				6853C265221484A5000F7B58 /* DirectXMathMisc.inl in Resources */,
+				688D3A0E221BEBEF0005B1F9 /* fonts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -863,9 +903,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				688D3A11221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				6853C2CF221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
 				688D3980221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2CB22158478000F7B58 /* wiSprite.cpp in Sources */,
+				688D3A14221C07290005B1F9 /* wiTimer.cpp in Sources */,
 				688D399F221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
 				6853C2FA2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
 				6853C2FE2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
@@ -880,6 +922,7 @@
 				688D3981221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
 				685F8BEB2209C30800A516B4 /* Renderer.m in Sources */,
 				688D39CE221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
+				688D39FD221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */,
 				6853C2AA22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29A2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C74220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
@@ -896,7 +939,6 @@
 				685F8BD82209C30800A516B4 /* main.m in Sources */,
 				6853C23622143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7E220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
-				6853C2BF22158143000F7B58 /* wiTimer.mm in Sources */,
 				6853C2FC2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				688D39AF221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
 				688D39EE221BD5F00005B1F9 /* objectVS_debug.metal in Sources */,
@@ -925,10 +967,12 @@
 				6853C27622153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				688D39F0221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */,
 				6853C2B9221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
+				688D39F8221BDFD00005B1F9 /* wiInitializer.cpp in Sources */,
 				685F8BED2209C30800A516B4 /* Shaders.metal in Sources */,
 				688D39F2221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28622153EA2000F7B58 /* wiRenderer.cpp in Sources */,
+				688D3A09221BE7290005B1F9 /* wiVersion.cpp in Sources */,
 				688D39A3221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2C922158478000F7B58 /* wiLensFlare.cpp in Sources */,
 				688D397C221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */,
@@ -944,9 +988,11 @@
 				688D397A221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				688D39D4221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
+				688D3A05221BE1720005B1F9 /* MainComponent.cpp in Sources */,
 				688D39B3221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
 				688D39A9221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31B221891E3000F7B58 /* objectVS_common.metal in Sources */,
+				688D3A01221BE1400005B1F9 /* LoadingScreen.cpp in Sources */,
 				688D39AB221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */,
 				688D39D8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */,
 				688D39E0221BC7AD0005B1F9 /* objectPS_textureonly.metal in Sources */,
@@ -961,9 +1007,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				688D3A12221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				688D3982221B388D0005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
 				688D3983221B388D0005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2D0221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
+				688D3A15221C07290005B1F9 /* wiTimer.cpp in Sources */,
 				688D39A0221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
 				6853C2CC22158478000F7B58 /* wiSprite.cpp in Sources */,
 				6853C2FB2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
@@ -978,11 +1026,12 @@
 				6853C28522153EA2000F7B58 /* wiImage.cpp in Sources */,
 				685F8BEC2209C30800A516B4 /* Renderer.m in Sources */,
 				688D39CF221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
+				688D39FE221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */,
 				6853C2AB22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29B2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C75220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
 				688D39A2221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */,
-				685F8BE42209C30800A516B4 /* GameViewController.m in Sources */,
+				685F8BE42209C30800A516B4 /* GameViewController.mm in Sources */,
 				6853C27D22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
 				688D39AE221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal in Sources */,
 				6853C24E22144197000F7B58 /* wiBackLog.cpp in Sources */,
@@ -994,7 +1043,6 @@
 				685F8BEA2209C30800A516B4 /* main.m in Sources */,
 				6853C23722143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7F220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
-				6853C2C022158143000F7B58 /* wiTimer.mm in Sources */,
 				6853C2FD2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				688D39B0221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
 				688D39EF221BD5F00005B1F9 /* objectVS_debug.metal in Sources */,
@@ -1023,10 +1071,12 @@
 				6853C27722153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				688D39F1221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */,
 				6853C2BA221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
+				688D39F9221BDFD00005B1F9 /* wiInitializer.cpp in Sources */,
 				685F8C592209F50A00A516B4 /* wiGraphicsResource.cpp in Sources */,
 				688D39F3221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28722153EA2000F7B58 /* wiRenderer.cpp in Sources */,
+				688D3A0A221BE7290005B1F9 /* wiVersion.cpp in Sources */,
 				688D39A4221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2CA22158478000F7B58 /* wiLensFlare.cpp in Sources */,
 				688D397D221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */,
@@ -1042,9 +1092,11 @@
 				688D397B221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F72215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				688D39D5221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
+				688D3A06221BE1720005B1F9 /* MainComponent.cpp in Sources */,
 				688D39B4221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
 				688D39AA221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31C221891E3000F7B58 /* objectVS_common.metal in Sources */,
+				688D3A02221BE1400005B1F9 /* LoadingScreen.cpp in Sources */,
 				688D39AC221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */,
 				688D39D9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */,
 				688D39E1221BC7AD0005B1F9 /* objectPS_textureonly.metal in Sources */,

@@ -8,6 +8,7 @@
 #include "wiTextureHelper.h"
 #include "wiRectPacker.h"
 #include "wiSpinLock.h"
+#include "wiObjCHelper.h"
 
 #include "Utility/stb_truetype.h"
 
@@ -29,7 +30,12 @@ using namespace wiRectPacker;
 
 namespace wiFont_Internal
 {
-	std::string			FONTPATH = "fonts/";
+	std::string			FONTPATH =
+#ifdef __APPLE__
+    wiObjCHelper::getResourceLocation() + "/fonts/";
+#else
+    "fonts/";
+#endif
 	GPUBuffer			indexBuffer;
 	GPUBuffer			constantBuffer;
 	BlendState			blendState;
