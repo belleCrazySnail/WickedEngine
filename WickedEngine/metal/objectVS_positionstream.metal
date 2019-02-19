@@ -1,11 +1,11 @@
-#include "objectHF.hlsli"
+#include "objectHF.h"
 
-float4 main(Input_Object_POS input) : SV_POSITION
+vertex float4 objectVS_positionstream(Input_Object_POS input, constant GlobalCBuffer &cb, uint vid [[vertex_id]], uint iid [[instance_id]])
 {
-	float4x4 WORLD = MakeWorldMatrixFromInstance(input.inst);
-	VertexSurface surface = MakeVertexSurfaceFromInput(input);
+	float4x4 WORLD = MakeWorldMatrixFromInstance(input.instance[iid]);
+	VertexSurface surface = MakeVertexSurfaceFromInput(input, vid);
 
-	surface.position = mul(surface.position, WORLD);
+	surface.position = surface.position * WORLD;
 
-	return mul(surface.position, g_xCamera_VP);
+	return surface.position * cb.camera.g_xCamera_VP;
 }

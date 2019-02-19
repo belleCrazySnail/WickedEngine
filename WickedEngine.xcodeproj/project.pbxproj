@@ -194,6 +194,18 @@
 		688D39E1221BC7AD0005B1F9 /* objectPS_textureonly.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C4221BC7AD0005B1F9 /* objectPS_textureonly.metal */; };
 		688D39E2221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */; };
 		688D39E3221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */; };
+		688D39EA221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E4221BD5EF0005B1F9 /* objectVS_positionstream.metal */; };
+		688D39EB221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E4221BD5EF0005B1F9 /* objectVS_positionstream.metal */; };
+		688D39EC221BD5F00005B1F9 /* objectVS_simple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E5221BD5EF0005B1F9 /* objectVS_simple.metal */; };
+		688D39ED221BD5F00005B1F9 /* objectVS_simple.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E5221BD5EF0005B1F9 /* objectVS_simple.metal */; };
+		688D39EE221BD5F00005B1F9 /* objectVS_debug.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E6221BD5EF0005B1F9 /* objectVS_debug.metal */; };
+		688D39EF221BD5F00005B1F9 /* objectVS_debug.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E6221BD5EF0005B1F9 /* objectVS_debug.metal */; };
+		688D39F0221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E7221BD5EF0005B1F9 /* objectVS_common_tessellation.metal */; };
+		688D39F1221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E7221BD5EF0005B1F9 /* objectVS_common_tessellation.metal */; };
+		688D39F2221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E8221BD5EF0005B1F9 /* objectVS_simple_tessellation.metal */; };
+		688D39F3221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E8221BD5EF0005B1F9 /* objectVS_simple_tessellation.metal */; };
+		688D39F4221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */; };
+		688D39F5221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -389,6 +401,12 @@
 		688D39C3221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_planarreflection.metal; path = WickedEngine/metal/objectPS_tiledforward_planarreflection.metal; sourceTree = "<group>"; };
 		688D39C4221BC7AD0005B1F9 /* objectPS_textureonly.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_textureonly.metal; path = WickedEngine/metal/objectPS_textureonly.metal; sourceTree = "<group>"; };
 		688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_normalmap_pom.metal; path = WickedEngine/metal/objectPS_tiledforward_normalmap_pom.metal; sourceTree = "<group>"; };
+		688D39E4221BD5EF0005B1F9 /* objectVS_positionstream.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_positionstream.metal; path = WickedEngine/metal/objectVS_positionstream.metal; sourceTree = "<group>"; };
+		688D39E5221BD5EF0005B1F9 /* objectVS_simple.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_simple.metal; path = WickedEngine/metal/objectVS_simple.metal; sourceTree = "<group>"; };
+		688D39E6221BD5EF0005B1F9 /* objectVS_debug.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_debug.metal; path = WickedEngine/metal/objectVS_debug.metal; sourceTree = "<group>"; };
+		688D39E7221BD5EF0005B1F9 /* objectVS_common_tessellation.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_common_tessellation.metal; path = WickedEngine/metal/objectVS_common_tessellation.metal; sourceTree = "<group>"; };
+		688D39E8221BD5EF0005B1F9 /* objectVS_simple_tessellation.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_simple_tessellation.metal; path = WickedEngine/metal/objectVS_simple_tessellation.metal; sourceTree = "<group>"; };
+		688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectVS_voxelizer.metal; path = WickedEngine/metal/objectVS_voxelizer.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -435,6 +453,21 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				68456035221AD0A100345A91 /* packHF.h */,
+				6853C324221AC005000F7B58 /* objectHF.h */,
+				6853C322221ABE2B000F7B58 /* ditherHF.h */,
+				6853C31F221A99F6000F7B58 /* brdf.h */,
+				6853C320221A9BA6000F7B58 /* voxelConeTracingHF.h */,
+				6853C321221AA514000F7B58 /* lightingHF.h */,
+				6853C31E221A875A000F7B58 /* globals.h */,
+				6853C31922188238000F7B58 /* objectInputLayoutHF.h */,
+				688D39E7221BD5EF0005B1F9 /* objectVS_common_tessellation.metal */,
+				6853C31A221891E3000F7B58 /* objectVS_common.metal */,
+				688D39E6221BD5EF0005B1F9 /* objectVS_debug.metal */,
+				688D39E4221BD5EF0005B1F9 /* objectVS_positionstream.metal */,
+				688D39E8221BD5EF0005B1F9 /* objectVS_simple_tessellation.metal */,
+				688D39E5221BD5EF0005B1F9 /* objectVS_simple.metal */,
+				688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */,
 				688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */,
 				688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */,
 				688D39C0221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal */,
@@ -472,15 +505,6 @@
 				688D3975221B2B1A0005B1F9 /* objectPS_debug.metal */,
 				688D39C2221BC7AD0005B1F9 /* objectPS_simplest.metal */,
 				688D39C4221BC7AD0005B1F9 /* objectPS_textureonly.metal */,
-				68456035221AD0A100345A91 /* packHF.h */,
-				6853C324221AC005000F7B58 /* objectHF.h */,
-				6853C322221ABE2B000F7B58 /* ditherHF.h */,
-				6853C31F221A99F6000F7B58 /* brdf.h */,
-				6853C320221A9BA6000F7B58 /* voxelConeTracingHF.h */,
-				6853C321221AA514000F7B58 /* lightingHF.h */,
-				6853C31E221A875A000F7B58 /* globals.h */,
-				6853C31922188238000F7B58 /* objectInputLayoutHF.h */,
-				6853C31A221891E3000F7B58 /* objectVS_common.metal */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -851,6 +875,7 @@
 				688D3978221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
 				6853C23422143AE4000F7B58 /* wiArchive.cpp in Sources */,
 				6853C2BB221580B9000F7B58 /* wiProfiler.cpp in Sources */,
+				688D39F4221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */,
 				6853C28422153EA2000F7B58 /* wiImage.cpp in Sources */,
 				688D3981221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
 				685F8BEB2209C30800A516B4 /* Renderer.m in Sources */,
@@ -866,6 +891,7 @@
 				6853C29022153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
 				688D39CA221BC7AD0005B1F9 /* objectPS_tiledforward_pom.metal in Sources */,
 				688D39DC221BC7AD0005B1F9 /* objectPS_simplest.metal in Sources */,
+				688D39EC221BD5F00005B1F9 /* objectVS_simple.metal in Sources */,
 				6853C3082215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BD82209C30800A516B4 /* main.m in Sources */,
 				6853C23622143AE4000F7B58 /* wiRandom.cpp in Sources */,
@@ -873,6 +899,7 @@
 				6853C2BF22158143000F7B58 /* wiTimer.mm in Sources */,
 				6853C2FC2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				688D39AF221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
+				688D39EE221BD5F00005B1F9 /* objectVS_debug.metal in Sources */,
 				688D39C6221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2A02215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A622154123000F7B58 /* wiDepthTarget.cpp in Sources */,
@@ -896,8 +923,10 @@
 				688D39D6221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
 				6853C28C22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27622153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
+				688D39F0221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */,
 				6853C2B9221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				685F8BED2209C30800A516B4 /* Shaders.metal in Sources */,
+				688D39F2221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28622153EA2000F7B58 /* wiRenderer.cpp in Sources */,
 				688D39A3221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
@@ -911,6 +940,7 @@
 				688D39CC221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
 				688D399D221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C442209E0F400A516B4 /* wiGraphicsResource.cpp in Sources */,
+				688D39EA221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */,
 				688D397A221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				688D39D4221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
@@ -943,6 +973,7 @@
 				6853C2D32215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
 				688D3979221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
 				6853C23522143AE4000F7B58 /* wiArchive.cpp in Sources */,
+				688D39F5221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */,
 				6853C2BC221580B9000F7B58 /* wiProfiler.cpp in Sources */,
 				6853C28522153EA2000F7B58 /* wiImage.cpp in Sources */,
 				685F8BEC2209C30800A516B4 /* Renderer.m in Sources */,
@@ -958,6 +989,7 @@
 				6853C29122153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
 				688D39CB221BC7AD0005B1F9 /* objectPS_tiledforward_pom.metal in Sources */,
 				688D39DD221BC7AD0005B1F9 /* objectPS_simplest.metal in Sources */,
+				688D39ED221BD5F00005B1F9 /* objectVS_simple.metal in Sources */,
 				6853C3092215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BEA2209C30800A516B4 /* main.m in Sources */,
 				6853C23722143AE4000F7B58 /* wiRandom.cpp in Sources */,
@@ -965,6 +997,7 @@
 				6853C2C022158143000F7B58 /* wiTimer.mm in Sources */,
 				6853C2FD2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				688D39B0221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
+				688D39EF221BD5F00005B1F9 /* objectVS_debug.metal in Sources */,
 				688D39C7221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2A12215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A722154123000F7B58 /* wiDepthTarget.cpp in Sources */,
@@ -988,8 +1021,10 @@
 				688D39D7221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
 				6853C28D22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27722153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
+				688D39F1221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */,
 				6853C2BA221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				685F8C592209F50A00A516B4 /* wiGraphicsResource.cpp in Sources */,
+				688D39F3221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28722153EA2000F7B58 /* wiRenderer.cpp in Sources */,
 				688D39A4221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
@@ -1003,6 +1038,7 @@
 				688D39CD221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
 				688D399E221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C582209F50700A516B4 /* wiGraphicsDevice.cpp in Sources */,
+				688D39EB221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */,
 				688D397B221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F72215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				688D39D5221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
