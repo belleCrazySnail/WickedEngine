@@ -2904,7 +2904,7 @@ void SetUpStates()
 	samplerDesc.AddressV = TEXTURE_ADDRESS_MIRROR;
 	samplerDesc.AddressW = TEXTURE_ADDRESS_MIRROR;
 	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 0;
+	samplerDesc.MaxAnisotropy = 1;
 	samplerDesc.ComparisonFunc = COMPARISON_NEVER;
 	samplerDesc.BorderColor[0] = 0;
 	samplerDesc.BorderColor[1] = 0;
@@ -2979,7 +2979,7 @@ void SetUpStates()
 	samplerDesc.AddressV = TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 0;
+	samplerDesc.MaxAnisotropy = 1;
 	samplerDesc.ComparisonFunc = COMPARISON_GREATER_EQUAL;
 	device->CreateSamplerState(&samplerDesc, samplers[SSLOT_CMP_DEPTH]);
 
@@ -2993,7 +2993,7 @@ void SetUpStates()
 	samplerDesc.AddressV = TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.AddressW = TEXTURE_ADDRESS_CLAMP;
 	samplerDesc.MipLODBias = 0.0f;
-	samplerDesc.MaxAnisotropy = 0;
+	samplerDesc.MaxAnisotropy = 1;
 	samplerDesc.ComparisonFunc = COMPARISON_NEVER;
 	samplerDesc.BorderColor[0] = 0;
 	samplerDesc.BorderColor[1] = 0;
