@@ -305,20 +305,18 @@ void wiFont::CleanUp()
 
 void wiFont::LoadShaders()
 {
-	std::string path = wiRenderer::GetShaderPath();
-
 	VertexLayoutDesc layout[] =
 	{
 		{ "POSITION", 0, FORMAT_R16G16_SINT, 0, VertexLayoutDesc::APPEND_ALIGNED_ELEMENT, INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, FORMAT_R16G16_FLOAT, 0, VertexLayoutDesc::APPEND_ALIGNED_ELEMENT, INPUT_PER_VERTEX_DATA, 0 },
 	};
-	vertexShader = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add(path + "fontVS.cso", wiResourceManager::VERTEXSHADER));
+	vertexShader = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("fontVS", wiResourceManager::VERTEXSHADER));
 	
 	vertexLayout = new VertexLayout;
 	wiRenderer::GetDevice()->CreateInputLayout(layout, ARRAYSIZE(layout), &vertexShader->code, vertexLayout);
 
 
-	pixelShader = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add(path + "fontPS.cso", wiResourceManager::PIXELSHADER));
+	pixelShader = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("fontPS", wiResourceManager::PIXELSHADER));
 
 
 	GraphicsPSODesc desc;

@@ -365,17 +365,15 @@ void wiOcean::Render(const CameraComponent& camera, const WeatherComponent& weat
 void wiOcean::LoadShaders()
 {
 
-	std::string path = wiRenderer::GetShaderPath();
-
-	m_pUpdateSpectrumCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "oceanSimulatorCS.cso", wiResourceManager::COMPUTESHADER));
-	m_pUpdateDisplacementMapCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "oceanUpdateDisplacementMapCS.cso", wiResourceManager::COMPUTESHADER));
-	m_pUpdateGradientFoldingCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "oceanUpdateGradientFoldingCS.cso", wiResourceManager::COMPUTESHADER));
+	m_pUpdateSpectrumCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("oceanSimulatorCS", wiResourceManager::COMPUTESHADER));
+	m_pUpdateDisplacementMapCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("oceanUpdateDisplacementMapCS", wiResourceManager::COMPUTESHADER));
+	m_pUpdateGradientFoldingCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("oceanUpdateGradientFoldingCS", wiResourceManager::COMPUTESHADER));
 
 
-	g_pOceanSurfVS = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add(path + "oceanSurfaceVS.cso", wiResourceManager::VERTEXSHADER));
+	g_pOceanSurfVS = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("oceanSurfaceVS", wiResourceManager::VERTEXSHADER));
 
-	g_pOceanSurfPS = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add(path + "oceanSurfacePS.cso", wiResourceManager::PIXELSHADER));
-	g_pWireframePS = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add(path + "oceanSurfaceSimplePS.cso", wiResourceManager::PIXELSHADER));
+	g_pOceanSurfPS = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("oceanSurfacePS", wiResourceManager::PIXELSHADER));
+	g_pWireframePS = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("oceanSurfaceSimplePS", wiResourceManager::PIXELSHADER));
 
 
 	GraphicsDevice* device = wiRenderer::GetDevice();

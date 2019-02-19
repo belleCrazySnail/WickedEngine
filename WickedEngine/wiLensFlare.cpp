@@ -59,13 +59,11 @@ namespace wiLensFlare
 
 	void LoadShaders()
 	{
-		std::string path = wiRenderer::GetShaderPath();
+		vertexShader = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("lensFlareVS", wiResourceManager::VERTEXSHADER));
 
-		vertexShader = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add(path + "lensFlareVS.cso", wiResourceManager::VERTEXSHADER));
+		pixelShader = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("lensFlarePS", wiResourceManager::PIXELSHADER));
 
-		pixelShader = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add(path + "lensFlarePS.cso", wiResourceManager::PIXELSHADER));
-
-		geometryShader = static_cast<GeometryShader*>(wiResourceManager::GetShaderManager().add(path + "lensFlareGS.cso", wiResourceManager::GEOMETRYSHADER));
+		geometryShader = static_cast<GeometryShader*>(wiResourceManager::GetShaderManager().add("lensFlareGS", wiResourceManager::GEOMETRYSHADER));
 
 
 		GraphicsDevice* device = wiRenderer::GetDevice();

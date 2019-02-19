@@ -615,27 +615,25 @@ void wiEmittedParticle::Draw(const CameraComponent& camera, const MaterialCompon
 
 void wiEmittedParticle::LoadShaders()
 {
-	std::string path = wiRenderer::GetShaderPath();
-
-	vertexShader = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticleVS.cso", wiResourceManager::VERTEXSHADER));
+	vertexShader = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("emittedparticleVS", wiResourceManager::VERTEXSHADER));
 	
-	pixelShader[SOFT] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticlePS_soft.cso", wiResourceManager::PIXELSHADER));
-	pixelShader[SOFT_DISTORTION] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticlePS_soft_distortion.cso", wiResourceManager::PIXELSHADER));
-	pixelShader[SIMPLEST] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticlePS_simplest.cso", wiResourceManager::PIXELSHADER));
+	pixelShader[SOFT] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("emittedparticlePS_soft", wiResourceManager::PIXELSHADER));
+	pixelShader[SOFT_DISTORTION] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("emittedparticlePS_soft_distortion", wiResourceManager::PIXELSHADER));
+	pixelShader[SIMPLEST] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("emittedparticlePS_simplest", wiResourceManager::PIXELSHADER));
 	
-	kickoffUpdateCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_kickoffUpdateCS.cso", wiResourceManager::COMPUTESHADER));
-	finishUpdateCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_finishUpdateCS.cso", wiResourceManager::COMPUTESHADER));
-	emitCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_emitCS.cso", wiResourceManager::COMPUTESHADER));
-	emitCS_FROMMESH = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_emitCS_FROMMESH.cso", wiResourceManager::COMPUTESHADER));
-	sphpartitionCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_sphpartitionCS.cso", wiResourceManager::COMPUTESHADER));
-	sphpartitionoffsetsCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_sphpartitionoffsetsCS.cso", wiResourceManager::COMPUTESHADER));
-	sphpartitionoffsetsresetCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_sphpartitionoffsetsresetCS.cso", wiResourceManager::COMPUTESHADER));
-	sphdensityCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_sphdensityCS.cso", wiResourceManager::COMPUTESHADER));
-	sphforceCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_sphforceCS.cso", wiResourceManager::COMPUTESHADER));
-	simulateCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_simulateCS.cso", wiResourceManager::COMPUTESHADER));
-	simulateCS_SORTING = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_simulateCS_SORTING.cso", wiResourceManager::COMPUTESHADER));
-	simulateCS_DEPTHCOLLISIONS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_simulateCS_DEPTHCOLLISIONS.cso", wiResourceManager::COMPUTESHADER));
-	simulateCS_SORTING_DEPTHCOLLISIONS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add(path + "emittedparticle_simulateCS_SORTING_DEPTHCOLLISIONS.cso", wiResourceManager::COMPUTESHADER));
+	kickoffUpdateCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_kickoffUpdateCS", wiResourceManager::COMPUTESHADER));
+	finishUpdateCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_finishUpdateCS", wiResourceManager::COMPUTESHADER));
+	emitCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_emitCS", wiResourceManager::COMPUTESHADER));
+	emitCS_FROMMESH = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_emitCS_FROMMESH", wiResourceManager::COMPUTESHADER));
+	sphpartitionCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_sphpartitionCS", wiResourceManager::COMPUTESHADER));
+	sphpartitionoffsetsCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_sphpartitionoffsetsCS", wiResourceManager::COMPUTESHADER));
+	sphpartitionoffsetsresetCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_sphpartitionoffsetsresetCS", wiResourceManager::COMPUTESHADER));
+	sphdensityCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_sphdensityCS", wiResourceManager::COMPUTESHADER));
+	sphforceCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_sphforceCS", wiResourceManager::COMPUTESHADER));
+	simulateCS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_simulateCS", wiResourceManager::COMPUTESHADER));
+	simulateCS_SORTING = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_simulateCS_SORTING", wiResourceManager::COMPUTESHADER));
+	simulateCS_DEPTHCOLLISIONS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_simulateCS_DEPTHCOLLISIONS", wiResourceManager::COMPUTESHADER));
+	simulateCS_SORTING_DEPTHCOLLISIONS = static_cast<ComputeShader*>(wiResourceManager::GetShaderManager().add("emittedparticle_simulateCS_SORTING_DEPTHCOLLISIONS", wiResourceManager::COMPUTESHADER));
 
 
 	GraphicsDevice* device = wiRenderer::GetDevice();
