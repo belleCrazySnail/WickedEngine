@@ -9,12 +9,12 @@
 // Charles de Rousiers - Electronic Arts Frostbite
 // SIGGRAPH 2014
 
-float3 F_Schlick(float3 f0, float f90, float u)
+inline float3 F_Schlick(float3 f0, float f90, float u)
 {
 	return f0 + (f90 - f0) * pow(1.f - u, 5.f);
 }
 
-float3 F_Fresnel(float3 SpecularColor, float VoH)
+inline float3 F_Fresnel(float3 SpecularColor, float VoH)
 {
 	float3 SpecularColorSqrt = sqrt(min(SpecularColor, float3(0.99, 0.99, 0.99)));
 	float3 n = (1 + SpecularColorSqrt) / (1 - SpecularColorSqrt);
@@ -22,7 +22,7 @@ float3 F_Fresnel(float3 SpecularColor, float VoH)
 	return 0.5 * sqr((g - VoH) / (g + VoH)) * (1 + sqr(((g + VoH)*VoH - 1) / ((g - VoH)*VoH + 1)));
 }
 
-float Fr_DisneyDiffuse(float NdotV, float NdotL, float LdotH, float linearRoughness)
+inline float Fr_DisneyDiffuse(float NdotV, float NdotL, float LdotH, float linearRoughness)
 {
 	float energyBias = mix(0, 0.5, linearRoughness);
 	float energyFactor = mix(1.0, 1.0 / 1.51, linearRoughness);
@@ -34,7 +34,7 @@ float Fr_DisneyDiffuse(float NdotV, float NdotL, float LdotH, float linearRoughn
 	return lightScatter * viewScatter * energyFactor;
 }
 
-float V_SmithGGXCorrelated(float NdotL, float NdotV, float alphaG2)
+inline float V_SmithGGXCorrelated(float NdotL, float NdotV, float alphaG2)
 {
 	// Original formulation of G_SmithGGX Correlated 
 	// lambda_v = (-1 + sqrt(alphaG2 * (1 - NdotL2) / NdotL2 + 1)) * 0.5f; 
@@ -53,7 +53,7 @@ float V_SmithGGXCorrelated(float NdotL, float NdotV, float alphaG2)
 	return 0.5f / (Lambda_GGXV + Lambda_GGXL);
 }
 
-float D_GGX(float NdotH, float m2)
+inline float D_GGX(float NdotH, float m2)
 {
 	// Divide by PI is apply later 
 	//float m2 = m * m;
@@ -63,11 +63,11 @@ float D_GGX(float NdotH, float m2)
 
 
 
-float3 ComputeAlbedo(float4 baseColor, float reflectance, float metalness)
+inline float3 ComputeAlbedo(float4 baseColor, float reflectance, float metalness)
 {
 	return mix(mix(baseColor.rgb, float3(0, 0, 0), reflectance), float3(0, 0, 0), metalness);
 }
-float3 ComputeF0(float4 baseColor, float reflectance, float metalness)
+inline float3 ComputeF0(float4 baseColor, float reflectance, float metalness)
 {
 	return mix(mix(float3(0, 0, 0), float3(1, 1, 1), reflectance), baseColor.rgb, metalness);
 }
@@ -148,7 +148,7 @@ inline SurfaceToLight CreateSurfaceToLight(Surface surface, float3 L)
 }
 
 
-float3 BRDF_GetSpecular(Surface surface, SurfaceToLight surfaceToLight)
+inline float3 BRDF_GetSpecular(Surface surface, SurfaceToLight surfaceToLight)
 {
 	float f90 = saturate(50.0 * dot(surface.f0, 0.33));
 	float3 F = F_Schlick(surface.f0, f90, surfaceToLight.HdotV);
@@ -158,7 +158,7 @@ float3 BRDF_GetSpecular(Surface surface, SurfaceToLight surfaceToLight)
 
 	return Fr;
 }
-float BRDF_GetDiffuse(Surface surface, SurfaceToLight surfaceToLight)
+inline float BRDF_GetDiffuse(Surface surface, SurfaceToLight surfaceToLight)
 {
 	float Fd = Fr_DisneyDiffuse(surface.NdotV, surfaceToLight.NdotL, surfaceToLight.HdotV, surface.roughness) / PI;
 

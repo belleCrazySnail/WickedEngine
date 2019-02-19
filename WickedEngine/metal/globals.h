@@ -77,7 +77,7 @@ static constant int gaussianOffsets[9] = {
 #ifdef DISABLE_ALPHATEST
 #define ALPHATEST(x)
 #else
-#define ALPHATEST(x)	if((x) < (1.0f - g_xAlphaRef)) discard_fragment();
+#define ALPHATEST(x)	if((x) < (1.0f - cb.api.g_xAlphaRef)) discard_fragment();
 #endif
 
 #define DEGAMMA_SKY(x)	pow(abs(x),cb.frame.g_xFrame_StaticSkyGamma)
@@ -95,7 +95,7 @@ inline float GetScreenWidth(constant GlobalCBuffer &cb) { return cb.frame.g_xFra
 inline float GetScreenHeight(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_ScreenWidthHeight.y; }
 inline float2 GetInternalResolution(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_InternalResolution; }
 inline float GetTime(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_Time; }
-inline uint2 GetTemporalAASampleRotation(constant GlobalCBuffer &cb) { return uint2((cb.frame.g_xFrame_TemporalAASampleRotation >> 0) & 0x000000FF, (cb.frame.g_xFrame_TemporalAASampleRotation >> 8) & 0x000000FF); }
+inline float2 GetTemporalAASampleRotation(constant GlobalCBuffer &cb) { return float2((cb.frame.g_xFrame_TemporalAASampleRotation >> 0) & 0x000000FF, (cb.frame.g_xFrame_TemporalAASampleRotation >> 8) & 0x000000FF); }
 inline bool IsStaticSky(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_StaticSkyGamma > 0.0f; }
 
 struct ComputeShaderInput
@@ -190,7 +190,7 @@ inline float3 UV_to_CubeMap(float2 uv, uint faceIndex)
 
 // Samples a texture with Catmull-Rom filtering, using 9 texture fetches instead of 16. ( https://gist.github.com/TheRealMJP/c83b8c0f46b63f3a88a5986f4fa982b1#file-tex2dcatmullrom-hlsl )
 // See http://vec3.ca/bicubic-filtering-in-fewer-taps/ for more details
-float4 SampleTextureCatmullRom(constant GlobalData &gd, texture2d<float> tex, float2 uv, float mipLevel = 0)
+inline float4 SampleTextureCatmullRom(texture2d<float> tex, float2 uv, float mipLevel, constant GlobalData &gd)
 {
 	float2 texSize;
     texSize.x = tex.get_width();

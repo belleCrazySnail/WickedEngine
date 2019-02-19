@@ -233,24 +233,24 @@ inline LightingResult SpotLight(ShaderEntityType light, Surface surface, CB_GD)
 //
 // This is not completely physically correct rendering, but nice enough for now.
 
-float cot(float x) { return cos(x) / sin(x); }
-float acot(float x) { return atan(1 / x); }
+inline float cot(float x) { return cos(x) / sin(x); }
+inline float acot(float x) { return atan(1 / x); }
 
 // Return the closest point on the line (without limit) 
-float3 ClosestPointOnLine(float3 a, float3 b, float3 c)
+inline float3 ClosestPointOnLine(float3 a, float3 b, float3 c)
 {
 	float3 ab = b - a;
 	float t = dot(c - a, ab) / dot(ab, ab);
 	return a + t * ab;
 }
 // Return the closest point on the segment (with limit) 
-float3 ClosestPointOnSegment(float3 a, float3 b, float3 c)
+inline float3 ClosestPointOnSegment(float3 a, float3 b, float3 c)
 {
 	float3 ab = b - a;
 	float t = dot(c - a, ab) / dot(ab, ab);
 	return a + saturate(t) * ab;
 }
-float RightPyramidSolidAngle(float dist, float halfWidth, float halfHeight)
+inline float RightPyramidSolidAngle(float dist, float halfWidth, float halfHeight)
 {
 	float a = halfWidth;
 	float b = halfHeight;
@@ -258,7 +258,7 @@ float RightPyramidSolidAngle(float dist, float halfWidth, float halfHeight)
 
 	return 4 * asin(a * b / sqrt((a * a + h * h) * (b * b + h * h)));
 }
-float RectangleSolidAngle(float3 worldPos,
+inline float RectangleSolidAngle(float3 worldPos,
 	float3 p0, float3 p1,
 	float3 p2, float3 p3)
 {
@@ -287,7 +287,7 @@ float RectangleSolidAngle(float3 worldPos,
 // center	: sphere center
 // radius	: sphere radius
 // returns distance on the ray to the object if hit, 0 otherwise
-float Trace_sphere(float3 o, float3 d, float3 center, float radius)
+inline float Trace_sphere(float3 o, float3 d, float3 center, float radius)
 {
 	float3 rc = o - center;
 	float c = dot(rc, rc) - (radius*radius);
@@ -300,7 +300,7 @@ float Trace_sphere(float3 o, float3 d, float3 center, float radius)
 // o		: ray origin
 // d		: ray direction
 // returns distance on the ray to the object if hit, 0 otherwise
-float Trace_plane(float3 o, float3 d, float3 planeOrigin, float3 planeNormal)
+inline float Trace_plane(float3 o, float3 d, float3 planeOrigin, float3 planeNormal)
 {
 	return dot(planeNormal, (planeOrigin - o) / dot(planeNormal, d));
 }
@@ -308,7 +308,7 @@ float Trace_plane(float3 o, float3 d, float3 planeOrigin, float3 planeNormal)
 // d		: ray direction
 // A,B,C	: traingle corners
 // returns distance on the ray to the object if hit, 0 otherwise
-float Trace_triangle(float3 o, float3 d, float3 A, float3 B, float3 C)
+inline float Trace_triangle(float3 o, float3 d, float3 A, float3 B, float3 C)
 {
 	float3 planeNormal = normalize(cross(B - A, C - B));
 	float t = Trace_plane(o, d, A, planeNormal);
@@ -328,7 +328,7 @@ float Trace_triangle(float3 o, float3 d, float3 A, float3 B, float3 C)
 // d		: ray direction
 // A,B,C,D	: rectangle corners
 // returns distance on the ray to the object if hit, 0 otherwise
-float Trace_rectangle(float3 o, float3 d, float3 A, float3 B, float3 C, float3 D)
+inline float Trace_rectangle(float3 o, float3 d, float3 A, float3 B, float3 C, float3 D)
 {
 	return max(Trace_triangle(o, d, A, B, C), Trace_triangle(o, d, C, D, A));
 }
@@ -336,7 +336,7 @@ float Trace_rectangle(float3 o, float3 d, float3 A, float3 B, float3 C, float3 D
 // d		: ray direction
 // diskNormal : disk facing direction
 // returns distance on the ray to the object if hit, 0 otherwise
-float Trace_disk(float3 o, float3 d, float3 diskCenter, float diskRadius, float3 diskNormal)
+inline float Trace_disk(float3 o, float3 d, float3 diskCenter, float diskRadius, float3 diskNormal)
 {
 	float t = Trace_plane(o, d, diskCenter, diskNormal);
 	float3 p = o + d*t;
@@ -360,7 +360,7 @@ inline float3 getSpecularDominantDirArea(float3 N, float3 R, float roughness)
 	return normalize(mix(N, R, lerpFactor));
 }
 
-float illuminanceSphereOrDisk(float cosTheta, float sinSigmaSqr)
+inline float illuminanceSphereOrDisk(float cosTheta, float sinSigmaSqr)
 {
 	float sinTheta = sqrt(1.0f - cosTheta * cosTheta);
 

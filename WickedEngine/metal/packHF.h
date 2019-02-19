@@ -4,7 +4,7 @@
 
 // Helper functions to compress and uncompress two floats
 
-float Pack(float2 input, int precision = 4096)
+inline float Pack(float2 input, int precision = 4096)
 {
 	float2 output = input;
 	output.x = floor(output.x * (precision - 1));
@@ -13,7 +13,7 @@ float Pack(float2 input, int precision = 4096)
 	return (output.x * precision) + output.y;
 }
 
-float2 Unpack(float input, int precision = 4096)
+inline float2 Unpack(float input, int precision = 4096)
 {
 	float2 output = float2(0, 0);
 
@@ -30,11 +30,11 @@ float2 Unpack(float input, int precision = 4096)
 
 #if NORMALMAPCOMPRESSOR == 0
 // Reconstruct Z
-float2 encode(float3 n)
+inline float2 encode(float3 n)
 {
 	return float2(n.xy*0.5 + 0.5);
 }
-float3 decode(float2 enc)
+inline float3 decode(float2 enc)
 {
 	float3 n;
 	n.xy = enc * 2 - 1;
@@ -45,11 +45,11 @@ float3 decode(float2 enc)
 #elif NORMALMAPCOMPRESSOR == 1
 
 // Spherical coordinates
-float2 encode(float3 n)
+inline float2 encode(float3 n)
 {
 	return (float2(atan2(n.y, n.x) / PI, n.z) + 1.0)*0.5;
 }
-float3 decode(float2 enc)
+inline float3 decode(float2 enc)
 {
 	float2 ang = enc * 2 - 1;
 	float2 scth;
@@ -63,13 +63,13 @@ float3 decode(float2 enc)
 #else
 
 // Spheremap
-float2 encode(float3 n)
+inline float2 encode(float3 n)
 {
 	float2 enc = normalize(n.xy) * (sqrt(-n.z*0.5 + 0.5));
 	enc = enc*0.5 + 0.5;
 	return enc;
 }
-float3 decode(float2 enc)
+inline float3 decode(float2 enc)
 {
 	float4 nn = float4(enc,0,0)*float4(2, 2, 0, 0) + float4(-1, -1, 1, -1);
 	float l = dot(nn.xyz, -nn.xyw);

@@ -120,6 +120,80 @@
 		685F8C75220B597500A516B4 /* wiWindowRegistration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 685F8C73220B597500A516B4 /* wiWindowRegistration.cpp */; };
 		685F8C7E220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 685F8C7C220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm */; };
 		685F8C7F220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 685F8C7C220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm */; };
+		688D3978221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3975221B2B1A0005B1F9 /* objectPS_debug.metal */; };
+		688D3979221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3975221B2B1A0005B1F9 /* objectPS_debug.metal */; };
+		688D397A221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3976221B2B1A0005B1F9 /* objectPS_alphatestonly.metal */; };
+		688D397B221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3976221B2B1A0005B1F9 /* objectPS_alphatestonly.metal */; };
+		688D397C221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3977221B2B1A0005B1F9 /* objectPS_blackout.metal */; };
+		688D397D221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3977221B2B1A0005B1F9 /* objectPS_blackout.metal */; };
+		688D3980221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D397E221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal */; };
+		688D3981221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D397F221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal */; };
+		688D3982221B388D0005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D397F221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal */; };
+		688D3983221B388D0005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D397E221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal */; };
+		688D3988221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3984221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal */; };
+		688D3989221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3984221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal */; };
+		688D398A221B394D0005B1F9 /* objectPS_deferred.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3985221B394D0005B1F9 /* objectPS_deferred.metal */; };
+		688D398B221B394D0005B1F9 /* objectPS_deferred.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3985221B394D0005B1F9 /* objectPS_deferred.metal */; };
+		688D398C221B394D0005B1F9 /* objectPS_deferred_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3986221B394D0005B1F9 /* objectPS_deferred_normalmap.metal */; };
+		688D398D221B394D0005B1F9 /* objectPS_deferred_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3986221B394D0005B1F9 /* objectPS_deferred_normalmap.metal */; };
+		688D398E221B394D0005B1F9 /* objectPS_deferred_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3987221B394D0005B1F9 /* objectPS_deferred_pom.metal */; };
+		688D398F221B394D0005B1F9 /* objectPS_deferred_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3987221B394D0005B1F9 /* objectPS_deferred_pom.metal */; };
+		688D399D221B48900005B1F9 /* objectPS_forward_water.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3990221B488F0005B1F9 /* objectPS_forward_water.metal */; };
+		688D399E221B48900005B1F9 /* objectPS_forward_water.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3990221B488F0005B1F9 /* objectPS_forward_water.metal */; };
+		688D399F221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3991221B488F0005B1F9 /* objectPS_forward_planarreflection.metal */; };
+		688D39A0221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3991221B488F0005B1F9 /* objectPS_forward_planarreflection.metal */; };
+		688D39A1221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3992221B488F0005B1F9 /* objectPS_forward_transparent_normalmap.metal */; };
+		688D39A2221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3992221B488F0005B1F9 /* objectPS_forward_transparent_normalmap.metal */; };
+		688D39A3221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3993221B488F0005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal */; };
+		688D39A4221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3993221B488F0005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal */; };
+		688D39A5221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3994221B488F0005B1F9 /* objectPS_forward_normalmap.metal */; };
+		688D39A6221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3994221B488F0005B1F9 /* objectPS_forward_normalmap.metal */; };
+		688D39A7221B48900005B1F9 /* objectPS_forward.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3995221B488F0005B1F9 /* objectPS_forward.metal */; };
+		688D39A8221B48900005B1F9 /* objectPS_forward.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3995221B488F0005B1F9 /* objectPS_forward.metal */; };
+		688D39A9221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3996221B488F0005B1F9 /* objectPS_forward_transparent_planarreflection.metal */; };
+		688D39AA221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3996221B488F0005B1F9 /* objectPS_forward_transparent_planarreflection.metal */; };
+		688D39AB221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3997221B488F0005B1F9 /* objectPS_forward_transparent.metal */; };
+		688D39AC221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3997221B488F0005B1F9 /* objectPS_forward_transparent.metal */; };
+		688D39AD221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3998221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal */; };
+		688D39AE221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3998221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal */; };
+		688D39AF221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3999221B48900005B1F9 /* objectPS_forward_pom.metal */; };
+		688D39B0221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3999221B48900005B1F9 /* objectPS_forward_pom.metal */; };
+		688D39B1221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D399A221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal */; };
+		688D39B2221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D399A221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal */; };
+		688D39B3221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D399B221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal */; };
+		688D39B4221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D399B221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal */; };
+		688D39B5221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D399C221B48900005B1F9 /* objectPS_forward_transparent_pom.metal */; };
+		688D39B6221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D399C221B48900005B1F9 /* objectPS_forward_transparent_pom.metal */; };
+		688D39C6221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39B7221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal */; };
+		688D39C7221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39B7221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal */; };
+		688D39C8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */; };
+		688D39C9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */; };
+		688D39CA221BC7AD0005B1F9 /* objectPS_tiledforward_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39B9221BC7AC0005B1F9 /* objectPS_tiledforward_pom.metal */; };
+		688D39CB221BC7AD0005B1F9 /* objectPS_tiledforward_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39B9221BC7AC0005B1F9 /* objectPS_tiledforward_pom.metal */; };
+		688D39CC221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BA221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal */; };
+		688D39CD221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BA221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal */; };
+		688D39CE221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BB221BC7AC0005B1F9 /* objectPS_tiledforward_water.metal */; };
+		688D39CF221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BB221BC7AC0005B1F9 /* objectPS_tiledforward_water.metal */; };
+		688D39D0221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BC221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal */; };
+		688D39D1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BC221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal */; };
+		688D39D2221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BD221BC7AC0005B1F9 /* objectPS_tiledforward_transparent.metal */; };
+		688D39D3221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BD221BC7AC0005B1F9 /* objectPS_tiledforward_transparent.metal */; };
+		688D39D4221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BE221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_pom.metal */; };
+		688D39D5221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BE221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_pom.metal */; };
+		688D39D6221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BF221BC7AD0005B1F9 /* objectPS_tiledforward.metal */; };
+		688D39D7221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39BF221BC7AD0005B1F9 /* objectPS_tiledforward.metal */; };
+		688D39D8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C0221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal */; };
+		688D39D9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C0221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal */; };
+		688D39DA221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal */; };
+		688D39DB221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal */; };
+		688D39DC221BC7AD0005B1F9 /* objectPS_simplest.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C2221BC7AD0005B1F9 /* objectPS_simplest.metal */; };
+		688D39DD221BC7AD0005B1F9 /* objectPS_simplest.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C2221BC7AD0005B1F9 /* objectPS_simplest.metal */; };
+		688D39DE221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C3221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal */; };
+		688D39DF221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C3221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal */; };
+		688D39E0221BC7AD0005B1F9 /* objectPS_textureonly.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C4221BC7AD0005B1F9 /* objectPS_textureonly.metal */; };
+		688D39E1221BC7AD0005B1F9 /* objectPS_textureonly.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C4221BC7AD0005B1F9 /* objectPS_textureonly.metal */; };
+		688D39E2221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */; };
+		688D39E3221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -278,6 +352,43 @@
 		685F8C73220B597500A516B4 /* wiWindowRegistration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiWindowRegistration.cpp; path = WickedEngine/wiWindowRegistration.cpp; sourceTree = "<group>"; };
 		685F8C7C220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = wiGraphicsDevice_Metal.mm; path = WickedEngine/wiGraphicsDevice_Metal.mm; sourceTree = "<group>"; };
 		685F8C7D220CC71A00A516B4 /* wiGraphicsDevice_Metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiGraphicsDevice_Metal.h; path = WickedEngine/wiGraphicsDevice_Metal.h; sourceTree = "<group>"; };
+		688D3975221B2B1A0005B1F9 /* objectPS_debug.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_debug.metal; path = WickedEngine/metal/objectPS_debug.metal; sourceTree = "<group>"; };
+		688D3976221B2B1A0005B1F9 /* objectPS_alphatestonly.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_alphatestonly.metal; path = WickedEngine/metal/objectPS_alphatestonly.metal; sourceTree = "<group>"; };
+		688D3977221B2B1A0005B1F9 /* objectPS_blackout.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_blackout.metal; path = WickedEngine/metal/objectPS_blackout.metal; sourceTree = "<group>"; };
+		688D397E221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_deferred_normalmap_pom.metal; path = WickedEngine/metal/objectPS_deferred_normalmap_pom.metal; sourceTree = "<group>"; };
+		688D397F221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_deferred_normalmap_planarreflection.metal; path = WickedEngine/metal/objectPS_deferred_normalmap_planarreflection.metal; sourceTree = "<group>"; };
+		688D3984221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_deferred_planarreflection.metal; path = WickedEngine/metal/objectPS_deferred_planarreflection.metal; sourceTree = "<group>"; };
+		688D3985221B394D0005B1F9 /* objectPS_deferred.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_deferred.metal; path = WickedEngine/metal/objectPS_deferred.metal; sourceTree = "<group>"; };
+		688D3986221B394D0005B1F9 /* objectPS_deferred_normalmap.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_deferred_normalmap.metal; path = WickedEngine/metal/objectPS_deferred_normalmap.metal; sourceTree = "<group>"; };
+		688D3987221B394D0005B1F9 /* objectPS_deferred_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_deferred_pom.metal; path = WickedEngine/metal/objectPS_deferred_pom.metal; sourceTree = "<group>"; };
+		688D3990221B488F0005B1F9 /* objectPS_forward_water.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_water.metal; path = WickedEngine/metal/objectPS_forward_water.metal; sourceTree = "<group>"; };
+		688D3991221B488F0005B1F9 /* objectPS_forward_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_planarreflection.metal; path = WickedEngine/metal/objectPS_forward_planarreflection.metal; sourceTree = "<group>"; };
+		688D3992221B488F0005B1F9 /* objectPS_forward_transparent_normalmap.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_transparent_normalmap.metal; path = WickedEngine/metal/objectPS_forward_transparent_normalmap.metal; sourceTree = "<group>"; };
+		688D3993221B488F0005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_transparent_normalmap_planarreflection.metal; path = WickedEngine/metal/objectPS_forward_transparent_normalmap_planarreflection.metal; sourceTree = "<group>"; };
+		688D3994221B488F0005B1F9 /* objectPS_forward_normalmap.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_normalmap.metal; path = WickedEngine/metal/objectPS_forward_normalmap.metal; sourceTree = "<group>"; };
+		688D3995221B488F0005B1F9 /* objectPS_forward.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward.metal; path = WickedEngine/metal/objectPS_forward.metal; sourceTree = "<group>"; };
+		688D3996221B488F0005B1F9 /* objectPS_forward_transparent_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_transparent_planarreflection.metal; path = WickedEngine/metal/objectPS_forward_transparent_planarreflection.metal; sourceTree = "<group>"; };
+		688D3997221B488F0005B1F9 /* objectPS_forward_transparent.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_transparent.metal; path = WickedEngine/metal/objectPS_forward_transparent.metal; sourceTree = "<group>"; };
+		688D3998221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_transparent_normalmap_pom.metal; path = WickedEngine/metal/objectPS_forward_transparent_normalmap_pom.metal; sourceTree = "<group>"; };
+		688D3999221B48900005B1F9 /* objectPS_forward_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_pom.metal; path = WickedEngine/metal/objectPS_forward_pom.metal; sourceTree = "<group>"; };
+		688D399A221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_normalmap_planarreflection.metal; path = WickedEngine/metal/objectPS_forward_normalmap_planarreflection.metal; sourceTree = "<group>"; };
+		688D399B221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_normalmap_pom.metal; path = WickedEngine/metal/objectPS_forward_normalmap_pom.metal; sourceTree = "<group>"; };
+		688D399C221B48900005B1F9 /* objectPS_forward_transparent_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_forward_transparent_pom.metal; path = WickedEngine/metal/objectPS_forward_transparent_pom.metal; sourceTree = "<group>"; };
+		688D39B7221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_transparent_normalmap_planarreflection.metal; path = WickedEngine/metal/objectPS_tiledforward_transparent_normalmap_planarreflection.metal; sourceTree = "<group>"; };
+		688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_normalmap_planarreflection.metal; path = WickedEngine/metal/objectPS_tiledforward_normalmap_planarreflection.metal; sourceTree = "<group>"; };
+		688D39B9221BC7AC0005B1F9 /* objectPS_tiledforward_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_pom.metal; path = WickedEngine/metal/objectPS_tiledforward_pom.metal; sourceTree = "<group>"; };
+		688D39BA221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_transparent_normalmap_pom.metal; path = WickedEngine/metal/objectPS_tiledforward_transparent_normalmap_pom.metal; sourceTree = "<group>"; };
+		688D39BB221BC7AC0005B1F9 /* objectPS_tiledforward_water.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_water.metal; path = WickedEngine/metal/objectPS_tiledforward_water.metal; sourceTree = "<group>"; };
+		688D39BC221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_transparent_planarreflection.metal; path = WickedEngine/metal/objectPS_tiledforward_transparent_planarreflection.metal; sourceTree = "<group>"; };
+		688D39BD221BC7AC0005B1F9 /* objectPS_tiledforward_transparent.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_transparent.metal; path = WickedEngine/metal/objectPS_tiledforward_transparent.metal; sourceTree = "<group>"; };
+		688D39BE221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_transparent_pom.metal; path = WickedEngine/metal/objectPS_tiledforward_transparent_pom.metal; sourceTree = "<group>"; };
+		688D39BF221BC7AD0005B1F9 /* objectPS_tiledforward.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward.metal; path = WickedEngine/metal/objectPS_tiledforward.metal; sourceTree = "<group>"; };
+		688D39C0221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_normalmap.metal; path = WickedEngine/metal/objectPS_tiledforward_normalmap.metal; sourceTree = "<group>"; };
+		688D39C1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_transparent_normalmap.metal; path = WickedEngine/metal/objectPS_tiledforward_transparent_normalmap.metal; sourceTree = "<group>"; };
+		688D39C2221BC7AD0005B1F9 /* objectPS_simplest.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_simplest.metal; path = WickedEngine/metal/objectPS_simplest.metal; sourceTree = "<group>"; };
+		688D39C3221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_planarreflection.metal; path = WickedEngine/metal/objectPS_tiledforward_planarreflection.metal; sourceTree = "<group>"; };
+		688D39C4221BC7AD0005B1F9 /* objectPS_textureonly.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_textureonly.metal; path = WickedEngine/metal/objectPS_textureonly.metal; sourceTree = "<group>"; };
+		688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = objectPS_tiledforward_normalmap_pom.metal; path = WickedEngine/metal/objectPS_tiledforward_normalmap_pom.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,15 +435,52 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */,
+				688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */,
+				688D39C0221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal */,
+				688D39C3221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal */,
+				688D39B9221BC7AC0005B1F9 /* objectPS_tiledforward_pom.metal */,
+				688D39B7221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal */,
+				688D39BA221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal */,
+				688D39C1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal */,
+				688D39BC221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal */,
+				688D39BE221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_pom.metal */,
+				688D39BD221BC7AC0005B1F9 /* objectPS_tiledforward_transparent.metal */,
+				688D39BB221BC7AC0005B1F9 /* objectPS_tiledforward_water.metal */,
+				688D39BF221BC7AD0005B1F9 /* objectPS_tiledforward.metal */,
+				688D399A221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal */,
+				688D399B221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal */,
+				688D3994221B488F0005B1F9 /* objectPS_forward_normalmap.metal */,
+				688D3991221B488F0005B1F9 /* objectPS_forward_planarreflection.metal */,
+				688D3999221B48900005B1F9 /* objectPS_forward_pom.metal */,
+				688D3993221B488F0005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal */,
+				688D3998221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal */,
+				688D3992221B488F0005B1F9 /* objectPS_forward_transparent_normalmap.metal */,
+				688D3996221B488F0005B1F9 /* objectPS_forward_transparent_planarreflection.metal */,
+				688D399C221B48900005B1F9 /* objectPS_forward_transparent_pom.metal */,
+				688D3997221B488F0005B1F9 /* objectPS_forward_transparent.metal */,
+				688D3990221B488F0005B1F9 /* objectPS_forward_water.metal */,
+				688D3995221B488F0005B1F9 /* objectPS_forward.metal */,
+				688D3986221B394D0005B1F9 /* objectPS_deferred_normalmap.metal */,
+				688D3984221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal */,
+				688D3987221B394D0005B1F9 /* objectPS_deferred_pom.metal */,
+				688D3985221B394D0005B1F9 /* objectPS_deferred.metal */,
+				688D397F221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal */,
+				688D397E221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal */,
+				688D3976221B2B1A0005B1F9 /* objectPS_alphatestonly.metal */,
+				688D3977221B2B1A0005B1F9 /* objectPS_blackout.metal */,
+				688D3975221B2B1A0005B1F9 /* objectPS_debug.metal */,
+				688D39C2221BC7AD0005B1F9 /* objectPS_simplest.metal */,
+				688D39C4221BC7AD0005B1F9 /* objectPS_textureonly.metal */,
 				68456035221AD0A100345A91 /* packHF.h */,
 				6853C324221AC005000F7B58 /* objectHF.h */,
 				6853C322221ABE2B000F7B58 /* ditherHF.h */,
-				6853C321221AA514000F7B58 /* lightingHF.h */,
-				6853C320221A9BA6000F7B58 /* voxelConeTracingHF.h */,
 				6853C31F221A99F6000F7B58 /* brdf.h */,
+				6853C320221A9BA6000F7B58 /* voxelConeTracingHF.h */,
+				6853C321221AA514000F7B58 /* lightingHF.h */,
 				6853C31E221A875A000F7B58 /* globals.h */,
-				6853C31A221891E3000F7B58 /* objectVS_common.metal */,
 				6853C31922188238000F7B58 /* objectInputLayoutHF.h */,
+				6853C31A221891E3000F7B58 /* objectVS_common.metal */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -692,53 +840,90 @@
 			buildActionMask = 2147483647;
 			files = (
 				6853C2CF221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
+				688D3980221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2CB22158478000F7B58 /* wiSprite.cpp in Sources */,
+				688D399F221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
 				6853C2FA2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
 				6853C2FE2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
 				685F8C61220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
+				688D398E221B394D0005B1F9 /* objectPS_deferred_pom.metal in Sources */,
 				6853C2D22215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
+				688D3978221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
 				6853C23422143AE4000F7B58 /* wiArchive.cpp in Sources */,
 				6853C2BB221580B9000F7B58 /* wiProfiler.cpp in Sources */,
 				6853C28422153EA2000F7B58 /* wiImage.cpp in Sources */,
+				688D3981221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
 				685F8BEB2209C30800A516B4 /* Renderer.m in Sources */,
+				688D39CE221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
 				6853C2AA22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29A2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C74220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
+				688D39A1221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */,
 				685F8BCF2209C30800A516B4 /* GameViewController.m in Sources */,
 				6853C27C22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
+				688D39AD221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal in Sources */,
 				6853C24D22144197000F7B58 /* wiBackLog.cpp in Sources */,
 				6853C29022153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
+				688D39CA221BC7AD0005B1F9 /* objectPS_tiledforward_pom.metal in Sources */,
+				688D39DC221BC7AD0005B1F9 /* objectPS_simplest.metal in Sources */,
 				6853C3082215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BD82209C30800A516B4 /* main.m in Sources */,
 				6853C23622143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7E220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2BF22158143000F7B58 /* wiTimer.mm in Sources */,
 				6853C2FC2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
+				688D39AF221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
+				688D39C6221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2A02215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A622154123000F7B58 /* wiDepthTarget.cpp in Sources */,
 				6853C2F22215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				6853C27422153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
+				688D39DA221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				685F8C422209E0F400A516B4 /* wiGraphicsDevice.cpp in Sources */,
+				688D39C8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */,
 				6853C2F82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
 				6853C3002215E0CF000F7B58 /* RenderPath.cpp in Sources */,
+				688D39A5221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */,
 				685F8BCC2209C30800A516B4 /* AppDelegate.m in Sources */,
 				6853C24F22144197000F7B58 /* wiHelper.cpp in Sources */,
+				688D39B5221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
 				6853C2AE22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25622144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C722158478000F7B58 /* wiOcean.cpp in Sources */,
+				688D39D2221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */,
+				688D398A221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
+				688D39E2221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
+				688D39D6221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
 				6853C28C22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27622153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				6853C2B9221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				685F8BED2209C30800A516B4 /* Shaders.metal in Sources */,
 				6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28622153EA2000F7B58 /* wiRenderer.cpp in Sources */,
+				688D39A3221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2C922158478000F7B58 /* wiLensFlare.cpp in Sources */,
+				688D397C221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */,
+				688D39B1221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */,
 				6853C2A22215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
+				688D3988221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
+				688D39D0221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29522154052000F7B58 /* wiTextureHelper.cpp in Sources */,
+				688D39CC221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
+				688D399D221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C442209E0F400A516B4 /* wiGraphicsResource.cpp in Sources */,
+				688D397A221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
+				688D39D4221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
+				688D39B3221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
+				688D39A9221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31B221891E3000F7B58 /* objectVS_common.metal in Sources */,
+				688D39AB221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */,
+				688D39D8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */,
+				688D39E0221BC7AD0005B1F9 /* objectPS_textureonly.metal in Sources */,
+				688D398C221B394D0005B1F9 /* objectPS_deferred_normalmap.metal in Sources */,
+				688D39DE221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal in Sources */,
 				6853C28822153EA2000F7B58 /* wiRenderTarget.cpp in Sources */,
+				688D39A7221B48900005B1F9 /* objectPS_forward.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,54 +931,91 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				688D3982221B388D0005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
+				688D3983221B388D0005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2D0221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
+				688D39A0221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
 				6853C2CC22158478000F7B58 /* wiSprite.cpp in Sources */,
 				6853C2FB2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
 				6853C2FF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
+				688D398F221B394D0005B1F9 /* objectPS_deferred_pom.metal in Sources */,
 				685F8C62220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
 				6853C2D32215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
+				688D3979221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
 				6853C23522143AE4000F7B58 /* wiArchive.cpp in Sources */,
 				6853C2BC221580B9000F7B58 /* wiProfiler.cpp in Sources */,
 				6853C28522153EA2000F7B58 /* wiImage.cpp in Sources */,
 				685F8BEC2209C30800A516B4 /* Renderer.m in Sources */,
+				688D39CF221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
 				6853C2AB22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29B2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C75220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
+				688D39A2221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */,
 				685F8BE42209C30800A516B4 /* GameViewController.m in Sources */,
 				6853C27D22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
+				688D39AE221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal in Sources */,
 				6853C24E22144197000F7B58 /* wiBackLog.cpp in Sources */,
 				6853C29122153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
+				688D39CB221BC7AD0005B1F9 /* objectPS_tiledforward_pom.metal in Sources */,
+				688D39DD221BC7AD0005B1F9 /* objectPS_simplest.metal in Sources */,
 				6853C3092215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BEA2209C30800A516B4 /* main.m in Sources */,
 				6853C23722143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7F220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2C022158143000F7B58 /* wiTimer.mm in Sources */,
 				6853C2FD2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
+				688D39B0221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
+				688D39C7221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2A12215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A722154123000F7B58 /* wiDepthTarget.cpp in Sources */,
 				6853C2F32215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				6853C27522153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
+				688D39DB221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				685F8BE12209C30800A516B4 /* AppDelegate.m in Sources */,
+				688D39C9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */,
 				6853C2F92215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
 				6853C3012215E0CF000F7B58 /* RenderPath.cpp in Sources */,
+				688D39A6221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */,
 				685F8BEE2209C30800A516B4 /* Shaders.metal in Sources */,
 				6853C25022144197000F7B58 /* wiHelper.cpp in Sources */,
+				688D39B6221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
 				6853C2AF22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25722144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C822158478000F7B58 /* wiOcean.cpp in Sources */,
+				688D39D3221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */,
+				688D398B221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
+				688D39E3221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
+				688D39D7221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
 				6853C28D22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27722153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				6853C2BA221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				685F8C592209F50A00A516B4 /* wiGraphicsResource.cpp in Sources */,
 				6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28722153EA2000F7B58 /* wiRenderer.cpp in Sources */,
+				688D39A4221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2CA22158478000F7B58 /* wiLensFlare.cpp in Sources */,
+				688D397D221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */,
+				688D39B2221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */,
 				6853C2A32215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
+				688D3989221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
+				688D39D1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29622154052000F7B58 /* wiTextureHelper.cpp in Sources */,
+				688D39CD221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
+				688D399E221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C582209F50700A516B4 /* wiGraphicsDevice.cpp in Sources */,
+				688D397B221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F72215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
+				688D39D5221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
+				688D39B4221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
+				688D39AA221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31C221891E3000F7B58 /* objectVS_common.metal in Sources */,
+				688D39AC221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */,
+				688D39D9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */,
+				688D39E1221BC7AD0005B1F9 /* objectPS_textureonly.metal in Sources */,
+				688D398D221B394D0005B1F9 /* objectPS_deferred_normalmap.metal in Sources */,
+				688D39DF221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal in Sources */,
 				6853C28922153EA2000F7B58 /* wiRenderTarget.cpp in Sources */,
+				688D39A8221B48900005B1F9 /* objectPS_forward.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

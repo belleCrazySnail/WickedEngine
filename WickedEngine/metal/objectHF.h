@@ -89,7 +89,7 @@ inline GBUFFEROutputType CreateGbuffer(float4 color, Surface surface, float2 vel
 struct GBUFFEROutputType_Thin
 {
 	float4 g0 [[color(0)]];		// texture_gbuffer0
-	float4 g1 [[color(0)]];		// texture_gbuffer1
+	float4 g1 [[color(1)]];		// texture_gbuffer1
 };
 inline GBUFFEROutputType_Thin CreateGbuffer_Thin(float4 color, Surface surface, float2 velocity)
 {
@@ -142,7 +142,7 @@ inline void LightMapping(float2 ATLAS, thread float3 &diffuse, thread float3 &sp
 	if (any(bool2(ATLAS)))
 	{
 #ifdef LIGHTMAP_QUALITY_BICUBIC
-		float4 lightmap = SampleTextureCatmullRom(gd, gd.texture_globallightmap, ATLAS);
+		float4 lightmap = SampleTextureCatmullRom(gd.texture_globallightmap, ATLAS, 0, gd);
 #else
 		float4 lightmap = gd.texture_globallightmap.SampleLevel(gd.sampler_linear_clamp, ATLAS, 0);
 #endif // LIGHTMAP_QUALITY_BICUBIC
@@ -498,20 +498,20 @@ inline void ApplyFog(float dist, thread float4 &color, constant GlobalCBuffer &c
 
 // entry point:
 #if defined(ALPHATESTONLY)
-fragment void main(PIXELINPUT input
+fragment void MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #elif defined(TEXTUREONLY)
-fragment float4 main(PIXELINPUT input
+fragment float4 MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #elif defined(TRANSPARENT)
-fragment float4 main(PIXELINPUT input
+fragment float4 MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #elif defined(ENVMAPRENDERING)
-fragment float4 main(PSIn_EnvmapRendering input
+fragment float4 MAINAPIENTRY(PSIn_EnvmapRendering input [[stage_in]]
 #elif defined(DEFERRED)
-fragment GBUFFEROutputType main(PIXELINPUT input
+fragment GBUFFEROutputType MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #elif defined(FORWARD)
-fragment GBUFFEROutputType_Thin main(PIXELINPUT input
+fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #elif defined(TILEDFORWARD)
-[early_fragment_tests]
-fragment GBUFFEROutputType_Thin main(PIXELINPUT input
+[[early_fragment_tests]]
+fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #endif // ALPHATESTONLY
 , CB_GD)
 
@@ -522,7 +522,7 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input
 
 #if !(defined(TILEDFORWARD) && !defined(TRANSPARENT)) && !defined(ENVMAPRENDERING)
 	// apply dithering:
-	if (dither(pixel + GetTemporalAASampleRotation()) < input.dither)
+	if (any(bool2(dither(pixel + GetTemporalAASampleRotation(cb)) - input.dither)))
         discard_fragment();
 #endif
 
@@ -534,7 +534,7 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input
 
 #ifndef SIMPLE_INPUT
 	surface.P = input.pos3D;
-	surface.V = cb.frame.g_xCamera_CamPos - surface.P;
+	surface.V = cb.camera.g_xCamera_CamPos - surface.P;
 	float dist = length(surface.V);
 	surface.V /= dist;
 	surface.N = normalize(input.nor);
@@ -547,7 +547,7 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input
 	ParallaxOcclusionMapping(UV, surface.V, TBN, cb, gd);
 #endif // POM
 
-	float4 color = cb.material.g_xMat_baseColor * float4(input.instanceColor, 1) * xBaseColorMap.sample(cb.sampler_objectshader, UV);
+	float4 color = cb.material.g_xMat_baseColor * float4(input.instanceColor, 1) * xBaseColorMap.sample(gd.sampler_objectshader, UV);
 	color.rgb = DEGAMMA(color.rgb);
 	ALPHATEST(color.a);
 
@@ -620,13 +620,13 @@ fragment GBUFFEROutputType_Thin main(PIXELINPUT input
 
 	//FRESNEL TERM
 	float3 fresnelTerm = F_Fresnel(surface.f0, surface.NdotV);
-	surface.albedo.rgb = lerp(refractiveColor, reflectiveColor.rgb, fresnelTerm);
+	surface.albedo.rgb = mix(refractiveColor, reflectiveColor.rgb, fresnelTerm);
 #endif // WATER
 
 
 #ifndef ENVMAPRENDERING
 #ifndef TRANSPARENT
-	ssao = xSSAO.SampleLevel(gd.sampler_linear_clamp, ReprojectedScreenCoord, 0);
+	ssao = xSSAO.SampleLevel(gd.sampler_linear_clamp, ReprojectedScreenCoord, 0).r;
 	ao *= ssao;
 #endif // TRANSPARENT
 #endif // ENVMAPRENDERING
