@@ -25,6 +25,10 @@ public:
 		COMPUTESHADER,
 	};
 
+    inline bool isShader(Data_Type t) {
+        return (t == VERTEXSHADER) || (t == PIXELSHADER) || (t == GEOMETRYSHADER) || (t == HULLSHADER) || (t == DOMAINSHADER) || (t == COMPUTESHADER);
+    }
+    
 	struct Resource
 	{
 		void* data;

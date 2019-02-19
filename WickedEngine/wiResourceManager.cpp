@@ -68,6 +68,62 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 			type = newType;
 
 		void* success = nullptr;
+        
+        if (isShader(type)) {
+            ShaderByteCode code;
+            code.ShaderName = nameStr;
+#ifndef __APPLE__
+            vector<uint8_t> buffer;
+            if (wiHelper::readByteData(wiRenderer::GetShaderPath() + nameStr + ".cso", buffer)) {
+                code.data = (BYTE *)buffer.data();
+                code.size = buffer.size();
+            }
+#endif
+            switch (type) {
+                case Data_Type::VERTEXSHADER:
+                {
+                    VertexShader* shader = new VertexShader;
+                    wiRenderer::GetDevice()->CreateVertexShader(&code, shader);
+                    success = shader;
+                }
+                    break;
+                case Data_Type::PIXELSHADER:
+                {
+                    PixelShader* shader = new PixelShader;
+                    wiRenderer::GetDevice()->CreatePixelShader(&code, shader);
+                    success = shader;
+                }
+                    break;
+                case Data_Type::GEOMETRYSHADER:
+                {
+                    GeometryShader* shader = new GeometryShader;
+                    wiRenderer::GetDevice()->CreateGeometryShader(&code, shader);
+                    success = shader;
+                }
+                    break;
+                case Data_Type::HULLSHADER:
+                {
+                    HullShader* shader = new HullShader;
+                    wiRenderer::GetDevice()->CreateHullShader(&code, shader);
+                    success = shader;
+                }
+                    break;
+                case Data_Type::DOMAINSHADER:
+                {
+                    DomainShader* shader = new DomainShader;
+                    wiRenderer::GetDevice()->CreateDomainShader(&code, shader);
+                    success = shader;
+                }
+                    break;
+                case Data_Type::COMPUTESHADER:
+                {
+                    ComputeShader* shader = new ComputeShader;
+                    wiRenderer::GetDevice()->CreateComputeShader(&code, shader);
+                    success = shader;
+                }
+                    break;
+            }
+        }
 
 		switch(type)
 		{
@@ -282,90 +338,6 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
 		case Data_Type::MUSIC:
 		{
 //            success = new wiMusic(name.GetString());
-		}
-		break;
-		case Data_Type::VERTEXSHADER:
-		{
-			vector<uint8_t> buffer;
-			if (wiHelper::readByteData(nameStr, buffer)) {
-				VertexShader* shader = new VertexShader;
-                ShaderByteCode code;
-                code.ShaderName = nameStr;
-                code.data = (BYTE *)buffer.data();
-                code.size = buffer.size();
-				wiRenderer::GetDevice()->CreateVertexShader(&code, shader);
-				success = shader;
-			}
-		}
-		break;
-		case Data_Type::PIXELSHADER:
-		{
-			vector<uint8_t> buffer;
-			if (wiHelper::readByteData(nameStr, buffer)){
-				PixelShader* shader = new PixelShader;
-                ShaderByteCode code;
-                code.ShaderName = nameStr;
-                code.data = (BYTE *)buffer.data();
-                code.size = buffer.size();
-				wiRenderer::GetDevice()->CreatePixelShader(&code, shader);
-				success = shader;
-			}
-		}
-		break;
-		case Data_Type::GEOMETRYSHADER:
-		{
-			vector<uint8_t> buffer;
-			if (wiHelper::readByteData(nameStr, buffer)){
-				GeometryShader* shader = new GeometryShader;
-                ShaderByteCode code;
-                code.ShaderName = nameStr;
-                code.data = (BYTE *)buffer.data();
-                code.size = buffer.size();
-				wiRenderer::GetDevice()->CreateGeometryShader(&code, shader);
-				success = shader;
-			}
-		}
-		break;
-		case Data_Type::HULLSHADER:
-		{
-			vector<uint8_t> buffer;
-			if (wiHelper::readByteData(nameStr, buffer)){
-				HullShader* shader = new HullShader;
-                ShaderByteCode code;
-                code.ShaderName = nameStr;
-                code.data = (BYTE *)buffer.data();
-                code.size = buffer.size();
-				wiRenderer::GetDevice()->CreateHullShader(&code, shader);
-				success = shader;
-			}
-		}
-		break;
-		case Data_Type::DOMAINSHADER:
-		{
-			vector<uint8_t> buffer;
-			if (wiHelper::readByteData(nameStr, buffer)){
-				DomainShader* shader = new DomainShader;
-                ShaderByteCode code;
-                code.ShaderName = nameStr;
-                code.data = (BYTE *)buffer.data();
-                code.size = buffer.size();
-				wiRenderer::GetDevice()->CreateDomainShader(&code, shader);
-				success = shader;
-			}
-		}
-		break;
-		case Data_Type::COMPUTESHADER:
-		{
-			vector<uint8_t> buffer;
-			if (wiHelper::readByteData(nameStr, buffer)) {
-				ComputeShader* shader = new ComputeShader;
-                ShaderByteCode code;
-                code.ShaderName = nameStr;
-                code.data = (BYTE *)buffer.data();
-                code.size = buffer.size();
-				wiRenderer::GetDevice()->CreateComputeShader(&code, shader);
-				success = shader;
-			}
 		}
 		break;
 		default:
