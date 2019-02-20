@@ -214,6 +214,10 @@
 		688D3A12221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A0F221C05EE0005B1F9 /* wiObjCHelper.mm */; };
 		688D3A14221C07290005B1F9 /* wiTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A13221C07290005B1F9 /* wiTimer.cpp */; };
 		688D3A15221C07290005B1F9 /* wiTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A13221C07290005B1F9 /* wiTimer.cpp */; };
+		688D3A18221C689A0005B1F9 /* imageVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A16221C689A0005B1F9 /* imageVS.metal */; };
+		688D3A19221C689A0005B1F9 /* imageVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A16221C689A0005B1F9 /* imageVS.metal */; };
+		688D3A1A221C689A0005B1F9 /* screenVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A17221C689A0005B1F9 /* screenVS.metal */; };
+		688D3A1B221C689A0005B1F9 /* screenVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A17221C689A0005B1F9 /* screenVS.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -429,6 +433,10 @@
 		688D3A0F221C05EE0005B1F9 /* wiObjCHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = wiObjCHelper.mm; path = WickedEngine/wiObjCHelper.mm; sourceTree = "<group>"; };
 		688D3A10221C05EE0005B1F9 /* wiObjCHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wiObjCHelper.h; path = WickedEngine/wiObjCHelper.h; sourceTree = "<group>"; };
 		688D3A13221C07290005B1F9 /* wiTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wiTimer.cpp; path = WickedEngine/wiTimer.cpp; sourceTree = "<group>"; };
+		688D3A16221C689A0005B1F9 /* imageVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imageVS.metal; path = WickedEngine/metal/imageVS.metal; sourceTree = "<group>"; };
+		688D3A17221C689A0005B1F9 /* screenVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = screenVS.metal; path = WickedEngine/metal/screenVS.metal; sourceTree = "<group>"; };
+		688D3A1C221C68DB0005B1F9 /* imageHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imageHF.h; path = WickedEngine/metal/imageHF.h; sourceTree = "<group>"; };
+		688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fullScreenTriangleHF.h; path = WickedEngine/metal/fullScreenTriangleHF.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,6 +483,10 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */,
+				688D3A1C221C68DB0005B1F9 /* imageHF.h */,
+				688D3A16221C689A0005B1F9 /* imageVS.metal */,
+				688D3A17221C689A0005B1F9 /* screenVS.metal */,
 				68456035221AD0A100345A91 /* packHF.h */,
 				6853C324221AC005000F7B58 /* objectHF.h */,
 				6853C322221ABE2B000F7B58 /* ditherHF.h */,
@@ -948,6 +960,7 @@
 				6853C2F22215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				6853C27422153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				688D39DA221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
+				688D3A1A221C689A0005B1F9 /* screenVS.metal in Sources */,
 				685F8C422209E0F400A516B4 /* wiGraphicsDevice.cpp in Sources */,
 				688D39C8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */,
 				6853C2F82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
@@ -979,6 +992,7 @@
 				688D39B1221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */,
 				6853C2A22215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				688D3988221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
+				688D3A18221C689A0005B1F9 /* imageVS.metal in Sources */,
 				688D39D0221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29522154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				688D39CC221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
@@ -1052,6 +1066,7 @@
 				6853C2F32215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				6853C27522153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				688D39DB221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
+				688D3A1B221C689A0005B1F9 /* screenVS.metal in Sources */,
 				685F8BE12209C30800A516B4 /* AppDelegate.m in Sources */,
 				688D39C9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */,
 				6853C2F92215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
@@ -1083,6 +1098,7 @@
 				688D39B2221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */,
 				6853C2A32215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				688D3989221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
+				688D3A19221C689A0005B1F9 /* imageVS.metal in Sources */,
 				688D39D1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29622154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				688D39CD221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,

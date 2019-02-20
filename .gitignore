@@ -3,6 +3,9 @@
 
 *.opendb
 
+# Xcode and mac specific
+*.DS_Store
+
 # User-specific files
 *.suo
 *.user

@@ -841,14 +841,18 @@ namespace wiGraphicsTypes
 		// Issue data copy on request:
 		if (pInitialData != nullptr)
 		{
-            MTLRegion region = {
-                { 0, 0, 0 },                   // MTLOrigin
-                {texDesc.width, texDesc.height, 1} // MTLSize
-            };
-            [mtlTex replaceRegion:region mipmapLevel:0 withBytes:pInitialData->pSysMem bytesPerRow:pInitialData->SysMemPitch];
-//            id <MTLBlitCommandEncoder> blitEnc = [_commandBuffer blitCommandEncoder];
+            MTLOrigin tex_origin = { 0, 0, 0 };
+            MTLSize tex_size = {texDesc.width, texDesc.height, 1};
+//            MTLRegion region = {
+//                tex_origin,                   // MTLOrigin
+//                tex_size  // MTLSize
+//            };
+//            [mtlTex replaceRegion:region mipmapLevel:0 withBytes:pInitialData->pSysMem bytesPerRow:pInitialData->SysMemPitch];
+            id <MTLBlitCommandEncoder> blitEnc = [_commandBuffer blitCommandEncoder];
+            id <MTLBuffer> tempBuffer = [_device newBufferWithBytes:pInitialData->pSysMem length:pInitialData->SysMemPitch * texDesc.height options:MTLResourceStorageModeManaged];
+            [blitEnc copyFromBuffer:tempBuffer sourceOffset:0 sourceBytesPerRow:pInitialData->SysMemPitch sourceBytesPerImage:pInitialData->SysMemPitch * texDesc.height sourceSize:tex_size toTexture:mtlTex destinationSlice:0 destinationLevel:0 destinationOrigin:tex_origin];
 //            [blitEnc generateMipmapsForTexture:mtlTex];
-//            [blitEnc endEncoding];
+            [blitEnc endEncoding];
 		}
 
 		return S_OK;
@@ -879,12 +883,13 @@ namespace wiGraphicsTypes
                 offset = 0;
             }
             vertexDesc.attributes[i].format = _ConvertVertexFormat(x.Format);
-            vertexDesc.attributes[i].offset = x.AlignedByteOffset;
-            if (vertexDesc.attributes[i].offset == VertexLayoutDesc::APPEND_ALIGNED_ELEMENT)
+            UINT off = x.AlignedByteOffset;
+            if (off == VertexLayoutDesc::APPEND_ALIGNED_ELEMENT)
             {
                 // need to manually resolve this from the format spec.
-                vertexDesc.attributes[i].offset = offset;
+                off = offset;
             }
+            vertexDesc.attributes[i].offset = off;
             offset += GetFormatStride(x.Format);
         }
         vertex_stride.push_back(offset);
@@ -908,7 +913,7 @@ namespace wiGraphicsTypes
         id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
         pVertexShader->resource = RETAIN_RES(func);
         
-        return S_OK;
+        return func == nil ? S_OK : E_FAIL;
     }
     HRESULT GraphicsDevice_Metal::CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader)
     {
@@ -917,7 +922,7 @@ namespace wiGraphicsTypes
         id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
         pPixelShader->resource = RETAIN_RES(func);
         
-        return S_OK;
+        return func == nil ? S_OK : E_FAIL;
     }
     HRESULT GraphicsDevice_Metal::CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader)
     {
@@ -941,7 +946,7 @@ namespace wiGraphicsTypes
         id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
         pComputeShader->resource = RETAIN_RES(func);
         
-        return S_OK;
+        return func == nil ? S_OK : E_FAIL;
     }
     HRESULT GraphicsDevice_Metal::CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState)
     {
@@ -1096,7 +1101,7 @@ namespace wiGraphicsTypes
 		samplerDesc.lodMinClamp = pSamplerDesc->MinLOD;
 		samplerDesc.lodMaxClamp = pSamplerDesc->MaxLOD;
         samplerDesc.borderColor = MTLSamplerBorderColorTransparentBlack;
-		samplerDesc.normalizedCoordinates = FALSE;
+		samplerDesc.normalizedCoordinates = TRUE;
         id <MTLSamplerState> sam_state = [_device newSamplerStateWithDescriptor:samplerDesc];
         pSamplerState->resource = RETAIN_RES(sam_state);
 
@@ -1133,7 +1138,8 @@ namespace wiGraphicsTypes
             pipelineDesc.fragmentFunction = BRIDGE_RES(MTLFunction, pDesc->ps->resource);
         }
         
-        pipelineDesc.vertexDescriptor = BRIDGE_RES1(MTLVertexDescriptor, pDesc->il->resource);
+        //it's possible for pDesc->il to be null, as in a vertex shader that only uses uint vid [[vertex_id]] as input
+        if (pDesc->il != nullptr) pipelineDesc.vertexDescriptor = BRIDGE_RES1(MTLVertexDescriptor, pDesc->il->resource);
         //Render target:
         BlendStateDesc pBlendStateDesc = pDesc->bs != nullptr ? pDesc->bs->GetDesc() : BlendStateDesc();
         for (UINT i = 0; i < pDesc->numRTs; ++i)
