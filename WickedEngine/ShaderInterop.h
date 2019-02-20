@@ -183,3 +183,5 @@ typedef XMINT4 int4;
 #endif // SHADER_MODEL_6
 
 #endif
+
+#endif
