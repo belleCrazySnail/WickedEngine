@@ -1,7 +1,7 @@
-#include "globals.hlsli"
-#include "imageHF.hlsli"
+#include "globals.h"
+#include "imageHF.h"
 
-VertextoPixel main(uint vI : SV_VERTEXID)
+VertextoPixel main(uint vI [[vertex_id]], constant GlobalData &gd)
 {
 	VertextoPixel Out;
 
@@ -12,11 +12,11 @@ VertextoPixel main(uint vI : SV_VERTEXID)
 	//	3--4
 	float2 inTex = float2(vI % 2, vI % 4 / 2);
 
-	Out.pos = xCorners[vI];
+	Out.pos = gd.image.xCorners[vI];
 
 	Out.tex_original = inTex;
 
-	Out.tex = inTex * xTexMulAdd.xy + xTexMulAdd.zw;
+	Out.tex = inTex * gd.image.xTexMulAdd.xy + gd.image.xTexMulAdd.zw;
 
 	Out.pos2D = Out.pos;
 

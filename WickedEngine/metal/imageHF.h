@@ -1,25 +1,23 @@
 #ifndef _IMAGEHF_
 #define _IMAGEHF_
-#include "globals.hlsli"
+#include "globals.h"
 #include "ShaderInterop_Image.h"
 
-#define xTexture		texture_0
-#define xMaskTex		texture_1
-#define xDistortionTex	texture_2
-
-SAMPLERSTATE(Sampler, SSLOT_ONDEMAND0);
+#define xTexture		gd.texture_0
+#define xMaskTex		gd.texture_1
+#define xDistortionTex	gd.texture_2
 
 struct VertextoPixel
 {
-	float4 pos				: SV_POSITION;
-	float2 tex_original		: TEXCOORD0;
-	float2 tex				: TEXCOORD1;
-	float4 pos2D			: TEXCOORD2;
+	float4 pos [[position]];
+	float2 tex_original;
+	float2 tex;
+	float4 pos2D;
 };
 struct VertexToPixelPostProcess
 {
-	float4 pos				: SV_POSITION;
-	float2 tex				: TEXCOORD0;
+	float4 pos [[position]];
+	float2 tex;
 };
 
 #endif // _IMAGEHF_

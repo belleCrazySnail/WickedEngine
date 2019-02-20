@@ -1,14 +1,14 @@
 #ifndef _FULLSCREEN_TRIANGLE_HF_
 #define _FULLSCREEN_TRIANGLE_HF_
 
-inline void FullScreenTriangle(in uint vertexID, out float4 pos)
+inline void FullScreenTriangle(uint vertexID, thread float4 &pos)
 {
 	pos.x = (float)(vertexID / 2) * 4.0f - 1.0f;
 	pos.y = (float)(vertexID % 2) * 4.0f - 1.0f;
 	pos.z = 0.0f;
 	pos.w = 1.0f;
 }
-inline void FullScreenTriangle(in uint vertexID, out float4 pos, out float2 tex)
+inline void FullScreenTriangle(uint vertexID, thread float4 &pos, thread float2 &tex)
 {
 	FullScreenTriangle(vertexID, pos);
 
