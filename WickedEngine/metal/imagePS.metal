@@ -1,8 +1,8 @@
-#include "imageHF.hlsli"
+#include "imageHF.h"
 
-float4 main(VertextoPixel PSIn) : SV_TARGET
+fragment float4 imagePS(VertextoPixel PSIn [[stage_in]], constant GlobalData &gd)
 {
-	float4 color = xTexture.SampleLevel(Sampler, PSIn.tex.xy, xMipLevel) * xColor;
+	float4 color = xTexture.SampleLevel(gd.customsampler0, PSIn.tex.xy, gd.image.xMipLevel) * gd.image.xColor;
 
 	return color;
 }

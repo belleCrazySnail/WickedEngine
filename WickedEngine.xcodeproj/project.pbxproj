@@ -220,6 +220,26 @@
 		688D3A1B221C689A0005B1F9 /* screenVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A17221C689A0005B1F9 /* screenVS.metal */; };
 		688D3A20221D73F80005B1F9 /* fxaa.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A1F221D73F80005B1F9 /* fxaa.metal */; };
 		688D3A21221D73F80005B1F9 /* fxaa.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A1F221D73F80005B1F9 /* fxaa.metal */; };
+		688D3A2C221DC2F10005B1F9 /* imagePS_distortion.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A22221DC2F00005B1F9 /* imagePS_distortion.metal */; };
+		688D3A2D221DC2F10005B1F9 /* imagePS_distortion.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A22221DC2F00005B1F9 /* imagePS_distortion.metal */; };
+		688D3A2E221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A23221DC2F00005B1F9 /* imagePS_distortion_masked_bicubic.metal */; };
+		688D3A2F221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A23221DC2F00005B1F9 /* imagePS_distortion_masked_bicubic.metal */; };
+		688D3A30221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A24221DC2F00005B1F9 /* imagePS_separatenormalmap_bicubic.metal */; };
+		688D3A31221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A24221DC2F00005B1F9 /* imagePS_separatenormalmap_bicubic.metal */; };
+		688D3A32221DC2F10005B1F9 /* imagePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A25221DC2F10005B1F9 /* imagePS.metal */; };
+		688D3A33221DC2F10005B1F9 /* imagePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A25221DC2F10005B1F9 /* imagePS.metal */; };
+		688D3A34221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A26221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal */; };
+		688D3A35221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A26221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal */; };
+		688D3A36221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A27221DC2F10005B1F9 /* imagePS_separatenormalmap.metal */; };
+		688D3A37221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A27221DC2F10005B1F9 /* imagePS_separatenormalmap.metal */; };
+		688D3A38221DC2F10005B1F9 /* imagePS_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A28221DC2F10005B1F9 /* imagePS_bicubic.metal */; };
+		688D3A39221DC2F10005B1F9 /* imagePS_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A28221DC2F10005B1F9 /* imagePS_bicubic.metal */; };
+		688D3A3A221DC2F10005B1F9 /* imagePS_distortion_masked.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A29221DC2F10005B1F9 /* imagePS_distortion_masked.metal */; };
+		688D3A3B221DC2F10005B1F9 /* imagePS_distortion_masked.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A29221DC2F10005B1F9 /* imagePS_distortion_masked.metal */; };
+		688D3A3C221DC2F10005B1F9 /* imagePS_masked_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */; };
+		688D3A3D221DC2F10005B1F9 /* imagePS_masked_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */; };
+		688D3A3E221DC2F10005B1F9 /* imagePS_masked.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */; };
+		688D3A3F221DC2F10005B1F9 /* imagePS_masked.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -441,6 +461,16 @@
 		688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fullScreenTriangleHF.h; path = WickedEngine/metal/fullScreenTriangleHF.h; sourceTree = "<group>"; };
 		688D3A1E221D73F80005B1F9 /* fxaa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fxaa.h; path = WickedEngine/metal/fxaa.h; sourceTree = "<group>"; };
 		688D3A1F221D73F80005B1F9 /* fxaa.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = fxaa.metal; path = WickedEngine/metal/fxaa.metal; sourceTree = "<group>"; };
+		688D3A22221DC2F00005B1F9 /* imagePS_distortion.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_distortion.metal; path = WickedEngine/metal/imagePS_distortion.metal; sourceTree = "<group>"; };
+		688D3A23221DC2F00005B1F9 /* imagePS_distortion_masked_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_distortion_masked_bicubic.metal; path = WickedEngine/metal/imagePS_distortion_masked_bicubic.metal; sourceTree = "<group>"; };
+		688D3A24221DC2F00005B1F9 /* imagePS_separatenormalmap_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_separatenormalmap_bicubic.metal; path = WickedEngine/metal/imagePS_separatenormalmap_bicubic.metal; sourceTree = "<group>"; };
+		688D3A25221DC2F10005B1F9 /* imagePS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS.metal; path = WickedEngine/metal/imagePS.metal; sourceTree = "<group>"; };
+		688D3A26221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_distortion_bicubic.metal; path = WickedEngine/metal/imagePS_distortion_bicubic.metal; sourceTree = "<group>"; };
+		688D3A27221DC2F10005B1F9 /* imagePS_separatenormalmap.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_separatenormalmap.metal; path = WickedEngine/metal/imagePS_separatenormalmap.metal; sourceTree = "<group>"; };
+		688D3A28221DC2F10005B1F9 /* imagePS_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_bicubic.metal; path = WickedEngine/metal/imagePS_bicubic.metal; sourceTree = "<group>"; };
+		688D3A29221DC2F10005B1F9 /* imagePS_distortion_masked.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_distortion_masked.metal; path = WickedEngine/metal/imagePS_distortion_masked.metal; sourceTree = "<group>"; };
+		688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_masked_bicubic.metal; path = WickedEngine/metal/imagePS_masked_bicubic.metal; sourceTree = "<group>"; };
+		688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_masked.metal; path = WickedEngine/metal/imagePS_masked.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -487,6 +517,16 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				688D3A28221DC2F10005B1F9 /* imagePS_bicubic.metal */,
+				688D3A26221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal */,
+				688D3A23221DC2F00005B1F9 /* imagePS_distortion_masked_bicubic.metal */,
+				688D3A29221DC2F10005B1F9 /* imagePS_distortion_masked.metal */,
+				688D3A22221DC2F00005B1F9 /* imagePS_distortion.metal */,
+				688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */,
+				688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */,
+				688D3A24221DC2F00005B1F9 /* imagePS_separatenormalmap_bicubic.metal */,
+				688D3A27221DC2F10005B1F9 /* imagePS_separatenormalmap.metal */,
+				688D3A25221DC2F10005B1F9 /* imagePS.metal */,
 				688D3A1E221D73F80005B1F9 /* fxaa.h */,
 				688D3A1F221D73F80005B1F9 /* fxaa.metal */,
 				688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */,
@@ -923,10 +963,12 @@
 			files = (
 				688D3A11221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				6853C2CF221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
+				688D3A2E221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */,
 				688D3980221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2CB22158478000F7B58 /* wiSprite.cpp in Sources */,
 				688D3A14221C07290005B1F9 /* wiTimer.cpp in Sources */,
 				688D399F221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
+				688D3A2C221DC2F10005B1F9 /* imagePS_distortion.metal in Sources */,
 				6853C2FA2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
 				6853C2FE2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
 				685F8C61220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
@@ -944,9 +986,11 @@
 				6853C2AA22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29A2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C74220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
+				688D3A3C221DC2F10005B1F9 /* imagePS_masked_bicubic.metal in Sources */,
 				688D39A1221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */,
 				685F8BCF2209C30800A516B4 /* GameViewController.m in Sources */,
 				6853C27C22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
+				688D3A32221DC2F10005B1F9 /* imagePS.metal in Sources */,
 				688D39AD221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal in Sources */,
 				6853C24D22144197000F7B58 /* wiBackLog.cpp in Sources */,
 				6853C29022153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
@@ -955,6 +999,7 @@
 				688D39EC221BD5F00005B1F9 /* objectVS_simple.metal in Sources */,
 				6853C3082215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BD82209C30800A516B4 /* main.m in Sources */,
+				688D3A34221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal in Sources */,
 				6853C23622143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7E220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2FC2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
@@ -964,6 +1009,7 @@
 				6853C2A02215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A622154123000F7B58 /* wiDepthTarget.cpp in Sources */,
 				6853C2F22215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
+				688D3A30221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */,
 				6853C27422153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				688D39DA221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				688D3A1A221C689A0005B1F9 /* screenVS.metal in Sources */,
@@ -975,6 +1021,7 @@
 				685F8BCC2209C30800A516B4 /* AppDelegate.m in Sources */,
 				6853C24F22144197000F7B58 /* wiHelper.cpp in Sources */,
 				688D39B5221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
+				688D3A36221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */,
 				6853C2AE22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25622144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C722158478000F7B58 /* wiOcean.cpp in Sources */,
@@ -982,6 +1029,7 @@
 				688D398A221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
 				688D39E2221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
 				688D39D6221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
+				688D3A38221DC2F10005B1F9 /* imagePS_bicubic.metal in Sources */,
 				6853C28C22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27622153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				688D39F0221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */,
@@ -1006,6 +1054,7 @@
 				688D399D221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C442209E0F400A516B4 /* wiGraphicsResource.cpp in Sources */,
 				688D39EA221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */,
+				688D3A3A221DC2F10005B1F9 /* imagePS_distortion_masked.metal in Sources */,
 				688D397A221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F62215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				688D39D4221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
@@ -1013,6 +1062,7 @@
 				688D39B3221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
 				688D39A9221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31B221891E3000F7B58 /* objectVS_common.metal in Sources */,
+				688D3A3E221DC2F10005B1F9 /* imagePS_masked.metal in Sources */,
 				688D3A01221BE1400005B1F9 /* LoadingScreen.cpp in Sources */,
 				688D39AB221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */,
 				688D39D8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */,
@@ -1030,10 +1080,12 @@
 			files = (
 				688D3A12221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				688D3982221B388D0005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
+				688D3A2F221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */,
 				688D3983221B388D0005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2D0221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
 				688D3A15221C07290005B1F9 /* wiTimer.cpp in Sources */,
 				688D39A0221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
+				688D3A2D221DC2F10005B1F9 /* imagePS_distortion.metal in Sources */,
 				6853C2CC22158478000F7B58 /* wiSprite.cpp in Sources */,
 				6853C2FB2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
 				6853C2FF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
@@ -1051,9 +1103,11 @@
 				6853C2AB22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29B2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C75220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
+				688D3A3D221DC2F10005B1F9 /* imagePS_masked_bicubic.metal in Sources */,
 				688D39A2221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */,
 				685F8BE42209C30800A516B4 /* GameViewController.mm in Sources */,
 				6853C27D22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
+				688D3A33221DC2F10005B1F9 /* imagePS.metal in Sources */,
 				688D39AE221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal in Sources */,
 				6853C24E22144197000F7B58 /* wiBackLog.cpp in Sources */,
 				6853C29122153FF0000F7B58 /* wiResourceManager.cpp in Sources */,
@@ -1062,6 +1116,7 @@
 				688D39ED221BD5F00005B1F9 /* objectVS_simple.metal in Sources */,
 				6853C3092215E2D1000F7B58 /* wiFadeManager.cpp in Sources */,
 				685F8BEA2209C30800A516B4 /* main.m in Sources */,
+				688D3A35221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal in Sources */,
 				6853C23722143AE4000F7B58 /* wiRandom.cpp in Sources */,
 				685F8C7F220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2FD2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
@@ -1071,6 +1126,7 @@
 				6853C2A12215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A722154123000F7B58 /* wiDepthTarget.cpp in Sources */,
 				6853C2F32215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
+				688D3A31221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */,
 				6853C27522153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				688D39DB221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				688D3A1B221C689A0005B1F9 /* screenVS.metal in Sources */,
@@ -1082,6 +1138,7 @@
 				685F8BEE2209C30800A516B4 /* Shaders.metal in Sources */,
 				6853C25022144197000F7B58 /* wiHelper.cpp in Sources */,
 				688D39B6221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
+				688D3A37221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */,
 				6853C2AF22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25722144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C822158478000F7B58 /* wiOcean.cpp in Sources */,
@@ -1089,6 +1146,7 @@
 				688D398B221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
 				688D39E3221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
 				688D39D7221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
+				688D3A39221DC2F10005B1F9 /* imagePS_bicubic.metal in Sources */,
 				6853C28D22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27722153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
 				688D39F1221BD5F00005B1F9 /* objectVS_common_tessellation.metal in Sources */,
@@ -1113,6 +1171,7 @@
 				688D399E221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C582209F50700A516B4 /* wiGraphicsDevice.cpp in Sources */,
 				688D39EB221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */,
+				688D3A3B221DC2F10005B1F9 /* imagePS_distortion_masked.metal in Sources */,
 				688D397B221B2B1A0005B1F9 /* objectPS_alphatestonly.metal in Sources */,
 				6853C2F72215E0CF000F7B58 /* RenderPath3D_TiledDeferred.cpp in Sources */,
 				688D39D5221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
@@ -1120,6 +1179,7 @@
 				688D39B4221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
 				688D39AA221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31C221891E3000F7B58 /* objectVS_common.metal in Sources */,
+				688D3A3F221DC2F10005B1F9 /* imagePS_masked.metal in Sources */,
 				688D3A02221BE1400005B1F9 /* LoadingScreen.cpp in Sources */,
 				688D39AC221B48900005B1F9 /* objectPS_forward_transparent.metal in Sources */,
 				688D39D9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal in Sources */,

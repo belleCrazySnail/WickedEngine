@@ -1,12 +1,12 @@
-#include "imageHF.hlsli"
+#include "imageHF.h"
 
-float4 main(VertextoPixel PSIn) : SV_TARGET
+fragment float4 imagePS_separatenormalmap(VertextoPixel PSIn [[stage_in]], constant GlobalData &gd)
 {
-	float4 color = xTexture.SampleLevel(Sampler, PSIn.tex.xy, xMipLevel);
+	float4 color = xTexture.SampleLevel(gd.customsampler0, PSIn.tex.xy, gd.image.xMipLevel);
 
 	color = 2 * color - 1;
 
-	color *= xColor;
+	color *= gd.image.xColor;
 
 	return color;
 }

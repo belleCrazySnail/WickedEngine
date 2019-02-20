@@ -1,14 +1,14 @@
-#include "imageHF.hlsli"
+#include "imageHF.h"
 
-float4 main(VertextoPixel PSIn) : SV_TARGET
+fragment float4 imagePS_distortion_masked(VertextoPixel PSIn [[stage_in]], constant GlobalData &gd)
 {
 	float2 distortionCo = PSIn.pos2D.xy / PSIn.pos2D.w * float2(0.5f, -0.5f) + 0.5f;
-	float2 distort = xDistortionTex.SampleLevel(Sampler, PSIn.tex.xy, 0).rg * 2 - 1;
+	float2 distort = xDistortionTex.SampleLevel(gd.customsampler0, PSIn.tex.xy, 0).rg * 2 - 1;
 	PSIn.tex.xy = distortionCo + distort;
 
-	float4 color = xTexture.SampleLevel(Sampler, PSIn.tex.xy, xMipLevel) * xColor;
+	float4 color = xTexture.SampleLevel(gd.customsampler0, PSIn.tex.xy, gd.image.xMipLevel) * gd.image.xColor;
 
-	color *= xMaskTex.SampleLevel(Sampler, PSIn.tex.xy, xMipLevel);
+	color *= xMaskTex.SampleLevel(gd.customsampler0, PSIn.tex.xy, gd.image.xMipLevel);
 
 	return color;
 }

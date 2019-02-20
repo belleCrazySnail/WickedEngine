@@ -1,10 +1,10 @@
-#include "imageHF.hlsli"
+#include "imageHF.h"
 
-float4 main(VertextoPixel PSIn) : SV_TARGET
+fragment float4 imagePS_masked_bicubic(VertextoPixel PSIn [[stage_in]], constant GlobalData &gd)
 {
-	float4 color = SampleTextureCatmullRom(xTexture, PSIn.tex.xy, xMipLevel) * xColor;
+	float4 color = SampleTextureCatmullRom(xTexture, PSIn.tex.xy, gd.image.xMipLevel, gd) * gd.image.xColor;
 
-	color *= xMaskTex.SampleLevel(Sampler, PSIn.tex_original.xy, xMipLevel);
+	color *= xMaskTex.SampleLevel(gd.customsampler0, PSIn.tex_original.xy, gd.image.xMipLevel);
 
 	return color;
 }
