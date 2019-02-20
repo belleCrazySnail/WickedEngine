@@ -12,7 +12,7 @@ struct HullInputType
 };
 
 
-vertex HullInputType objectVS_common_tessellation(Input_Object_ALL input, constant GlobalCBuffer &cb, uint vid [[vertex_id]], uint iid [[instance_id]])
+vertex HullInputType objectVS_common_tessellation(Input_Object_ALL input, constant GlobalData &gd, uint vid [[vertex_id]], uint iid [[instance_id]])
 {
 	HullInputType Out;
 

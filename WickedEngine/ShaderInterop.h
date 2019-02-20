@@ -59,8 +59,6 @@ using namespace metal;
 #define SampleCmpLevelZero sample_compare
 #define SampleGrad sample
 
-#define CB_GD constant GlobalCBuffer &cb, constant GlobalData &gd
-
 #elif __cplusplus // not invoking shader compiler, but included in engine source
 
 // Application-side types:

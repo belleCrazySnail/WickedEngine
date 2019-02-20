@@ -1,7 +1,7 @@
 #include "imageHF.h"
 #include "fullScreenTriangleHF.h"
 
-VertexToPixelPostProcess main(uint vI [[vertex_id]])
+VertexToPixelPostProcess screenVS(uint vI [[vertex_id]])
 {
 	VertexToPixelPostProcess Out;
 

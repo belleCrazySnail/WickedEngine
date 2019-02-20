@@ -2,6 +2,8 @@
 #define _SHADER_GLOBALS_
 #include "ShaderInterop.h"
 #include "ShaderInterop_Renderer.h"
+#include "ShaderInterop_Image.h"
+#include "ShaderInterop_Font.h"
 
 struct GlobalData
 {
@@ -35,6 +37,15 @@ STRUCTUREDBUFFER(EntityTiles, uint, SBSLOT_ENTITYTILES);
 STRUCTUREDBUFFER(EntityArray, ShaderEntityType, SBSLOT_ENTITYARRAY);
 STRUCTUREDBUFFER(MatrixArray, float4x4, SBSLOT_MATRIXARRAY);
 
+    constant FrameCB &frame [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_FRAME)]];
+    constant CameraCB &camera [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_CAMERA)]];
+    constant MiscCB &misc [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_MISC)]];
+    constant ImageCB &image [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_IMAGE_IMAGE)]];
+    constant PostProcessCB &postproc [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_IMAGE_POSTPROCESS)]];
+    constant FontCB &font [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_FONT)]];
+    constant APICB &api [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_API)]];
+    constant MaterialCB &material [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_MATERIAL)]];
+
 SAMPLERSTATE(			sampler_linear_clamp,	SSLOT_LINEAR_CLAMP	)
 SAMPLERSTATE(			sampler_linear_wrap,	SSLOT_LINEAR_WRAP	)
 SAMPLERSTATE(			sampler_linear_mirror,	SSLOT_LINEAR_MIRROR	)
@@ -46,6 +57,8 @@ SAMPLERSTATE(			sampler_aniso_wrap,		SSLOT_ANISO_WRAP	)
 SAMPLERSTATE(			sampler_aniso_mirror,	SSLOT_ANISO_MIRROR	)
 SAMPLERCOMPARISONSTATE(	sampler_cmp_depth,		SSLOT_CMP_DEPTH		)
 SAMPLERSTATE(			sampler_objectshader,	SSLOT_OBJECTSHADER	)
+SAMPLERSTATE(customsampler0, SSLOT_ONDEMAND0)
+SAMPLERSTATE(customsampler1, SSLOT_ONDEMAND1)
 };
 
 static constant float		PI = 3.14159265358979323846;
@@ -77,26 +90,26 @@ static constant int gaussianOffsets[9] = {
 #ifdef DISABLE_ALPHATEST
 #define ALPHATEST(x)
 #else
-#define ALPHATEST(x)	if((x) < (1.0f - cb.api.g_xAlphaRef)) discard_fragment();
+#define ALPHATEST(x)	if((x) < (1.0f - gd.api.g_xAlphaRef)) discard_fragment();
 #endif
 
-#define DEGAMMA_SKY(x)	pow(abs(x),cb.frame.g_xFrame_StaticSkyGamma)
-#define DEGAMMA(x)		pow(abs(x),cb.frame.g_xFrame_Gamma)
-#define GAMMA(x)		pow(abs(x),1.0/cb.frame.g_xFrame_Gamma)
+#define DEGAMMA_SKY(x)	pow(abs(x),gd.frame.g_xFrame_StaticSkyGamma)
+#define DEGAMMA(x)		pow(abs(x),gd.frame.g_xFrame_Gamma)
+#define GAMMA(x)		pow(abs(x),1.0/gd.frame.g_xFrame_Gamma)
 
-inline float3 GetSunColor(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_SunColor; }
-inline float3 GetSunDirection(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_SunDirection; }
-inline float3 GetHorizonColor(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_Horizon.rgb; }
-inline float3 GetZenithColor(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_Zenith.rgb; }
-inline float3 GetAmbientColor(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_Ambient.rgb; }
-inline float3 GetAmbient(float3 N, constant GlobalCBuffer &cb) { return mix(GetHorizonColor(cb), GetZenithColor(cb), saturate(N.y * 0.5f + 0.5f)) + GetAmbientColor(cb); }
-inline float2 GetScreenResolution(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_ScreenWidthHeight; }
-inline float GetScreenWidth(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_ScreenWidthHeight.x; }
-inline float GetScreenHeight(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_ScreenWidthHeight.y; }
-inline float2 GetInternalResolution(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_InternalResolution; }
-inline float GetTime(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_Time; }
-inline float2 GetTemporalAASampleRotation(constant GlobalCBuffer &cb) { return float2((cb.frame.g_xFrame_TemporalAASampleRotation >> 0) & 0x000000FF, (cb.frame.g_xFrame_TemporalAASampleRotation >> 8) & 0x000000FF); }
-inline bool IsStaticSky(constant GlobalCBuffer &cb) { return cb.frame.g_xFrame_StaticSkyGamma > 0.0f; }
+inline float3 GetSunColor(constant GlobalData &gd) { return gd.frame.g_xFrame_SunColor; }
+inline float3 GetSunDirection(constant GlobalData &gd) { return gd.frame.g_xFrame_SunDirection; }
+inline float3 GetHorizonColor(constant GlobalData &gd) { return gd.frame.g_xFrame_Horizon.rgb; }
+inline float3 GetZenithColor(constant GlobalData &gd) { return gd.frame.g_xFrame_Zenith.rgb; }
+inline float3 GetAmbientColor(constant GlobalData &gd) { return gd.frame.g_xFrame_Ambient.rgb; }
+inline float3 GetAmbient(float3 N, constant GlobalData &gd) { return mix(GetHorizonColor(gd), GetZenithColor(gd), saturate(N.y * 0.5f + 0.5f)) + GetAmbientColor(gd); }
+inline float2 GetScreenResolution(constant GlobalData &gd) { return gd.frame.g_xFrame_ScreenWidthHeight; }
+inline float GetScreenWidth(constant GlobalData &gd) { return gd.frame.g_xFrame_ScreenWidthHeight.x; }
+inline float GetScreenHeight(constant GlobalData &gd) { return gd.frame.g_xFrame_ScreenWidthHeight.y; }
+inline float2 GetInternalResolution(constant GlobalData &gd) { return gd.frame.g_xFrame_InternalResolution; }
+inline float GetTime(constant GlobalData &gd) { return gd.frame.g_xFrame_Time; }
+inline float2 GetTemporalAASampleRotation(constant GlobalData &gd) { return float2((gd.frame.g_xFrame_TemporalAASampleRotation >> 0) & 0x000000FF, (gd.frame.g_xFrame_TemporalAASampleRotation >> 8) & 0x000000FF); }
+inline bool IsStaticSky(constant GlobalData &gd) { return gd.frame.g_xFrame_StaticSkyGamma > 0.0f; }
 
 struct ComputeShaderInput
 {

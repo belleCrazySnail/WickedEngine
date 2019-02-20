@@ -1,6 +1,6 @@
 #include "objectHF.h"
 
-vertex PixelInputType_Simple objectVS_simple(Input_Object_POS_TEX input, constant GlobalCBuffer &cb, uint vid [[vertex_id]], uint iid [[instance_id]])
+vertex PixelInputType_Simple objectVS_simple(Input_Object_POS_TEX input, constant GlobalData &gd, uint vid [[vertex_id]], uint iid [[instance_id]])
 {
 	PixelInputType_Simple Out;
 
@@ -12,9 +12,9 @@ vertex PixelInputType_Simple objectVS_simple(Input_Object_POS_TEX input, constan
 
 	surface.position = surface.position * WORLD;
 
-	Out.clip = dot(surface.position, cb.api.g_xClipPlane);
+	Out.clip = dot(surface.position, gd.api.g_xClipPlane);
 
-	Out.pos = surface.position * cb.camera.g_xCamera_VP;
+	Out.pos = surface.position * gd.camera.g_xCamera_VP;
 	Out.tex = surface.uv;
 
 	return Out;

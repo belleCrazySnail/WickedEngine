@@ -262,11 +262,6 @@ CBUFFER(APICB, CBSLOT_API)
 
 struct GlobalCBuffer
 {
-    constant FrameCB &frame [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_FRAME)]];
-    constant CameraCB &camera [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_CAMERA)]];
-    constant MiscCB &misc [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_MISC)]];
-    constant APICB &api [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_API)]];
-    constant MaterialCB &material [[buffer(CBSLOT_RENDERER_MATERIAL)]];
 };
 
 #endif

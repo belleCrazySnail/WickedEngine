@@ -103,18 +103,18 @@ inline GBUFFEROutputType_Thin CreateGbuffer_Thin(float4 color, Surface surface, 
 // METHODS
 ////////////
 
-inline float getLinearDepth(float c, constant GlobalCBuffer &cb)
+inline float getLinearDepth(float c, constant GlobalData &gd)
 {
     float z_b = c;
     float z_n = 2.0 * z_b - 1.0;
     //float lin = 2.0 * g_xFrame_MainCamera_ZNearP * g_xFrame_MainCamera_ZFarP / (g_xFrame_MainCamera_ZFarP + g_xFrame_MainCamera_ZNearP - z_n * (g_xFrame_MainCamera_ZFarP - g_xFrame_MainCamera_ZNearP));
-    float lin = 2.0 * cb.frame.g_xFrame_MainCamera_ZFarP * cb.frame.g_xFrame_MainCamera_ZNearP / (cb.frame.g_xFrame_MainCamera_ZNearP + cb.frame.g_xFrame_MainCamera_ZFarP - z_n * (cb.frame.g_xFrame_MainCamera_ZNearP - cb.frame.g_xFrame_MainCamera_ZFarP));
+    float lin = 2.0 * gd.frame.g_xFrame_MainCamera_ZFarP * gd.frame.g_xFrame_MainCamera_ZNearP / (gd.frame.g_xFrame_MainCamera_ZNearP + gd.frame.g_xFrame_MainCamera_ZFarP - z_n * (gd.frame.g_xFrame_MainCamera_ZNearP - gd.frame.g_xFrame_MainCamera_ZFarP));
     return lin;
 }
 
-inline float GetFog(float dist, constant GlobalCBuffer &cb)
+inline float GetFog(float dist, constant GlobalData &gd)
 {
-    return saturate((dist - cb.frame.g_xFrame_Fog.x) / (cb.frame.g_xFrame_Fog.y - cb.frame.g_xFrame_Fog.x));
+    return saturate((dist - gd.frame.g_xFrame_Fog.x) / (gd.frame.g_xFrame_Fog.y - gd.frame.g_xFrame_Fog.x));
 }
 
 inline float3x3 compute_tangent_frame(float3 N, float3 P, float2 UV, thread float3 &T, thread float3 &B)
@@ -151,39 +151,39 @@ inline void LightMapping(float2 ATLAS, thread float3 &diffuse, thread float3 &sp
 	}
 }
 
-inline void NormalMapping(float2 UV, float3 V, thread float3 &N, float3x3 TBN, thread float3 &bumpColor, thread float &roughness, CB_GD)
+inline void NormalMapping(float2 UV, float3 V, thread float3 &N, float3x3 TBN, thread float3 &bumpColor, thread float &roughness, constant GlobalData &gd)
 {
 	float4 normal_roughness = xNormalMap.sample(gd.sampler_objectshader, UV);
 	bumpColor = 2.0f * normal_roughness.rgb - 1.0f;
-	N = normalize(mix(N, bumpColor * TBN, cb.material.g_xMat_normalMapStrength));
-	bumpColor *= cb.material.g_xMat_normalMapStrength;
+	N = normalize(mix(N, bumpColor * TBN, gd.material.g_xMat_normalMapStrength));
+	bumpColor *= gd.material.g_xMat_normalMapStrength;
 	roughness *= normal_roughness.a;
 }
 
-inline void SpecularAA(float3 N, thread float &roughness, constant GlobalCBuffer &cb)
+inline void SpecularAA(float3 N, thread float &roughness, constant GlobalData &gd)
 {
 //    [branch]
-	if (cb.frame.g_xFrame_SpecularAA > 0)
+	if (gd.frame.g_xFrame_SpecularAA > 0)
 	{
 		float3 ddxN = dfdx(N);
 		float3 ddyN = dfdy(N);
-		float curve = pow(max(dot(ddxN, ddxN), dot(ddyN, ddyN)), 1 - cb.frame.g_xFrame_SpecularAA);
+		float curve = pow(max(dot(ddxN, ddxN), dot(ddyN, ddyN)), 1 - gd.frame.g_xFrame_SpecularAA);
 		roughness = max(roughness, curve);
 	}
 }
 
-inline float3 PlanarReflection(float2 reflectionUV, Surface surface, CB_GD)
+inline float3 PlanarReflection(float2 reflectionUV, Surface surface, constant GlobalData &gd)
 {
-	return xReflection.SampleLevel(gd.sampler_linear_clamp, reflectionUV + surface.N.xz*cb.material.g_xMat_normalMapStrength, 0).rgb;
+	return xReflection.SampleLevel(gd.sampler_linear_clamp, reflectionUV + surface.N.xz*gd.material.g_xMat_normalMapStrength, 0).rgb;
 }
 
 #define NUM_PARALLAX_OCCLUSION_STEPS 32
-inline void ParallaxOcclusionMapping(thread float2 &UV, float3 V, float3x3 TBN, CB_GD)
+inline void ParallaxOcclusionMapping(thread float2 &UV, float3 V, float3x3 TBN, constant GlobalData &gd)
 {
 	V = TBN * V;
 	float layerHeight = 1.0 / NUM_PARALLAX_OCCLUSION_STEPS;
 	float curLayerHeight = 0;
-	float2 dtex = cb.material.g_xMat_parallaxOcclusionMapping * V.xy / NUM_PARALLAX_OCCLUSION_STEPS;
+	float2 dtex = gd.material.g_xMat_parallaxOcclusionMapping * V.xy / NUM_PARALLAX_OCCLUSION_STEPS;
 	float2 currentTextureCoords = UV;
 	float2 derivX = dfdx(UV);
 	float2 derivY = dfdy(UV);
@@ -205,30 +205,30 @@ inline void ParallaxOcclusionMapping(thread float2 &UV, float3 V, float3x3 TBN, 
 	UV = finalTexCoords;
 }
 
-inline void Refraction(float2 ScreenCoord, float2 normal2D, float3 bumpColor, thread Surface &surface, thread float4 &color, thread float3 &diffuse, CB_GD)
+inline void Refraction(float2 ScreenCoord, float2 normal2D, float3 bumpColor, thread Surface &surface, thread float4 &color, thread float3 &diffuse, constant GlobalData &gd)
 {
-	if (cb.material.g_xMat_refractionIndex > 0)
+	if (gd.material.g_xMat_refractionIndex > 0)
 	{
 		float mipLevels = xRefraction.get_num_mip_levels();
-		float2 perturbatedRefrTexCoords = ScreenCoord.xy + (normal2D + bumpColor.rg) * cb.material.g_xMat_refractionIndex;
-		float4 refractiveColor = xRefraction.SampleLevel(gd.sampler_linear_clamp, perturbatedRefrTexCoords, level((cb.frame.g_xFrame_AdvancedRefractions ? surface.roughness * mipLevels : 0)));
+		float2 perturbatedRefrTexCoords = ScreenCoord.xy + (normal2D + bumpColor.rg) * gd.material.g_xMat_refractionIndex;
+		float4 refractiveColor = xRefraction.SampleLevel(gd.sampler_linear_clamp, perturbatedRefrTexCoords, level((gd.frame.g_xFrame_AdvancedRefractions ? surface.roughness * mipLevels : 0)));
 		surface.albedo.rgb = mix(refractiveColor.rgb, surface.albedo.rgb, color.a);
 		diffuse = mix(1, diffuse, color.a);
 		color.a = 1;
 	}
 }
 
-inline void ForwardLighting(thread Surface &surface, thread float3 &diffuse, thread float3 &specular, thread float3 &reflection, CB_GD)
+inline void ForwardLighting(thread Surface &surface, thread float3 &diffuse, thread float3 &specular, thread float3 &reflection, constant GlobalData &gd)
 {
 #ifndef DISABLE_ENVMAPS
-	const float envMapMIP = surface.roughness * cb.frame.g_xFrame_EnvProbeMipCount;
-	reflection = max(float3(0.f), EnvironmentReflection_Global(surface, envMapMIP, cb, gd));
+	const float envMapMIP = surface.roughness * gd.frame.g_xFrame_EnvProbeMipCount;
+	reflection = max(float3(0.f), EnvironmentReflection_Global(surface, envMapMIP, gd));
 #endif // DISABLE_ENVMAPS
 
 //    [loop]
-	for (uint iterator = 0; iterator < cb.frame.g_xFrame_LightArrayCount; iterator++)
+	for (uint iterator = 0; iterator < gd.frame.g_xFrame_LightArrayCount; iterator++)
 	{
-		ShaderEntityType light = gd.EntityArray[cb.frame.g_xFrame_LightArrayOffset + iterator];
+		ShaderEntityType light = gd.EntityArray[gd.frame.g_xFrame_LightArrayOffset + iterator];
 
 		if (light.GetFlags() & ENTITY_FLAG_LIGHT_STATIC)
 		{
@@ -241,17 +241,17 @@ inline void ForwardLighting(thread Surface &surface, thread float3 &diffuse, thr
 		{
 		case ENTITY_TYPE_DIRECTIONALLIGHT:
 		{
-			result = DirectionalLight(light, surface, cb, gd);
+			result = DirectionalLight(light, surface, gd);
 		}
 		break;
 		case ENTITY_TYPE_POINTLIGHT:
 		{
-			result = PointLight(light, surface, cb, gd);
+			result = PointLight(light, surface, gd);
 		}
 		break;
 		case ENTITY_TYPE_SPOTLIGHT:
 		{
-			result = SpotLight(light, surface, cb, gd);
+			result = SpotLight(light, surface, gd);
 		}
 		break;
 		case ENTITY_TYPE_SPHERELIGHT:
@@ -281,10 +281,10 @@ inline void ForwardLighting(thread Surface &surface, thread float3 &diffuse, thr
 	}
 }
 
-inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &diffuse, thread float3 &specular, thread float3 &reflection, CB_GD)
+inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &diffuse, thread float3 &specular, thread float3 &reflection, constant GlobalData &gd)
 {
 	const uint2 tileIndex = uint2(floor(pixel / TILED_CULLING_BLOCKSIZE));
-	const uint flatTileIndex = flatten2D(tileIndex, cb.frame.g_xFrame_EntityCullingTileCount.xy) * SHADER_ENTITY_TILE_BUCKET_COUNT;
+	const uint flatTileIndex = flatten2D(tileIndex, gd.frame.g_xFrame_EntityCullingTileCount.xy) * SHADER_ENTITY_TILE_BUCKET_COUNT;
 
 #ifndef DISABLE_DECALS
 	// decals are enabled, loop through them first:
@@ -296,11 +296,11 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 #ifndef DISABLE_ENVMAPS
 	// Apply environment maps:
 	float4 envmapAccumulation = 0;
-	const float envMapMIP = surface.roughness * cb.frame.g_xFrame_EnvProbeMipCount;
+	const float envMapMIP = surface.roughness * gd.frame.g_xFrame_EnvProbeMipCount;
 #endif // DISABLE_ENVMAPS
 
 	// Loop through entity buckets in the tile (but only up to the last bucket that contains a light):
-	const uint last_bucket = min((cb.frame.g_xFrame_LightArrayOffset + cb.frame.g_xFrame_LightArrayCount) / 32, max(0u, SHADER_ENTITY_TILE_BUCKET_COUNT - 1));
+	const uint last_bucket = min((gd.frame.g_xFrame_LightArrayOffset + gd.frame.g_xFrame_LightArrayCount) / 32, max(0u, SHADER_ENTITY_TILE_BUCKET_COUNT - 1));
 	for (uint bucket = 0; bucket <= last_bucket; ++bucket)
 	{
 		uint bucket_bits = gd.EntityTiles[flatTileIndex + bucket];
@@ -318,8 +318,8 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 
 #ifndef DISABLE_DECALS
 			// Check if it is a decal, and process:
-			if (entity_index >= cb.frame.g_xFrame_DecalArrayOffset &&
-				entity_index < cb.frame.g_xFrame_DecalArrayOffset + cb.frame.g_xFrame_DecalArrayCount &&
+			if (entity_index >= gd.frame.g_xFrame_DecalArrayOffset &&
+				entity_index < gd.frame.g_xFrame_DecalArrayOffset + gd.frame.g_xFrame_DecalArrayCount &&
 				decalAccumulation.a < 1)
 			{
 				ShaderEntityType decal = gd.EntityArray[entity_index];
@@ -354,8 +354,8 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 #ifndef DISABLE_ENVMAPS
 #ifndef DISABLE_LOCALENVPMAPS
 			// Check if it is an envprobe and process:
-			if (entity_index >= cb.frame.g_xFrame_EnvProbeArrayOffset &&
-				entity_index < cb.frame.g_xFrame_EnvProbeArrayOffset + cb.frame.g_xFrame_EnvProbeArrayCount &&
+			if (entity_index >= gd.frame.g_xFrame_EnvProbeArrayOffset &&
+				entity_index < gd.frame.g_xFrame_EnvProbeArrayOffset + gd.frame.g_xFrame_EnvProbeArrayCount &&
 				envmapAccumulation.a < 1)
 			{
 				ShaderEntityType probe = gd.EntityArray[entity_index];
@@ -380,8 +380,8 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 			
 
 			// Check if it is a light and process:
-			if (entity_index >= cb.frame.g_xFrame_LightArrayOffset &&
-				entity_index < cb.frame.g_xFrame_LightArrayOffset + cb.frame.g_xFrame_LightArrayCount)
+			if (entity_index >= gd.frame.g_xFrame_LightArrayOffset &&
+				entity_index < gd.frame.g_xFrame_LightArrayOffset + gd.frame.g_xFrame_LightArrayCount)
 			{
 				ShaderEntityType light = gd.EntityArray[entity_index];
 
@@ -396,17 +396,17 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 				{
 				case ENTITY_TYPE_DIRECTIONALLIGHT:
 				{
-					result = DirectionalLight(light, surface, cb, gd);
+					result = DirectionalLight(light, surface, gd);
 				}
 				break;
 				case ENTITY_TYPE_POINTLIGHT:
 				{
-					result = PointLight(light, surface, cb, gd);
+					result = PointLight(light, surface, gd);
 				}
 				break;
 				case ENTITY_TYPE_SPOTLIGHT:
 				{
-					result = SpotLight(light, surface, cb, gd);
+					result = SpotLight(light, surface, gd);
 				}
 				break;
 				case ENTITY_TYPE_SPHERELIGHT:
@@ -448,21 +448,21 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 	// Apply global envmap where there is no local envmap information:
 	if (envmapAccumulation.a < 0.99f)
 	{
-		envmapAccumulation.rgb = mix(EnvironmentReflection_Global(surface, envMapMIP, cb, gd), envmapAccumulation.rgb, envmapAccumulation.a);
+		envmapAccumulation.rgb = mix(EnvironmentReflection_Global(surface, envMapMIP, gd), envmapAccumulation.rgb, envmapAccumulation.a);
 	}
 	reflection = max(0, envmapAccumulation.rgb);
 #endif // DISABLE_ENVMAPS
 
 }
 
-inline void ApplyLighting(Surface surface, float3 diffuse, float3 specular, float ao, thread float4 &color, constant GlobalCBuffer &cb)
+inline void ApplyLighting(Surface surface, float3 diffuse, float3 specular, float ao, thread float4 &color, constant GlobalData &gd)
 {
-	color.rgb = (GetAmbient(surface.N, cb) * ao + diffuse) * surface.albedo + specular;
+	color.rgb = (GetAmbient(surface.N, gd) * ao + diffuse) * surface.albedo + specular;
 }
 
-inline void ApplyFog(float dist, thread float4 &color, constant GlobalCBuffer &cb)
+inline void ApplyFog(float dist, thread float4 &color, constant GlobalData &gd)
 {
-	color.rgb = mix(color.rgb, GetHorizonColor(cb), GetFog(dist, cb));
+	color.rgb = mix(color.rgb, GetHorizonColor(gd), GetFog(dist, gd));
 }
 
 
@@ -513,7 +513,7 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 [[early_fragment_tests]]
 fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #endif // ALPHATESTONLY
-, CB_GD)
+, constant GlobalData &gd)
 
 
 // shader base:
@@ -522,19 +522,19 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 
 #if !(defined(TILEDFORWARD) && !defined(TRANSPARENT)) && !defined(ENVMAPRENDERING)
 	// apply dithering:
-	if (any(bool2(dither(pixel + GetTemporalAASampleRotation(cb)) - input.dither)))
+	if (any(bool2(dither(pixel + GetTemporalAASampleRotation(gd)) - input.dither)))
         discard_fragment();
 #endif
 
 
 
-	float2 UV = input.tex * cb.material.g_xMat_texMulAdd.xy + cb.material.g_xMat_texMulAdd.zw;
+	float2 UV = input.tex * gd.material.g_xMat_texMulAdd.xy + gd.material.g_xMat_texMulAdd.zw;
 
 	Surface surface;
 
 #ifndef SIMPLE_INPUT
 	surface.P = input.pos3D;
-	surface.V = cb.camera.g_xCamera_CamPos - surface.P;
+	surface.V = gd.camera.g_xCamera_CamPos - surface.P;
 	float dist = length(surface.V);
 	surface.V /= dist;
 	surface.N = normalize(input.nor);
@@ -544,10 +544,10 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #endif // SIMPLE_INPUT
 
 #ifdef POM
-	ParallaxOcclusionMapping(UV, surface.V, TBN, cb, gd);
+	ParallaxOcclusionMapping(UV, surface.V, TBN, gd);
 #endif // POM
 
-	float4 color = cb.material.g_xMat_baseColor * float4(input.instanceColor, 1) * xBaseColorMap.sample(gd.sampler_objectshader, UV);
+	float4 color = gd.material.g_xMat_baseColor * float4(input.instanceColor, 1) * xBaseColorMap.sample(gd.sampler_objectshader, UV);
 	color.rgb = DEGAMMA(color.rgb);
 	ALPHATEST(color.a);
 
@@ -568,25 +568,25 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 
 	float2 refUV = input.ReflectionMapSamplingPos.xy * float2(0.5f, -0.5f) + 0.5f;
 	float2 ScreenCoord = input.pos2D.xy * float2(0.5f, -0.5f) + 0.5f;
-	float2 velocity = ((input.pos2DPrev.xy - cb.frame.g_xFrame_TemporalAAJitterPrev) - (input.pos2D.xy - cb.frame.g_xFrame_TemporalAAJitter)) * float2(0.5f, -0.5f);
+	float2 velocity = ((input.pos2DPrev.xy - gd.frame.g_xFrame_TemporalAAJitterPrev) - (input.pos2D.xy - gd.frame.g_xFrame_TemporalAAJitter)) * float2(0.5f, -0.5f);
 	float2 ReprojectedScreenCoord = ScreenCoord + velocity;
 #endif // ENVMAPRENDERING
 #endif // SIMPLE_INPUT
 
-	float roughness = cb.material.g_xMat_roughness;
+	float roughness = gd.material.g_xMat_roughness;
 
 #ifdef NORMALMAP
-	NormalMapping(UV, surface.P, surface.N, TBN, bumpColor, roughness, cb, gd);
+	NormalMapping(UV, surface.P, surface.N, TBN, bumpColor, roughness, gd);
 #endif // NORMALMAP
 
 	float4 surface_ref_met_emi_sss = xSurfaceMap.sample(gd.sampler_objectshader, UV);
 
 	surface = CreateSurface(
 		surface.P, surface.N, surface.V, color, roughness,
-		cb.material.g_xMat_reflectance * surface_ref_met_emi_sss.r,
-		cb.material.g_xMat_metalness * surface_ref_met_emi_sss.g,
-		cb.material.g_xMat_emissive * surface_ref_met_emi_sss.b,
-		cb.material.g_xMat_subsurfaceScattering * surface_ref_met_emi_sss.a
+		gd.material.g_xMat_reflectance * surface_ref_met_emi_sss.r,
+		gd.material.g_xMat_metalness * surface_ref_met_emi_sss.g,
+		gd.material.g_xMat_emissive * surface_ref_met_emi_sss.b,
+		gd.material.g_xMat_subsurfaceScattering * surface_ref_met_emi_sss.a
 	);
 
 
@@ -600,12 +600,12 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 	float2 bumpColor0 = 0;
 	float2 bumpColor1 = 0;
 	float2 bumpColor2 = 0;
-	bumpColor0 = 2.0f * xNormalMap.sample(gd.sampler_objectshader, UV - cb.material.g_xMat_texMulAdd.ww).rg - 1.0f;
-	bumpColor1 = 2.0f * xNormalMap.sample(gd.sampler_objectshader, UV + cb.material.g_xMat_texMulAdd.zw).rg - 1.0f;
+	bumpColor0 = 2.0f * xNormalMap.sample(gd.sampler_objectshader, UV - gd.material.g_xMat_texMulAdd.ww).rg - 1.0f;
+	bumpColor1 = 2.0f * xNormalMap.sample(gd.sampler_objectshader, UV + gd.material.g_xMat_texMulAdd.zw).rg - 1.0f;
 	bumpColor2 = xWaterRipples.sample(gd.sampler_objectshader, ScreenCoord).rg;
-	bumpColor = float3(bumpColor0 + bumpColor1 + bumpColor2, 1)  * cb.material.g_xMat_refractionIndex;
-	surface.N = normalize(mix(surface.N, normalize(bumpColor) * TBN, cb.material.g_xMat_normalMapStrength));
-	bumpColor *= cb.material.g_xMat_normalMapStrength;
+	bumpColor = float3(bumpColor0 + bumpColor1 + bumpColor2, 1)  * gd.material.g_xMat_refractionIndex;
+	surface.N = normalize(mix(surface.N, normalize(bumpColor) * TBN, gd.material.g_xMat_normalMapStrength));
+	bumpColor *= gd.material.g_xMat_normalMapStrength;
 
 	//REFLECTION
 	float4 reflectiveColor = xReflection.SampleLevel(gd.sampler_linear_mirror, refUV + bumpColor.rg, 0);
@@ -613,7 +613,7 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 
 	//REFRACTION 
 	float2 perturbatedRefrTexCoords = ScreenCoord.xy + bumpColor.rg;
-	float refDepth = gd.texture_lineardepth.sample(gd.sampler_linear_mirror, ScreenCoord) * cb.frame.g_xFrame_MainCamera_ZFarP;
+	float refDepth = gd.texture_lineardepth.sample(gd.sampler_linear_mirror, ScreenCoord) * gd.frame.g_xFrame_MainCamera_ZFarP;
 	float3 refractiveColor = xRefraction.SampleLevel(gd.sampler_linear_mirror, perturbatedRefrTexCoords, 0).rgb;
 	float mod = saturate(0.05*(refDepth - lineardepth));
 	refractiveColor = mix(refractiveColor, surface.baseColor.rgb, mod).rgb;
@@ -633,7 +633,7 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 
 
 
-	SpecularAA(surface.N, surface.roughness, cb);
+	SpecularAA(surface.N, surface.roughness, gd);
 
 	ApplyEmissive(surface, specular);
 
@@ -645,7 +645,7 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 
 
 #ifdef PLANARREFLECTION
-	specular += PlanarReflection(refUV, surface, cb, gd) * surface.F;
+	specular += PlanarReflection(refUV, surface, gd) * surface.F;
 #endif
 
 
@@ -653,26 +653,26 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 #else // not DEFERRED
 
 #ifdef FORWARD
-	ForwardLighting(surface, diffuse, specular, reflection, cb, gd);
+	ForwardLighting(surface, diffuse, specular, reflection, gd);
 #endif // FORWARD
 
 #ifdef TILEDFORWARD
-	TiledLighting(pixel, surface, diffuse, specular, reflection, cb, gd);
+	TiledLighting(pixel, surface, diffuse, specular, reflection, gd);
 #endif // TILEDFORWARD
 
 
 #ifndef WATER
 #ifndef ENVMAPRENDERING
 
-	VoxelGI(surface, diffuse, reflection, ao, cb, gd);
+	VoxelGI(surface, diffuse, reflection, ao, gd);
 
 #ifdef PLANARREFLECTION
-	reflection = PlanarReflection(refUV, surface, cb, gd);
+	reflection = PlanarReflection(refUV, surface, gd);
 #endif
 
 
 #ifdef TRANSPARENT
-	Refraction(ScreenCoord, input.nor2D, bumpColor, surface, color, diffuse, cb, gd);
+	Refraction(ScreenCoord, input.nor2D, bumpColor, surface, color, diffuse, gd);
 #else
 	float4 ssr = xSSR.SampleLevel(gd.sampler_linear_clamp, ReprojectedScreenCoord, 0);
 	reflection = mix(reflection, ssr.rgb, ssr.a);
@@ -684,7 +684,7 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 
 	specular += reflection * surface.F;
 
-	ApplyLighting(surface, diffuse, specular, ao, color, cb);
+	ApplyLighting(surface, diffuse, specular, ao, color, gd);
 
 #ifdef WATER
 	// SOFT EDGE
@@ -692,7 +692,7 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 	color.a *= fade;
 #endif // WATER
 
-	ApplyFog(dist, color, cb);
+	ApplyFog(dist, color, gd);
 
 
 #endif // DEFERRED

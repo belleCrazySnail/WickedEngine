@@ -10,7 +10,7 @@ struct LightingResult
 	float3 specular;
 };
 
-inline float3 shadowCascade(float4 shadowPos, float2 ShTex, float shadowKernel, float bias, float slice, CB_GD)
+inline float3 shadowCascade(float4 shadowPos, float2 ShTex, float shadowKernel, float bias, float slice, constant GlobalData &gd)
 {
 	float realDistance = shadowPos.z + bias;
 	float sum = 0;
@@ -33,7 +33,7 @@ inline float3 shadowCascade(float4 shadowPos, float2 ShTex, float shadowKernel, 
 #endif
 
 #ifndef DISABLE_TRANSPARENT_SHADOWMAP
-	if (cb.frame.g_xFrame_TransparentShadowsEnabled)
+	if (gd.frame.g_xFrame_TransparentShadowsEnabled)
 	{
 		// unfortunately transparents will not receive transparent shadow map
 		// because we cannot distinguish without using secondary depth buffer for transparents
@@ -53,7 +53,7 @@ inline float3 shadowCascade(float4 shadowPos, float2 ShTex, float shadowKernel, 
 }
 
 
-inline LightingResult DirectionalLight(ShaderEntityType light, Surface surface, CB_GD)
+inline LightingResult DirectionalLight(ShaderEntityType light, Surface surface, constant GlobalData &gd)
 {
 	LightingResult result;
 	const float3 lightColor = light.GetColor().rgb*light.energy;
@@ -96,13 +96,13 @@ inline LightingResult DirectionalLight(ShaderEntityType light, Surface surface, 
 			float3 shadows[2] = { float3(1,1,1), float3(1,1,1) };
 
 			// main shadow cascade sampling:
-			shadows[0] = shadowCascade(ShPos[cascades[0]], ShTex[cascades[0]].xy, light.shadowKernel, light.shadowBias, light.GetShadowMapIndex() + cascades[0], cb, gd);
+			shadows[0] = shadowCascade(ShPos[cascades[0]], ShTex[cascades[0]].xy, light.shadowKernel, light.shadowBias, light.GetShadowMapIndex() + cascades[0], gd);
 
 			// fallback shadow cascade sampling (far cascade has no fallback, so avoid sampling):
 //            [branch]
 			if (cascades[1] >= 0)
 			{
-				shadows[1] = shadowCascade(ShPos[cascades[1]], ShTex[cascades[1]].xy, light.shadowKernel, light.shadowBias, light.GetShadowMapIndex() + cascades[1], cb, gd);
+				shadows[1] = shadowCascade(ShPos[cascades[1]], ShTex[cascades[1]].xy, light.shadowKernel, light.shadowBias, light.GetShadowMapIndex() + cascades[1], gd);
 			}
 
 			// blend the cascades:
@@ -118,7 +118,7 @@ inline LightingResult DirectionalLight(ShaderEntityType light, Surface surface, 
 	result.specular = max(0.0f, result.specular);
 	return result;
 }
-inline LightingResult PointLight(ShaderEntityType light, Surface surface, CB_GD)
+inline LightingResult PointLight(ShaderEntityType light, Surface surface, constant GlobalData &gd)
 {
     LightingResult result = {};
 
@@ -161,7 +161,7 @@ inline LightingResult PointLight(ShaderEntityType light, Surface surface, CB_GD)
 
 	return result;
 }
-inline LightingResult SpotLight(ShaderEntityType light, Surface surface, CB_GD)
+inline LightingResult SpotLight(ShaderEntityType light, Surface surface, constant GlobalData &gd)
 {
     LightingResult result = {};
 
@@ -205,7 +205,7 @@ inline LightingResult SpotLight(ShaderEntityType light, Surface surface, CB_GD)
 //                [branch]
 				if (!any(bool2(ShTex - saturate(ShTex))))
 				{
-					sh *= shadowCascade(ShPos, ShTex.xy, light.shadowKernel, light.shadowBias, light.GetShadowMapIndex(), cb, gd);
+					sh *= shadowCascade(ShPos, ShTex.xy, light.shadowKernel, light.shadowBias, light.GetShadowMapIndex(), gd);
 				}
 			}
 			result.diffuse *= sh;
@@ -693,26 +693,26 @@ inline LightingResult TubeLight(ShaderEntityType light, Surface surface, constan
 
 // VOXEL RADIANCE
 
-inline void VoxelGI(Surface surface, thread float3 &diffuse, thread float3 &specular, thread float &ao, CB_GD)
+inline void VoxelGI(Surface surface, thread float3 &diffuse, thread float3 &specular, thread float &ao, constant GlobalData &gd)
 {
 //    [branch]
-    if (cb.frame.g_xFrame_VoxelRadianceDataRes != 0)
+    if (gd.frame.g_xFrame_VoxelRadianceDataRes != 0)
 	{
 		// determine blending factor (we will blend out voxel GI on grid edges):
-		float3 voxelSpacePos = surface.P - cb.frame.g_xFrame_VoxelRadianceDataCenter;
-		voxelSpacePos *= cb.frame.g_xFrame_VoxelRadianceDataSize_Inverse;
-		voxelSpacePos *= cb.frame.g_xFrame_VoxelRadianceDataRes_Inverse;
+		float3 voxelSpacePos = surface.P - gd.frame.g_xFrame_VoxelRadianceDataCenter;
+		voxelSpacePos *= gd.frame.g_xFrame_VoxelRadianceDataSize_Inverse;
+		voxelSpacePos *= gd.frame.g_xFrame_VoxelRadianceDataRes_Inverse;
 		voxelSpacePos = saturate(abs(voxelSpacePos));
 		float blend = 1 - pow(max(voxelSpacePos.x, max(voxelSpacePos.y, voxelSpacePos.z)), 4);
 
-		float4 radiance = ConeTraceRadiance(gd.texture_voxelradiance, surface.P, surface.N, cb, gd);
+		float4 radiance = ConeTraceRadiance(gd.texture_voxelradiance, surface.P, surface.N, gd);
 		diffuse += mix(0, radiance.rgb, blend);
 		ao *= 1 - mix(0, radiance.a, blend);
 
 //        [branch]
-		if (cb.frame.g_xFrame_VoxelRadianceReflectionsEnabled)
+		if (gd.frame.g_xFrame_VoxelRadianceReflectionsEnabled)
 		{
-			float4 reflection = ConeTraceReflection(gd.texture_voxelradiance, surface.P, surface.N, surface.V, surface.roughness, cb, gd);
+			float4 reflection = ConeTraceReflection(gd.texture_voxelradiance, surface.P, surface.N, surface.V, surface.roughness, gd);
 			specular = mix(specular, reflection.rgb, reflection.a * blend);
 		}
 	}
@@ -725,24 +725,24 @@ inline void VoxelGI(Surface surface, thread float3 &diffuse, thread float3 &spec
 // surface:				surface descriptor
 // MIP:					mip level to sample
 // return:				color of the environment color (rgb)
-inline float3 EnvironmentReflection_Global(Surface surface, float MIP, CB_GD)
+inline float3 EnvironmentReflection_Global(Surface surface, float MIP, constant GlobalData &gd)
 {
 	float3 envColor;
 
 #ifndef ENVMAPRENDERING
 //    [branch]
-	if (cb.frame.g_xFrame_GlobalEnvProbeIndex >= 0)
+	if (gd.frame.g_xFrame_GlobalEnvProbeIndex >= 0)
 	{
 		// We have envmap information in a texture:
-		envColor = gd.texture_envmaparray.SampleLevel(gd.sampler_linear_clamp, surface.R, cb.frame.g_xFrame_GlobalEnvProbeIndex, level(MIP)).rgb;
+		envColor = gd.texture_envmaparray.SampleLevel(gd.sampler_linear_clamp, surface.R, gd.frame.g_xFrame_GlobalEnvProbeIndex, level(MIP)).rgb;
 	}
 	else
 #endif // ENVMAPRENDERING
 	{
 		// There are no envmaps, approximate sky color:
-		float3 realSkyColor = mix(GetHorizonColor(cb), GetZenithColor(cb), pow(saturate(surface.R.y), 0.25f));
-		float3 roughSkyColor = (GetHorizonColor(cb) + GetZenithColor(cb)) * 0.5f;
-		float blendSkyByRoughness = saturate(MIP * cb.frame.g_xFrame_EnvProbeMipCount_Inverse);
+		float3 realSkyColor = mix(GetHorizonColor(gd), GetZenithColor(gd), pow(saturate(surface.R.y), 0.25f));
+		float3 roughSkyColor = (GetHorizonColor(gd) + GetZenithColor(gd)) * 0.5f;
+		float blendSkyByRoughness = saturate(MIP * gd.frame.g_xFrame_EnvProbeMipCount_Inverse);
 		envColor = mix(realSkyColor, roughSkyColor, blendSkyByRoughness);
 	}
 
