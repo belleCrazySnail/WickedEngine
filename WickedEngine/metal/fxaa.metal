@@ -1,23 +1,24 @@
-#include "imageHF.hlsli"
+#include "imageHF.h"
 
 #define FXAA_PC 1
-#define FXAA_HLSL_4 1
+#define FXAA_METAL 1
 #define FXAA_GREEN_AS_LUMA 1
 //#define FXAA_QUALITY__PRESET 12
-//#define FXAA_QUALITY__PRESET 25
-#define FXAA_QUALITY__PRESET 39
-#include "fxaa.hlsli"
+#define FXAA_QUALITY__PRESET 25
+//#define FXAA_QUALITY__PRESET 39
+#include "fxaa.h"
 
-static const float fxaaSubpix = 0.75;
-static const float fxaaEdgeThreshold = 0.166;
-static const float fxaaEdgeThresholdMin = 0.0833;
+static constant float fxaaSubpix = 0.75;
+static constant float fxaaEdgeThreshold = 0.166;
+static constant float fxaaEdgeThresholdMin = 0.0833;
 
-float4 main(VertexToPixelPostProcess PSIn): SV_Target
+fragment float4 fxaa(VertexToPixelPostProcess PSIn [[stage_in]], constant GlobalData &gd)
 {
     float2 fxaaFrame;
-    xTexture.GetDimensions(fxaaFrame.x, fxaaFrame.y);
+    fxaaFrame.x = xTexture.get_width();
+    fxaaFrame.y = xTexture.get_height();
 
-    FxaaTex tex = { Sampler, xTexture };
+    FxaaTex tex = { gd.customsampler0, xTexture };
 
     return FxaaPixelShader(PSIn.tex, 0, tex, tex, tex, 1 / fxaaFrame, 0, 0, 0, fxaaSubpix, fxaaEdgeThreshold, fxaaEdgeThresholdMin, 0, 0, 0, 0);
 }

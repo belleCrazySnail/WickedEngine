@@ -231,6 +231,10 @@ A. Or use FXAA_GREEN_AS_LUMA.
 #ifndef FXAA_HLSL_5
     #define FXAA_HLSL_5 0
 #endif
+/*--------------------------------------------------------------------------*/
+#ifndef FXAA_METAL
+    #define FXAA_METAL 0
+#endif
 /*==========================================================================*/
 #ifndef FXAA_GREEN_AS_LUMA
     //
@@ -306,6 +310,9 @@ A. Or use FXAA_GREEN_AS_LUMA.
     // 1 = API supports gather4 on alpha channel.
     // 0 = API does not support gather4 on alpha channel.
     //
+    #if (FXAA_METAL == 1)
+        #define FXAA_GATHER4_ALPHA 1
+    #endif
     #if (FXAA_HLSL_5 == 1)
         #define FXAA_GATHER4_ALPHA 1
     #endif
@@ -696,6 +703,17 @@ NOTE the other tuning knobs are now in the shader function inputs!
     #define FxaaTexOffAlpha4(t, p, o) t.tex.GatherAlpha(t.smpl, p, o)
     #define FxaaTexGreen4(t, p) t.tex.GatherGreen(t.smpl, p)
     #define FxaaTexOffGreen4(t, p, o) t.tex.GatherGreen(t.smpl, p, o)
+#endif
+/*--------------------------------------------------------------------------*/
+#if (FXAA_METAL == 1)
+#define FxaaInt2 int2
+struct FxaaTex { sampler smpl; texture2d<float> tex; };
+#define FxaaTexTop(t, p) t.tex.sample(t.smpl, p)
+#define FxaaTexOff(t, p, o, r) t.tex.sample(t.smpl, p, level(0), o)
+#define FxaaTexAlpha4(t, p) t.tex.gather(t.smpl, p, int2(0), component::w)
+#define FxaaTexOffAlpha4(t, p, o) t.tex.gather(t.smpl, p, o, component::w)
+#define FxaaTexGreen4(t, p) t.tex.gather(t.smpl, p, int2(0), component::y)
+#define FxaaTexOffGreen4(t, p, o) t.tex.gather(t.smpl, p, o, component::y)
 #endif
 
 

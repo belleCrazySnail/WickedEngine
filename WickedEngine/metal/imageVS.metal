@@ -1,7 +1,7 @@
 #include "globals.h"
 #include "imageHF.h"
 
-VertextoPixel imageVS(uint vI [[vertex_id]], constant GlobalData &gd)
+vertex VertextoPixel imageVS(uint vI [[vertex_id]], constant GlobalData &gd)
 {
 	VertextoPixel Out;
 

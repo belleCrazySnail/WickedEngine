@@ -218,6 +218,8 @@
 		688D3A19221C689A0005B1F9 /* imageVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A16221C689A0005B1F9 /* imageVS.metal */; };
 		688D3A1A221C689A0005B1F9 /* screenVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A17221C689A0005B1F9 /* screenVS.metal */; };
 		688D3A1B221C689A0005B1F9 /* screenVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A17221C689A0005B1F9 /* screenVS.metal */; };
+		688D3A20221D73F80005B1F9 /* fxaa.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A1F221D73F80005B1F9 /* fxaa.metal */; };
+		688D3A21221D73F80005B1F9 /* fxaa.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A1F221D73F80005B1F9 /* fxaa.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -437,6 +439,8 @@
 		688D3A17221C689A0005B1F9 /* screenVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = screenVS.metal; path = WickedEngine/metal/screenVS.metal; sourceTree = "<group>"; };
 		688D3A1C221C68DB0005B1F9 /* imageHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imageHF.h; path = WickedEngine/metal/imageHF.h; sourceTree = "<group>"; };
 		688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fullScreenTriangleHF.h; path = WickedEngine/metal/fullScreenTriangleHF.h; sourceTree = "<group>"; };
+		688D3A1E221D73F80005B1F9 /* fxaa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fxaa.h; path = WickedEngine/metal/fxaa.h; sourceTree = "<group>"; };
+		688D3A1F221D73F80005B1F9 /* fxaa.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = fxaa.metal; path = WickedEngine/metal/fxaa.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -483,6 +487,8 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				688D3A1E221D73F80005B1F9 /* fxaa.h */,
+				688D3A1F221D73F80005B1F9 /* fxaa.metal */,
 				688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */,
 				688D3A1C221C68DB0005B1F9 /* imageHF.h */,
 				688D3A16221C689A0005B1F9 /* imageVS.metal */,
@@ -982,6 +988,7 @@
 				6853C2B9221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				688D39F8221BDFD00005B1F9 /* wiInitializer.cpp in Sources */,
 				685F8BED2209C30800A516B4 /* Shaders.metal in Sources */,
+				688D3A20221D73F80005B1F9 /* fxaa.metal in Sources */,
 				688D39F2221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28622153EA2000F7B58 /* wiRenderer.cpp in Sources */,
@@ -1088,6 +1095,7 @@
 				6853C2BA221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				688D39F9221BDFD00005B1F9 /* wiInitializer.cpp in Sources */,
 				685F8C592209F50A00A516B4 /* wiGraphicsResource.cpp in Sources */,
+				688D3A21221D73F80005B1F9 /* fxaa.metal in Sources */,
 				688D39F3221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28722153EA2000F7B58 /* wiRenderer.cpp in Sources */,
