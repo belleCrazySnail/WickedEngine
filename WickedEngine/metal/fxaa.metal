@@ -15,8 +15,7 @@ static constant float fxaaEdgeThresholdMin = 0.0833;
 fragment float4 fxaa(VertexToPixelPostProcess PSIn [[stage_in]], constant GlobalData &gd)
 {
     float2 fxaaFrame;
-    fxaaFrame.x = xTexture.get_width();
-    fxaaFrame.y = xTexture.get_height();
+    GETDIMENSION(xTexture, fxaaFrame);
 
     FxaaTex tex = { gd.customsampler0, xTexture };
 

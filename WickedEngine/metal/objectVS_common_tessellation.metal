@@ -22,9 +22,9 @@ vertex HullInputType objectVS_common_tessellation(Input_Object_ALL input, consta
 	VertexSurface surface = MakeVertexSurfaceFromInput(input, vid, iid);
 		
 
-	surface.position = surface.position * WORLD;
-	surface.prevPos = surface.prevPos * WORLDPREV;
-	surface.normal = normalize(surface.normal * getUpper3x3(WORLD));
+	surface.position = mul(surface.position, WORLD);
+	surface.prevPos = mul(surface.prevPos, WORLDPREV);
+	surface.normal = normalize(mul(surface.normal, getUpper3x3(WORLD)));
 
 
 	Out.pos = surface.position;

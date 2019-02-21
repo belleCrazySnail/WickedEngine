@@ -63,10 +63,10 @@ fragment float4 ssao(VertexToPixelPostProcess input [[stage_in]], constant Globa
 	{
 		float2 hamm = hammersley2d(i, sampleCount);
 		float3 hemisphere = hemisphereSample_uniform(hamm.x, hamm.y);
-		float3 cone = hemisphere * tangentSpace;
+		float3 cone = mul(hemisphere, tangentSpace);
 		float3 sam = P + cone * range;
 
-		float4 vProjectedCoord = float4(sam, 1.0f) * gd.camera.g_xCamera_VP;
+		float4 vProjectedCoord = mul(float4(sam, 1.0f), gd.camera.g_xCamera_VP);
 		vProjectedCoord.xy /= vProjectedCoord.w;
 		vProjectedCoord.xy = vProjectedCoord.xy * float2(0.5f, -0.5f) + float2(0.5f, 0.5f);
 

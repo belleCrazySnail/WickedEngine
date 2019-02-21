@@ -12,7 +12,7 @@ fragment FragRet reprojectDepthBufferPS(VertexToPixelPostProcess PSIn [[stage_in
 
 	float3 P = getPositionEx(PSIn.tex, prevDepth, gd.frame.g_xFrame_MainCamera_PrevInvVP);
 
-	float4 reprojectedP = float4(P,1) * gd.camera.g_xCamera_VP;
+	float4 reprojectedP = mul(float4(P,1), gd.camera.g_xCamera_VP);
 
 	ret.dep = reprojectedP.z / reprojectedP.w;
     return ret;

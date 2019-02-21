@@ -246,8 +246,7 @@ inline float3 decodeNormal (float2 enc)
 inline float4 SampleTextureCatmullRom(texture2d<float> tex, float2 uv, float mipLevel, constant GlobalData &gd)
 {
 	float2 texSize;
-    texSize.x = tex.get_width();
-    texSize.y = tex.get_height();
+    GETDIMENSION(tex, texSize);
 
 	// We're going to sample a a 4x4 grid of texels surrounding the target UV coordinate. We'll do this by rounding
 	// down the sample location to get the exact center of our "starting" texel. The starting texel will be at

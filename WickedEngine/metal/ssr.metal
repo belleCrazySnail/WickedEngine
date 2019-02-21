@@ -26,7 +26,7 @@ float4 SSRBinarySearch(float3 vDir, thread float3 &vHitCoord, constant GlobalDat
 
 	for (int i = 0; i < g_iNumBinarySearchSteps; i++)
 	{
-		float4 vProjectedCoord = float4(vHitCoord, 1.0f) * gd.camera.g_xCamera_Proj;
+		float4 vProjectedCoord = mul(float4(vHitCoord, 1.0f), gd.camera.g_xCamera_Proj);
 		vProjectedCoord.xy /= vProjectedCoord.w;
 		vProjectedCoord.xy = vProjectedCoord.xy * float2(0.5f, -0.5f) + float2(0.5f, 0.5f);
 
@@ -40,7 +40,7 @@ float4 SSRBinarySearch(float3 vDir, thread float3 &vHitCoord, constant GlobalDat
 		vHitCoord -= vDir;
 	}
 
-	float4 vProjectedCoord = float4(vHitCoord, 1.0f) * gd.camera.g_xCamera_Proj;
+	float4 vProjectedCoord = mul(float4(vHitCoord, 1.0f), gd.camera.g_xCamera_Proj);
 	vProjectedCoord.xy /= vProjectedCoord.w;
 	vProjectedCoord.xy = vProjectedCoord.xy * float2(0.5f, -0.5f) + float2(0.5f, 0.5f);
 
@@ -58,7 +58,7 @@ float4 SSRRayMarch(float3 vDir, thread float3 &vHitCoord, constant GlobalData &g
 	{
 		vHitCoord += vDir;
 
-		float4 vProjectedCoord = float4(vHitCoord, 1.0f) * gd.camera.g_xCamera_Proj;
+		float4 vProjectedCoord = mul(float4(vHitCoord, 1.0f), gd.camera.g_xCamera_Proj);
 		vProjectedCoord.xy /= vProjectedCoord.w;
 		vProjectedCoord.xy = vProjectedCoord.xy * float2(0.5f, -0.5f) + float2(0.5f, 0.5f);
 
@@ -84,8 +84,8 @@ fragment float4 ssr(VertexToPixelPostProcess input [[stage_in]], constant Global
 
 
 	//Reflection vector
-	float3 vViewPos = (float4(P.xyz, 1) * gd.camera.g_xCamera_View).xyz;
-	float3 vViewNor = (float4(N, 0) * gd.camera.g_xCamera_View).xyz;
+	float3 vViewPos = mul(float4(P.xyz, 1), gd.camera.g_xCamera_View).xyz;
+	float3 vViewNor = mul(float4(N, 0), gd.camera.g_xCamera_View).xyz;
 	float3 vReflectDir = normalize(reflect(vViewPos.xyz, vViewNor.xyz));
 
 

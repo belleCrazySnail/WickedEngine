@@ -71,9 +71,9 @@ inline LightingResult DirectionalLight(ShaderEntityType light, Surface surface, 
 	{
 		// calculate shadow map texcoords:
 		float4 ShPos[3];
-		ShPos[0] = float4(surface.P, 1) * gd.MatrixArray[light.GetShadowMatrixIndex() + 0];
-		ShPos[1] = float4(surface.P, 1) * gd.MatrixArray[light.GetShadowMatrixIndex() + 1];
-		ShPos[2] = float4(surface.P, 1) * gd.MatrixArray[light.GetShadowMatrixIndex() + 2];
+		ShPos[0] = mul(float4(surface.P, 1), gd.MatrixArray[light.GetShadowMatrixIndex() + 0]);
+		ShPos[1] = mul(float4(surface.P, 1), gd.MatrixArray[light.GetShadowMatrixIndex() + 1]);
+		ShPos[2] = mul(float4(surface.P, 1), gd.MatrixArray[light.GetShadowMatrixIndex() + 2]);
 		float3 ShTex[3];
 		ShTex[0] = ShPos[0].xyz * float3(0.5f, -0.5f, 0.5f) + 0.5f;
 		ShTex[1] = ShPos[1].xyz * float3(0.5f, -0.5f, 0.5f) + 0.5f;
@@ -84,7 +84,7 @@ inline LightingResult DirectionalLight(ShaderEntityType light, Surface surface, 
 //        [unroll]
 		for (uint i = 0; i < 3; ++i)
 		{
-			cascade = any(bool3(ShTex[i] - saturate(ShTex[i]))) ? cascade : i;
+			cascade = is_saturated(ShTex[i]) ? cascade : i;
 		}
 
 		// if we are within any cascade, sample shadow maps:
@@ -199,11 +199,11 @@ inline LightingResult SpotLight(ShaderEntityType light, Surface surface, constan
 //            [branch]
 			if (light.IsCastingShadow())
 			{
-				float4 ShPos = float4(surface.P, 1) * gd.MatrixArray[light.GetShadowMatrixIndex() + 0];
+				float4 ShPos = mul(float4(surface.P, 1), gd.MatrixArray[light.GetShadowMatrixIndex() + 0]);
 				ShPos.xyz /= ShPos.w;
 				float2 ShTex = ShPos.xy * float2(0.5f, -0.5f) + float2(0.5f, 0.5f);
 //                [branch]
-				if (!any(bool2(ShTex - saturate(ShTex))))
+				if (!is_saturated(ShTex))
 				{
 					sh *= shadowCascade(ShPos, ShTex.xy, light.shadowKernel, light.shadowBias, light.GetShadowMapIndex(), gd);
 				}
@@ -758,7 +758,7 @@ inline float3 EnvironmentReflection_Global(Surface surface, float MIP, constant 
 inline float4 EnvironmentReflection_Local(Surface surface, ShaderEntityType probe, float4x4 probeProjection, float3 clipSpacePos, float MIP, constant GlobalData &gd)
 {
 	// Perform parallax correction of reflection ray (R) into OBB:
-	float3 RayLS = surface.R * getUpper3x3(probeProjection);
+	float3 RayLS = mul(surface.R, getUpper3x3(probeProjection));
 	float3 FirstPlaneIntersect = (float3(1, 1, 1) - clipSpacePos) / RayLS;
 	float3 SecondPlaneIntersect = (-float3(1, 1, 1) - clipSpacePos) / RayLS;
 	float3 FurthestPlane = max(FirstPlaneIntersect, SecondPlaneIntersect);

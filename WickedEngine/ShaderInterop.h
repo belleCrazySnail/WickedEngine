@@ -15,6 +15,7 @@
 using namespace metal;
 
 #define getUpper3x3(m) (simd::float3x3((m)[0].xyz, (m)[1].xyz, (m)[2].xyz))
+#define mul(a, b) ((b) * (a))
 
 #define CBUFFER(name, slot) struct name
 
@@ -58,6 +59,8 @@ using namespace metal;
 #define SampleLevel sample
 #define SampleCmpLevelZero sample_compare
 #define SampleGrad sample
+
+#define GETDIMENSION(t, d) (d).x = (t).get_width(); (d).y = (t).get_height()
 
 #elif __cplusplus // not invoking shader compiler, but included in engine source
 

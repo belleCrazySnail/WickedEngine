@@ -5,7 +5,7 @@ vertex float4 objectVS_positionstream(Input_Object_POS input, constant GlobalDat
 	float4x4 WORLD = MakeWorldMatrixFromInstance(input.instance[iid]);
 	VertexSurface surface = MakeVertexSurfaceFromInput(input, vid);
 
-	surface.position = surface.position * WORLD;
+	surface.position = mul(surface.position, WORLD);
 
-	return surface.position * gd.camera.g_xCamera_VP;
+	return mul(surface.position, gd.camera.g_xCamera_VP);
 }

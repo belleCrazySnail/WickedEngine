@@ -55,7 +55,7 @@ inline float4 ConeTrace(texture3d<float> voxels, float3 P, float3 N, float3 cone
 		tc = tc * float3(0.5f, -0.5f, 0.5f) + 0.5f;
 
 		// break if the ray exits the voxel grid, or we sample from the last mip:
-		if (any(bool3(tc - saturate(tc))) || mip >= (float)gd.frame.g_xFrame_VoxelRadianceDataMIPs)
+		if (is_saturated(tc) || mip >= (float)gd.frame.g_xFrame_VoxelRadianceDataMIPs)
 			break;
 
 		float4 sam = voxels.SampleLevel(gd.sampler_linear_clamp, tc, mip);

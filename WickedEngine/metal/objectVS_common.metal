@@ -12,21 +12,21 @@ vertex PixelInputType objectVS_common(Input_Object_ALL input, constant GlobalDat
 	Out.instanceColor = input.data[iid].instance.color_dither.rgb;
 	Out.dither = input.data[iid].instance.color_dither.a;
 
-	surface.position = surface.position * WORLD;
-	surface.prevPos = surface.prevPos * WORLDPREV;
-	surface.normal = normalize(surface.normal * getUpper3x3(WORLD));
+	surface.position = mul(surface.position, WORLD);
+	surface.prevPos = mul(surface.prevPos, WORLDPREV);
+	surface.normal = normalize(mul(surface.normal, getUpper3x3(WORLD)));
 
 	Out.clip = dot(surface.position, gd.api.g_xClipPlane);
 
-	Out.pos = Out.pos2D = surface.position * gd.camera.g_xCamera_VP;
-	Out.pos2DPrev = surface.prevPos * gd.frame.g_xFrame_MainCamera_PrevVP;
+	Out.pos = Out.pos2D = mul(surface.position, gd.camera.g_xCamera_VP);
+	Out.pos2DPrev = mul(surface.prevPos, gd.frame.g_xFrame_MainCamera_PrevVP);
 	Out.pos3D = surface.position.xyz;
 	Out.tex = surface.uv;
 	Out.nor = surface.normal;
-	Out.nor2D = (Out.nor.xyz * getUpper3x3(gd.camera.g_xCamera_View)).xy;
+	Out.nor2D = (mul(Out.nor.xyz, getUpper3x3(gd.camera.g_xCamera_View))).xy;
 	Out.atl = surface.atlas;
 
-	Out.ReflectionMapSamplingPos = surface.position * gd.frame.g_xFrame_MainCamera_ReflVP;
+	Out.ReflectionMapSamplingPos = mul(surface.position, gd.frame.g_xFrame_MainCamera_ReflVP);
 
 	return Out;
 }

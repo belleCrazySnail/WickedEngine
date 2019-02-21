@@ -10,11 +10,11 @@ vertex PixelInputType_Simple objectVS_simple(Input_Object_POS_TEX input, constan
 	Out.instanceColor = input.instance[iid].color_dither.rgb;
 	Out.dither = input.instance[iid].color_dither.a;
 
-	surface.position = surface.position * WORLD;
+	surface.position = mul(surface.position, WORLD);
 
 	Out.clip = dot(surface.position, gd.api.g_xClipPlane);
 
-	Out.pos = surface.position * gd.camera.g_xCamera_VP;
+	Out.pos = mul(surface.position, gd.camera.g_xCamera_VP);
 	Out.tex = surface.uv;
 
 	return Out;

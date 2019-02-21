@@ -112,8 +112,8 @@ inline float3x3 compute_tangent_frame(float3 N, float3 P, float2 UV, thread floa
     
     float3x3 M = float3x3(dp1, dp2, cross(dp1, dp2));
     float2x3 inverseM = float2x3(cross(M[1], M[2]), cross(M[2], M[0]));
-    T = normalize(inverseM * float2(duv1.x, duv2.x));
-    B = normalize(inverseM * float2(duv1.y, duv2.y));
+    T = normalize(mul(float2(duv1.x, duv2.x), inverseM));
+    B = normalize(mul(float2(duv1.y, duv2.y), inverseM));
     
     return float3x3(T, B, N);
 }
@@ -141,7 +141,7 @@ inline void NormalMapping(float2 UV, float3 V, thread float3 &N, float3x3 TBN, t
 {
 	float4 normal_roughness = xNormalMap.sample(gd.sampler_objectshader, UV);
 	bumpColor = 2.0f * normal_roughness.rgb - 1.0f;
-	N = normalize(mix(N, bumpColor * TBN, gd.material.g_xMat_normalMapStrength));
+	N = normalize(mix(N, mul(bumpColor, TBN), gd.material.g_xMat_normalMapStrength));
 	bumpColor *= gd.material.g_xMat_normalMapStrength;
 	roughness *= normal_roughness.a;
 }
@@ -166,7 +166,7 @@ inline float3 PlanarReflection(float2 reflectionUV, Surface surface, constant Gl
 #define NUM_PARALLAX_OCCLUSION_STEPS 32
 inline void ParallaxOcclusionMapping(thread float2 &UV, float3 V, float3x3 TBN, constant GlobalData &gd)
 {
-	V = TBN * V;
+	V = mul(TBN, V);
 	float layerHeight = 1.0 / NUM_PARALLAX_OCCLUSION_STEPS;
 	float curLayerHeight = 0;
 	float2 dtex = gd.material.g_xMat_parallaxOcclusionMapping * V.xy / NUM_PARALLAX_OCCLUSION_STEPS;
@@ -311,14 +311,14 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 				ShaderEntityType decal = gd.EntityArray[entity_index];
 
 				const float4x4 decalProjection = gd.MatrixArray[decal.userdata];
-				const float3 clipSpacePos = (float4(surface.P, 1) * decalProjection).xyz;
+				const float3 clipSpacePos = mul(float4(surface.P, 1), decalProjection).xyz;
 				const float3 uvw = clipSpacePos.xyz*float3(0.5f, -0.5f, 0.5f) + 0.5f;
 //                [branch]
-				if (!any(bool3(uvw - saturate(uvw))))
+				if (!is_saturated(uvw))
 				{
 					// mipmapping needs to be performed by hand:
-					const float2 decalDX = (P_dx * getUpper3x3(decalProjection)).xy * decal.texMulAdd.xy;
-					const float2 decalDY = (P_dy * getUpper3x3(decalProjection)).xy * decal.texMulAdd.xy;
+					const float2 decalDX = (mul(P_dx, getUpper3x3(decalProjection))).xy * decal.texMulAdd.xy;
+					const float2 decalDY = (mul(P_dy, getUpper3x3(decalProjection))).xy * decal.texMulAdd.xy;
 					float4 decalColor = gd.texture_decalatlas.SampleGrad(gd.sampler_linear_clamp, uvw.xy*decal.texMulAdd.xy + decal.texMulAdd.zw, gradient2d(decalDX, decalDY));
 					// blend out if close to cube Z:
 					float edgeBlend = 1 - pow(saturate(abs(clipSpacePos.z)), 8);
@@ -347,10 +347,10 @@ inline void TiledLighting(float2 pixel, thread Surface &surface, thread float3 &
 				ShaderEntityType probe = gd.EntityArray[entity_index];
 
 				const float4x4 probeProjection = gd.MatrixArray[probe.userdata];
-				const float3 clipSpacePos = (float4(surface.P, 1) * probeProjection).xyz;
+				const float3 clipSpacePos = mul(float4(surface.P, 1), probeProjection).xyz;
 				const float3 uvw = clipSpacePos.xyz*float3(0.5f, -0.5f, 0.5f) + 0.5f;
 //                [branch]
-				if (!any(bool3(uvw - saturate(uvw))))
+				if (!is_saturated(uvw))
 				{
 					const float4 envmapColor = EnvironmentReflection_Local(surface, probe, probeProjection, clipSpacePos, envMapMIP, gd);
 					// perform manual blending of probes:
@@ -590,7 +590,7 @@ fragment GBUFFEROutputType_Thin MAINAPIENTRY(PIXELINPUT input [[stage_in]]
 	bumpColor1 = 2.0f * xNormalMap.sample(gd.sampler_objectshader, UV + gd.material.g_xMat_texMulAdd.zw).rg - 1.0f;
 	bumpColor2 = xWaterRipples.sample(gd.sampler_objectshader, ScreenCoord).rg;
 	bumpColor = float3(bumpColor0 + bumpColor1 + bumpColor2, 1)  * gd.material.g_xMat_refractionIndex;
-	surface.N = normalize(mix(surface.N, normalize(bumpColor) * TBN, gd.material.g_xMat_normalMapStrength));
+	surface.N = normalize(mix(surface.N, mul(normalize(bumpColor), TBN), gd.material.g_xMat_normalMapStrength));
 	bumpColor *= gd.material.g_xMat_normalMapStrength;
 
 	//REFLECTION
