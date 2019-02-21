@@ -1915,7 +1915,7 @@ void LoadShaders()
 	{
 		VertexLayoutDesc layout[] =
 		{
-			{ "POSITION", 0, FORMAT_R32G32B32_FLOAT, 0, VertexLayoutDesc::APPEND_ALIGNED_ELEMENT, INPUT_PER_VERTEX_DATA, 0 },
+			{ "POSITION", 0, FORMAT_R32G32B32A32_FLOAT, 0, VertexLayoutDesc::APPEND_ALIGNED_ELEMENT, INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 0, FORMAT_R32G32_FLOAT, 0, VertexLayoutDesc::APPEND_ALIGNED_ELEMENT, INPUT_PER_VERTEX_DATA, 0 },
 			{ "TEXCOORD", 1, FORMAT_R32G32B32A32_FLOAT, 0, VertexLayoutDesc::APPEND_ALIGNED_ELEMENT, INPUT_PER_VERTEX_DATA, 0 },
 		};
@@ -3396,14 +3396,14 @@ void SetUpStates()
 	bd.RenderTarget[0].DestBlendAlpha = BLEND_ONE;
 	bd.RenderTarget[0].BlendOpAlpha = BLEND_OP_ADD;
 	bd.RenderTarget[0].RenderTargetWriteMask = COLOR_WRITE_ENABLE_ALL;
-	bd.IndependentBlendEnable = false,
+    bd.IndependentBlendEnable = false;
 		bd.AlphaToCoverageEnable = false;
 	device->CreateBlendState(&bd, blendStates[BSTYPE_ADDITIVE]);
 
 
 	bd.RenderTarget[0].BlendEnable = false;
 	bd.RenderTarget[0].RenderTargetWriteMask = COLOR_WRITE_DISABLE;
-	bd.IndependentBlendEnable = false,
+    bd.IndependentBlendEnable = false;
 		bd.AlphaToCoverageEnable = false;
 	device->CreateBlendState(&bd, blendStates[BSTYPE_COLORWRITEDISABLE]);
 
@@ -3416,7 +3416,7 @@ void SetUpStates()
 	bd.RenderTarget[0].DestBlendAlpha = BLEND_ONE;
 	bd.RenderTarget[0].BlendOpAlpha = BLEND_OP_ADD;
 	bd.RenderTarget[0].RenderTargetWriteMask = COLOR_WRITE_ENABLE_RED | COLOR_WRITE_ENABLE_GREEN | COLOR_WRITE_ENABLE_BLUE; // alpha is not written by deferred lights!
-	bd.IndependentBlendEnable = false,
+    bd.IndependentBlendEnable = false;
 		bd.AlphaToCoverageEnable = false;
 	device->CreateBlendState(&bd, blendStates[BSTYPE_DEFERREDLIGHT]);
 
@@ -3428,7 +3428,7 @@ void SetUpStates()
 	bd.RenderTarget[0].DestBlendAlpha = BLEND_ONE;
 	bd.RenderTarget[0].BlendOpAlpha = BLEND_OP_ADD;
 	bd.RenderTarget[0].RenderTargetWriteMask = COLOR_WRITE_ENABLE_ALL;
-	bd.IndependentBlendEnable = false,
+    bd.IndependentBlendEnable = false;
 		bd.AlphaToCoverageEnable = false;
 	device->CreateBlendState(&bd, blendStates[BSTYPE_ENVIRONMENTALLIGHT]);
 

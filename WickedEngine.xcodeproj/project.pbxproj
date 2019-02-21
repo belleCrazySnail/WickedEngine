@@ -935,12 +935,16 @@
 		688D3A42221DCBAA0005B1F9 /* PostProcessing */ = {
 			isa = PBXGroup;
 			children = (
+				688D3A85221DCEB60005B1F9 /* postProcessHF.h */,
+				688D3A87221DCEB60005B1F9 /* reconstructPositionHF.h */,
 				688D3A8A221DD2D60005B1F9 /* bloomSeparatePS.metal */,
 				688D3A8B221DD2D60005B1F9 /* blurPS.metal */,
 				688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */,
 				688D3A98221DD2D70005B1F9 /* deferredPS.metal */,
 				688D3A95221DD2D70005B1F9 /* depthofFieldPS.metal */,
 				688D3A8D221DD2D70005B1F9 /* downsampleDepthBuffer4xPS.metal */,
+				688D3A1E221D73F80005B1F9 /* fxaa.h */,
+				688D3A1F221D73F80005B1F9 /* fxaa.metal */,
 				688D3A88221DD2D60005B1F9 /* lightShaftPS.metal */,
 				688D3A89221DD2D60005B1F9 /* linDepthPS.metal */,
 				688D3A93221DD2D70005B1F9 /* motionBlurPS.metal */,
@@ -953,10 +957,6 @@
 				688D3A90221DD2D70005B1F9 /* stereogramPS.metal */,
 				688D3A91221DD2D70005B1F9 /* temporalAAResolvePS.metal */,
 				688D3A92221DD2D70005B1F9 /* toneMapPS.metal */,
-				688D3A85221DCEB60005B1F9 /* postProcessHF.h */,
-				688D3A87221DCEB60005B1F9 /* reconstructPositionHF.h */,
-				688D3A1E221D73F80005B1F9 /* fxaa.h */,
-				688D3A1F221D73F80005B1F9 /* fxaa.metal */,
 			);
 			name = PostProcessing;
 			sourceTree = "<group>";

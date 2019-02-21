@@ -898,8 +898,11 @@ namespace wiGraphicsTypes
             const VertexLayoutDesc &x = pInputElementDescs[i];
             UINT slot = x.InputSlot;
             vertexDesc.layouts[slot].stride = vertex_stride[slot];
-            vertexDesc.layouts[slot].stepRate = x.InstanceDataStepRate;
-            vertexDesc.layouts[slot].stepFunction = _ConvertInputClassification(x.InputSlotClass);
+            MTLVertexStepFunction func = _ConvertInputClassification(x.InputSlotClass);
+            vertexDesc.layouts[slot].stepFunction = func;
+            //dx12 specifies step rate must be 0 for an element that contains per-vertex data, but metal validator say it must be 1
+            //so just don't set it for metal, which have a default value of 1 for step rate
+            if (func == MTLVertexStepFunctionPerInstance) vertexDesc.layouts[slot].stepRate = x.InstanceDataStepRate;
         }
         pInputLayout->resource = RETAIN_RES(vertexDesc);
 
@@ -910,6 +913,7 @@ namespace wiGraphicsTypes
     {
         pVertexShader->Register(this);
         
+        pVertexShader->code.ShaderName = pCode->ShaderName;
         id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
         pVertexShader->resource = RETAIN_RES(func);
         
@@ -919,6 +923,7 @@ namespace wiGraphicsTypes
     {
         pPixelShader->Register(this);
         
+        pPixelShader->code.ShaderName = pCode->ShaderName;
         id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
         pPixelShader->resource = RETAIN_RES(func);
         
@@ -943,6 +948,7 @@ namespace wiGraphicsTypes
     {
         pComputeShader->Register(this);
         
+        pComputeShader->code.ShaderName = pCode->ShaderName;
         id <MTLFunction> func = [_library newFunctionWithName:[NSString stringWithUTF8String:pCode->ShaderName.c_str()]];
         pComputeShader->resource = RETAIN_RES(func);
         
