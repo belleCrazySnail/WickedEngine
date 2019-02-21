@@ -1,4 +1,4 @@
-#include "postProcessHF.hlsli"
+#include "postProcessHF.h"
 
 
 // Gaussian weights for the six samples around the current pixel:
@@ -8,7 +8,7 @@
 
 
 #define SSSS_N_SAMPLES 11
-static const float4 kernel[] = {
+static constant float4 ssss_kernel[] = {
     float4(0.560479, 0.669086, 0.784728, 0),
     float4(0.00471691, 0.000184771, 5.07566e-005, -2),
     float4(0.0192831, 0.00282018, 0.00084214, -1.28),
@@ -21,42 +21,42 @@ static const float4 kernel[] = {
     float4(0.0192831, 0.00282018, 0.00084214, 1.28),
     float4(0.00471691, 0.000184771, 5.07565e-005, 2),
 };
+static constant float correction = 500;
 
-float4 main(VertexToPixelPostProcess input) : SV_TARGET
+fragment float4 ssss(VertexToPixelPostProcess input [[stage_in]], constant GlobalData &gd)
 {
     // Fetch color and linear depth for current pixel:
-    float4 colorM = xTexture.Sample(Sampler, input.tex);
-	float depthM = texture_lineardepth[input.pos.xy];
-	float sss = texture_gbuffer2[input.pos.xy].a;
+    float4 colorM = xTexture.sample(gd.customsampler0, input.tex);
+	float depthM = gd.texture_lineardepth.read(uint2(input.pos.xy));
+	float sss = gd.texture_gbuffer2.read(uint2(input.pos.xy)).a;
 	sss *= 0.01f;
 
     // Accumulate center sample, multiplying it with its gaussian weight:
     float4 colorBlurred = colorM;
-    colorBlurred.rgb *= kernel[0].rgb;
+    colorBlurred.rgb *= ssss_kernel[0].rgb;
 
     // Calculate the step that we will use to fetch the surrounding pixels,
     // where "step" is:
     //     step = sssStrength * gaussianWidth * pixelSize * dir
     // The closer the pixel, the stronger the effect needs to be, hence
     // the factor 1.0 / depthM.
-	float2 step = xPPParams0.xy * sss;
+	float2 step = gd.postproc.xPPParams0.xy * sss;
     float2 finalStep = colorM.a * step / depthM;
 
     // Accumulate the other samples:
-    [unroll]
+//    [unroll]
     for (int i = 1; i < SSSS_N_SAMPLES; i++) {
         // Fetch color and depth for current sample:
-        float2 offset = input.tex + kernel[i].a * finalStep;
-        float3 color = xTexture.SampleLevel(Sampler, offset, 0).rgb;
-        float depth = ( texture_lineardepth.SampleLevel(Sampler,offset,0).r );
+        float2 offset = input.tex + ssss_kernel[i].a * finalStep;
+        float3 color = xTexture.SampleLevel(gd.customsampler0, offset, 0).rgb;
+        float depth = ( gd.texture_lineardepth.SampleLevel(gd.customsampler0,offset,0) );
 
         // If the difference in depth is huge, we lerp color back to "colorM":
-		static const float correction = 500;
         float s = min(0.0125 * correction * abs(depthM - depth), 1.0);
-        color = lerp(color, colorM.rgb, s);
+        color = mix(color, colorM.rgb, s);
 
         // Accumulate:
-        colorBlurred.rgb += kernel[i].rgb * color.rgb;
+        colorBlurred.rgb += ssss_kernel[i].rgb * color.rgb;
     }
 
     return colorBlurred;

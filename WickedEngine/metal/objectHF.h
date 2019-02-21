@@ -103,20 +103,6 @@ inline GBUFFEROutputType_Thin CreateGbuffer_Thin(float4 color, Surface surface, 
 // METHODS
 ////////////
 
-inline float getLinearDepth(float c, constant GlobalData &gd)
-{
-    float z_b = c;
-    float z_n = 2.0 * z_b - 1.0;
-    //float lin = 2.0 * g_xFrame_MainCamera_ZNearP * g_xFrame_MainCamera_ZFarP / (g_xFrame_MainCamera_ZFarP + g_xFrame_MainCamera_ZNearP - z_n * (g_xFrame_MainCamera_ZFarP - g_xFrame_MainCamera_ZNearP));
-    float lin = 2.0 * gd.frame.g_xFrame_MainCamera_ZFarP * gd.frame.g_xFrame_MainCamera_ZNearP / (gd.frame.g_xFrame_MainCamera_ZNearP + gd.frame.g_xFrame_MainCamera_ZFarP - z_n * (gd.frame.g_xFrame_MainCamera_ZNearP - gd.frame.g_xFrame_MainCamera_ZFarP));
-    return lin;
-}
-
-inline float GetFog(float dist, constant GlobalData &gd)
-{
-    return saturate((dist - gd.frame.g_xFrame_Fog.x) / (gd.frame.g_xFrame_Fog.y - gd.frame.g_xFrame_Fog.x));
-}
-
 inline float3x3 compute_tangent_frame(float3 N, float3 P, float2 UV, thread float3 &T, thread float3 &B)
 {
     float3 dp1 = dfdx(P);

@@ -1,16 +1,16 @@
-#include "postProcessHF.hlsli"
+#include "postProcessHF.h"
 
-float4 main(VertexToPixelPostProcess PSIn) : SV_TARGET
+fragment float4 outlinePS(VertexToPixelPostProcess PSIn [[stage_in]], constant GlobalData &gd)
 {
-	float outlineThreshold = xPPParams0.x;
-	float outlineThickness = xPPParams0.y;
-	float3 outlineColor = xPPParams1.xyz;
+	float outlineThreshold = gd.postproc.xPPParams0.x;
+	float outlineThickness = gd.postproc.xPPParams0.y;
+	float3 outlineColor = gd.postproc.xPPParams1.xyz;
 
 	float2 dim;
-	texture_lineardepth.GetDimensions(dim.x, dim.y);
+    GETDIMENSION(gd.texture_lineardepth, dim);
 
 	float2 uv = PSIn.tex.xy;
-	float midDepth = texture_lineardepth.SampleLevel(sampler_linear_clamp, uv, 0);
+	float midDepth = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, uv, 0);
 
 	outlineThreshold *= midDepth;
 
@@ -18,17 +18,17 @@ float4 main(VertexToPixelPostProcess PSIn) : SV_TARGET
 	float2 oy = float2(0.0, outlineThickness / dim.y);
 	float2 PP = uv - oy;
 
-	float CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, (PP - ox), 0); float g00 = (CC);
-	CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, PP, 0);				float g01 = (CC);
-	CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, (PP + ox), 0);		float g02 = (CC);
+	float CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, (PP - ox), 0); float g00 = (CC);
+	CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, PP, 0);				float g01 = (CC);
+	CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, (PP + ox), 0);		float g02 = (CC);
 	PP = uv;
-	CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, (PP - ox), 0);		float g10 = (CC);
+	CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, (PP - ox), 0);		float g10 = (CC);
 	CC = midDepth;																	float g11 = (CC)*0.01f;
-	CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, (PP + ox), 0);		float g12 = (CC);
+	CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, (PP + ox), 0);		float g12 = (CC);
 	PP = uv + oy;
-	CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, (PP - ox), 0);		float g20 = (CC);
-	CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, PP, 0);				float g21 = (CC);
-	CC = texture_lineardepth.SampleLevel(sampler_linear_clamp, (PP + ox), 0);		float g22 = (CC);
+	CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, (PP - ox), 0);		float g20 = (CC);
+	CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, PP, 0);				float g21 = (CC);
+	CC = gd.texture_lineardepth.SampleLevel(gd.sampler_linear_clamp, (PP + ox), 0);		float g22 = (CC);
 	float K00 = -1;
 	float K01 = -2;
 	float K02 = -1;

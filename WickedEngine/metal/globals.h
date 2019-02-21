@@ -86,6 +86,10 @@ static constant int gaussianOffsets[9] = {
 };
 
 #define sqr(a)		((a)*(a))
+inline bool is_saturated(float a) { return a == saturate(a); }
+inline bool is_saturated(float2 a) { return any(bool2(a - saturate(a))); }
+inline bool is_saturated(float3 a) { return any(bool3(a - saturate(a))); }
+inline bool is_saturated(float4 a) { return any(bool4(a - saturate(a))); }
 
 #ifdef DISABLE_ALPHATEST
 #define ALPHATEST(x)
@@ -199,6 +203,42 @@ inline float3 UV_to_CubeMap(float2 uv, uint faceIndex)
 		// error
 		return 0;
 	}
+}
+
+inline float getLinearDepth(float c, constant GlobalData &gd)
+{
+    float z_b = c;
+    float z_n = 2.0 * z_b - 1.0;
+    //float lin = 2.0 * g_xFrame_MainCamera_ZNearP * g_xFrame_MainCamera_ZFarP / (g_xFrame_MainCamera_ZFarP + g_xFrame_MainCamera_ZNearP - z_n * (g_xFrame_MainCamera_ZFarP - g_xFrame_MainCamera_ZNearP));
+    float lin = 2.0 * gd.frame.g_xFrame_MainCamera_ZFarP * gd.frame.g_xFrame_MainCamera_ZNearP / (gd.frame.g_xFrame_MainCamera_ZNearP + gd.frame.g_xFrame_MainCamera_ZFarP - z_n * (gd.frame.g_xFrame_MainCamera_ZNearP - gd.frame.g_xFrame_MainCamera_ZFarP));
+    return lin;
+}
+
+inline float GetFog(float dist, constant GlobalData &gd)
+{
+    return saturate((dist - gd.frame.g_xFrame_Fog.x) / (gd.frame.g_xFrame_Fog.y - gd.frame.g_xFrame_Fog.x));
+}
+
+// Reinhard operator
+inline float3 tonemap(float3 x)
+{
+    return x / (x + 1);
+}
+inline float3 inverseTonemap(float3 x)
+{
+    return x / (1 - x);
+}
+
+inline float2 encodeNormal (float3 n)
+{
+    return n.xy*0.5+0.5;
+}
+inline float3 decodeNormal (float2 enc)
+{
+    float3 n;
+    n.xy = enc*2-1;
+    n.z = sqrt(1-dot(n.xy, n.xy));
+    return n;
 }
 
 // Samples a texture with Catmull-Rom filtering, using 9 texture fetches instead of 16. ( https://gist.github.com/TheRealMJP/c83b8c0f46b63f3a88a5986f4fa982b1#file-tex2dcatmullrom-hlsl )

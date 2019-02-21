@@ -1,6 +1,6 @@
-#include "imageHF.hlsli"
+#include "imageHF.h"
 
-float4 main(VertexToPixelPostProcess PSIn) : SV_TARGET
+fragment float4 screenPS_bicubic(VertexToPixelPostProcess PSIn [[stage_in]], constant GlobalData &gd)
 {
-	return SampleTextureCatmullRom(xTexture, PSIn.tex, 0);
+	return SampleTextureCatmullRom(xTexture, PSIn.tex, 0, gd);
 }

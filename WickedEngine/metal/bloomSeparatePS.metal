@@ -1,24 +1,23 @@
-#include "postProcessHF.hlsli"
+#include "postProcessHF.h"
 
 // This will cut out bright parts (>1) and also downsample 4x
 
-float4 main(VertexToPixelPostProcess PSIn) : SV_TARGET
+fragment float4 bloomSeparatePS(VertexToPixelPostProcess PSIn [[stage_in]], constant GlobalData &gd)
 {
 	float2 dim;
-	xTexture.GetDimensions(dim.x, dim.y);
+    GETDIMENSION(xTexture, dim);
 	dim = 1.0 / dim;
 
 	float3 color = 0;
 
-	color += xTexture.SampleLevel(sampler_linear_clamp, PSIn.tex + float2(-1, -1) * dim, 0).rgb;
-	color += xTexture.SampleLevel(sampler_linear_clamp, PSIn.tex + float2(1, -1) * dim, 0).rgb;
-	color += xTexture.SampleLevel(sampler_linear_clamp, PSIn.tex + float2(-1, 1) * dim, 0).rgb;
-	color += xTexture.SampleLevel(sampler_linear_clamp, PSIn.tex + float2(1, 1) * dim, 0).rgb;
+	color += xTexture.SampleLevel(gd.sampler_linear_clamp, PSIn.tex + float2(-1, -1) * dim, 0).rgb;
+	color += xTexture.SampleLevel(gd.sampler_linear_clamp, PSIn.tex + float2(1, -1) * dim, 0).rgb;
+	color += xTexture.SampleLevel(gd.sampler_linear_clamp, PSIn.tex + float2(-1, 1) * dim, 0).rgb;
+	color += xTexture.SampleLevel(gd.sampler_linear_clamp, PSIn.tex + float2(1, 1) * dim, 0).rgb;
 
 	color /= 4.0f;
 
-	const float bloomThreshold = xPPParams0.x;
-	color = max(0, color - bloomThreshold);
+	color = max(0, color - gd.postproc.xPPParams0.x);
 
 	return float4(color, 1);
 }

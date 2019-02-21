@@ -240,6 +240,46 @@
 		688D3A3D221DC2F10005B1F9 /* imagePS_masked_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */; };
 		688D3A3E221DC2F10005B1F9 /* imagePS_masked.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */; };
 		688D3A3F221DC2F10005B1F9 /* imagePS_masked.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */; };
+		688D3A9C221DD2D80005B1F9 /* lightShaftPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A88221DD2D60005B1F9 /* lightShaftPS.metal */; };
+		688D3A9D221DD2D80005B1F9 /* lightShaftPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A88221DD2D60005B1F9 /* lightShaftPS.metal */; };
+		688D3A9E221DD2D80005B1F9 /* linDepthPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A89221DD2D60005B1F9 /* linDepthPS.metal */; };
+		688D3A9F221DD2D80005B1F9 /* linDepthPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A89221DD2D60005B1F9 /* linDepthPS.metal */; };
+		688D3AA0221DD2D80005B1F9 /* bloomSeparatePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8A221DD2D60005B1F9 /* bloomSeparatePS.metal */; };
+		688D3AA1221DD2D80005B1F9 /* bloomSeparatePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8A221DD2D60005B1F9 /* bloomSeparatePS.metal */; };
+		688D3AA2221DD2D80005B1F9 /* blurPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8B221DD2D60005B1F9 /* blurPS.metal */; };
+		688D3AA3221DD2D80005B1F9 /* blurPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8B221DD2D60005B1F9 /* blurPS.metal */; };
+		688D3AA4221DD2D80005B1F9 /* ssao.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8C221DD2D60005B1F9 /* ssao.metal */; };
+		688D3AA5221DD2D80005B1F9 /* ssao.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8C221DD2D60005B1F9 /* ssao.metal */; };
+		688D3AA6221DD2D80005B1F9 /* downsampleDepthBuffer4xPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8D221DD2D70005B1F9 /* downsampleDepthBuffer4xPS.metal */; };
+		688D3AA7221DD2D80005B1F9 /* downsampleDepthBuffer4xPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8D221DD2D70005B1F9 /* downsampleDepthBuffer4xPS.metal */; };
+		688D3AA8221DD2D80005B1F9 /* outlinePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8E221DD2D70005B1F9 /* outlinePS.metal */; };
+		688D3AA9221DD2D80005B1F9 /* outlinePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8E221DD2D70005B1F9 /* outlinePS.metal */; };
+		688D3AAA221DD2D80005B1F9 /* ssr.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8F221DD2D70005B1F9 /* ssr.metal */; };
+		688D3AAB221DD2D80005B1F9 /* ssr.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A8F221DD2D70005B1F9 /* ssr.metal */; };
+		688D3AAC221DD2D80005B1F9 /* stereogramPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A90221DD2D70005B1F9 /* stereogramPS.metal */; };
+		688D3AAD221DD2D80005B1F9 /* stereogramPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A90221DD2D70005B1F9 /* stereogramPS.metal */; };
+		688D3AAE221DD2D80005B1F9 /* temporalAAResolvePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A91221DD2D70005B1F9 /* temporalAAResolvePS.metal */; };
+		688D3AAF221DD2D80005B1F9 /* temporalAAResolvePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A91221DD2D70005B1F9 /* temporalAAResolvePS.metal */; };
+		688D3AB0221DD2D80005B1F9 /* toneMapPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A92221DD2D70005B1F9 /* toneMapPS.metal */; };
+		688D3AB1221DD2D80005B1F9 /* toneMapPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A92221DD2D70005B1F9 /* toneMapPS.metal */; };
+		688D3AB2221DD2D80005B1F9 /* motionBlurPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A93221DD2D70005B1F9 /* motionBlurPS.metal */; };
+		688D3AB3221DD2D80005B1F9 /* motionBlurPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A93221DD2D70005B1F9 /* motionBlurPS.metal */; };
+		688D3AB4221DD2D80005B1F9 /* reprojectDepthBufferPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A94221DD2D70005B1F9 /* reprojectDepthBufferPS.metal */; };
+		688D3AB5221DD2D80005B1F9 /* reprojectDepthBufferPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A94221DD2D70005B1F9 /* reprojectDepthBufferPS.metal */; };
+		688D3AB6221DD2D80005B1F9 /* depthofFieldPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A95221DD2D70005B1F9 /* depthofFieldPS.metal */; };
+		688D3AB7221DD2D80005B1F9 /* depthofFieldPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A95221DD2D70005B1F9 /* depthofFieldPS.metal */; };
+		688D3AB8221DD2D80005B1F9 /* screenPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A96221DD2D70005B1F9 /* screenPS.metal */; };
+		688D3AB9221DD2D80005B1F9 /* screenPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A96221DD2D70005B1F9 /* screenPS.metal */; };
+		688D3ABA221DD2D80005B1F9 /* sharpenPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A97221DD2D70005B1F9 /* sharpenPS.metal */; };
+		688D3ABB221DD2D80005B1F9 /* sharpenPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A97221DD2D70005B1F9 /* sharpenPS.metal */; };
+		688D3ABC221DD2D80005B1F9 /* deferredPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A98221DD2D70005B1F9 /* deferredPS.metal */; };
+		688D3ABD221DD2D80005B1F9 /* deferredPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A98221DD2D70005B1F9 /* deferredPS.metal */; };
+		688D3ABE221DD2D80005B1F9 /* ssss.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A99221DD2D70005B1F9 /* ssss.metal */; };
+		688D3ABF221DD2D80005B1F9 /* ssss.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A99221DD2D70005B1F9 /* ssss.metal */; };
+		688D3AC0221DD2D80005B1F9 /* colorGradePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */; };
+		688D3AC1221DD2D80005B1F9 /* colorGradePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */; };
+		688D3AC2221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A9B221DD2D70005B1F9 /* screenPS_bicubic.metal */; };
+		688D3AC3221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A9B221DD2D70005B1F9 /* screenPS_bicubic.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -471,6 +511,28 @@
 		688D3A29221DC2F10005B1F9 /* imagePS_distortion_masked.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_distortion_masked.metal; path = WickedEngine/metal/imagePS_distortion_masked.metal; sourceTree = "<group>"; };
 		688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_masked_bicubic.metal; path = WickedEngine/metal/imagePS_masked_bicubic.metal; sourceTree = "<group>"; };
 		688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = imagePS_masked.metal; path = WickedEngine/metal/imagePS_masked.metal; sourceTree = "<group>"; };
+		688D3A85221DCEB60005B1F9 /* postProcessHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = postProcessHF.h; path = WickedEngine/metal/postProcessHF.h; sourceTree = "<group>"; };
+		688D3A87221DCEB60005B1F9 /* reconstructPositionHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reconstructPositionHF.h; path = WickedEngine/metal/reconstructPositionHF.h; sourceTree = "<group>"; };
+		688D3A88221DD2D60005B1F9 /* lightShaftPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = lightShaftPS.metal; path = WickedEngine/metal/lightShaftPS.metal; sourceTree = "<group>"; };
+		688D3A89221DD2D60005B1F9 /* linDepthPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = linDepthPS.metal; path = WickedEngine/metal/linDepthPS.metal; sourceTree = "<group>"; };
+		688D3A8A221DD2D60005B1F9 /* bloomSeparatePS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = bloomSeparatePS.metal; path = WickedEngine/metal/bloomSeparatePS.metal; sourceTree = "<group>"; };
+		688D3A8B221DD2D60005B1F9 /* blurPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = blurPS.metal; path = WickedEngine/metal/blurPS.metal; sourceTree = "<group>"; };
+		688D3A8C221DD2D60005B1F9 /* ssao.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = ssao.metal; path = WickedEngine/metal/ssao.metal; sourceTree = "<group>"; };
+		688D3A8D221DD2D70005B1F9 /* downsampleDepthBuffer4xPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = downsampleDepthBuffer4xPS.metal; path = WickedEngine/metal/downsampleDepthBuffer4xPS.metal; sourceTree = "<group>"; };
+		688D3A8E221DD2D70005B1F9 /* outlinePS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = outlinePS.metal; path = WickedEngine/metal/outlinePS.metal; sourceTree = "<group>"; };
+		688D3A8F221DD2D70005B1F9 /* ssr.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = ssr.metal; path = WickedEngine/metal/ssr.metal; sourceTree = "<group>"; };
+		688D3A90221DD2D70005B1F9 /* stereogramPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = stereogramPS.metal; path = WickedEngine/metal/stereogramPS.metal; sourceTree = "<group>"; };
+		688D3A91221DD2D70005B1F9 /* temporalAAResolvePS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = temporalAAResolvePS.metal; path = WickedEngine/metal/temporalAAResolvePS.metal; sourceTree = "<group>"; };
+		688D3A92221DD2D70005B1F9 /* toneMapPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = toneMapPS.metal; path = WickedEngine/metal/toneMapPS.metal; sourceTree = "<group>"; };
+		688D3A93221DD2D70005B1F9 /* motionBlurPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = motionBlurPS.metal; path = WickedEngine/metal/motionBlurPS.metal; sourceTree = "<group>"; };
+		688D3A94221DD2D70005B1F9 /* reprojectDepthBufferPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = reprojectDepthBufferPS.metal; path = WickedEngine/metal/reprojectDepthBufferPS.metal; sourceTree = "<group>"; };
+		688D3A95221DD2D70005B1F9 /* depthofFieldPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = depthofFieldPS.metal; path = WickedEngine/metal/depthofFieldPS.metal; sourceTree = "<group>"; };
+		688D3A96221DD2D70005B1F9 /* screenPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = screenPS.metal; path = WickedEngine/metal/screenPS.metal; sourceTree = "<group>"; };
+		688D3A97221DD2D70005B1F9 /* sharpenPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = sharpenPS.metal; path = WickedEngine/metal/sharpenPS.metal; sourceTree = "<group>"; };
+		688D3A98221DD2D70005B1F9 /* deferredPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = deferredPS.metal; path = WickedEngine/metal/deferredPS.metal; sourceTree = "<group>"; };
+		688D3A99221DD2D70005B1F9 /* ssss.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = ssss.metal; path = WickedEngine/metal/ssss.metal; sourceTree = "<group>"; };
+		688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = colorGradePS.metal; path = WickedEngine/metal/colorGradePS.metal; sourceTree = "<group>"; };
+		688D3A9B221DD2D70005B1F9 /* screenPS_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = screenPS_bicubic.metal; path = WickedEngine/metal/screenPS_bicubic.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -517,24 +579,12 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				688D3A28221DC2F10005B1F9 /* imagePS_bicubic.metal */,
-				688D3A26221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal */,
-				688D3A23221DC2F00005B1F9 /* imagePS_distortion_masked_bicubic.metal */,
-				688D3A29221DC2F10005B1F9 /* imagePS_distortion_masked.metal */,
-				688D3A22221DC2F00005B1F9 /* imagePS_distortion.metal */,
-				688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */,
-				688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */,
-				688D3A24221DC2F00005B1F9 /* imagePS_separatenormalmap_bicubic.metal */,
-				688D3A27221DC2F10005B1F9 /* imagePS_separatenormalmap.metal */,
-				688D3A25221DC2F10005B1F9 /* imagePS.metal */,
-				688D3A1E221D73F80005B1F9 /* fxaa.h */,
-				688D3A1F221D73F80005B1F9 /* fxaa.metal */,
-				688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */,
-				688D3A1C221C68DB0005B1F9 /* imageHF.h */,
+				688D3A42221DCBAA0005B1F9 /* PostProcessing */,
+				688D3A40221DC9100005B1F9 /* image */,
+				688D3A41221DC9270005B1F9 /* RenderPath */,
 				688D3A16221C689A0005B1F9 /* imageVS.metal */,
 				688D3A17221C689A0005B1F9 /* screenVS.metal */,
 				68456035221AD0A100345A91 /* packHF.h */,
-				6853C324221AC005000F7B58 /* objectHF.h */,
 				6853C322221ABE2B000F7B58 /* ditherHF.h */,
 				6853C31F221A99F6000F7B58 /* brdf.h */,
 				6853C320221A9BA6000F7B58 /* voxelConeTracingHF.h */,
@@ -548,38 +598,6 @@
 				688D39E8221BD5EF0005B1F9 /* objectVS_simple_tessellation.metal */,
 				688D39E5221BD5EF0005B1F9 /* objectVS_simple.metal */,
 				688D39E9221BD5F00005B1F9 /* objectVS_voxelizer.metal */,
-				688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */,
-				688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */,
-				688D39C0221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal */,
-				688D39C3221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal */,
-				688D39B9221BC7AC0005B1F9 /* objectPS_tiledforward_pom.metal */,
-				688D39B7221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal */,
-				688D39BA221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal */,
-				688D39C1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal */,
-				688D39BC221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal */,
-				688D39BE221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_pom.metal */,
-				688D39BD221BC7AC0005B1F9 /* objectPS_tiledforward_transparent.metal */,
-				688D39BB221BC7AC0005B1F9 /* objectPS_tiledforward_water.metal */,
-				688D39BF221BC7AD0005B1F9 /* objectPS_tiledforward.metal */,
-				688D399A221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal */,
-				688D399B221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal */,
-				688D3994221B488F0005B1F9 /* objectPS_forward_normalmap.metal */,
-				688D3991221B488F0005B1F9 /* objectPS_forward_planarreflection.metal */,
-				688D3999221B48900005B1F9 /* objectPS_forward_pom.metal */,
-				688D3993221B488F0005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal */,
-				688D3998221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal */,
-				688D3992221B488F0005B1F9 /* objectPS_forward_transparent_normalmap.metal */,
-				688D3996221B488F0005B1F9 /* objectPS_forward_transparent_planarreflection.metal */,
-				688D399C221B48900005B1F9 /* objectPS_forward_transparent_pom.metal */,
-				688D3997221B488F0005B1F9 /* objectPS_forward_transparent.metal */,
-				688D3990221B488F0005B1F9 /* objectPS_forward_water.metal */,
-				688D3995221B488F0005B1F9 /* objectPS_forward.metal */,
-				688D3986221B394D0005B1F9 /* objectPS_deferred_normalmap.metal */,
-				688D3984221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal */,
-				688D3987221B394D0005B1F9 /* objectPS_deferred_pom.metal */,
-				688D3985221B394D0005B1F9 /* objectPS_deferred.metal */,
-				688D397F221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal */,
-				688D397E221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal */,
 				688D3976221B2B1A0005B1F9 /* objectPS_alphatestonly.metal */,
 				688D3977221B2B1A0005B1F9 /* objectPS_blackout.metal */,
 				688D3975221B2B1A0005B1F9 /* objectPS_debug.metal */,
@@ -853,6 +871,96 @@
 			name = Resource;
 			sourceTree = "<group>";
 		};
+		688D3A40221DC9100005B1F9 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				688D3A1D221C76EC0005B1F9 /* fullScreenTriangleHF.h */,
+				688D3A1C221C68DB0005B1F9 /* imageHF.h */,
+				688D3A28221DC2F10005B1F9 /* imagePS_bicubic.metal */,
+				688D3A26221DC2F10005B1F9 /* imagePS_distortion_bicubic.metal */,
+				688D3A23221DC2F00005B1F9 /* imagePS_distortion_masked_bicubic.metal */,
+				688D3A29221DC2F10005B1F9 /* imagePS_distortion_masked.metal */,
+				688D3A22221DC2F00005B1F9 /* imagePS_distortion.metal */,
+				688D3A2A221DC2F10005B1F9 /* imagePS_masked_bicubic.metal */,
+				688D3A2B221DC2F10005B1F9 /* imagePS_masked.metal */,
+				688D3A24221DC2F00005B1F9 /* imagePS_separatenormalmap_bicubic.metal */,
+				688D3A27221DC2F10005B1F9 /* imagePS_separatenormalmap.metal */,
+				688D3A25221DC2F10005B1F9 /* imagePS.metal */,
+				688D3A9B221DD2D70005B1F9 /* screenPS_bicubic.metal */,
+				688D3A96221DD2D70005B1F9 /* screenPS.metal */,
+			);
+			name = image;
+			sourceTree = "<group>";
+		};
+		688D3A41221DC9270005B1F9 /* RenderPath */ = {
+			isa = PBXGroup;
+			children = (
+				6853C324221AC005000F7B58 /* objectHF.h */,
+				688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */,
+				688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */,
+				688D39C0221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap.metal */,
+				688D39C3221BC7AD0005B1F9 /* objectPS_tiledforward_planarreflection.metal */,
+				688D39B9221BC7AC0005B1F9 /* objectPS_tiledforward_pom.metal */,
+				688D39B7221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal */,
+				688D39BA221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal */,
+				688D39C1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal */,
+				688D39BC221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal */,
+				688D39BE221BC7AC0005B1F9 /* objectPS_tiledforward_transparent_pom.metal */,
+				688D39BD221BC7AC0005B1F9 /* objectPS_tiledforward_transparent.metal */,
+				688D39BB221BC7AC0005B1F9 /* objectPS_tiledforward_water.metal */,
+				688D39BF221BC7AD0005B1F9 /* objectPS_tiledforward.metal */,
+				688D399A221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal */,
+				688D399B221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal */,
+				688D3994221B488F0005B1F9 /* objectPS_forward_normalmap.metal */,
+				688D3991221B488F0005B1F9 /* objectPS_forward_planarreflection.metal */,
+				688D3999221B48900005B1F9 /* objectPS_forward_pom.metal */,
+				688D3993221B488F0005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal */,
+				688D3998221B48900005B1F9 /* objectPS_forward_transparent_normalmap_pom.metal */,
+				688D3992221B488F0005B1F9 /* objectPS_forward_transparent_normalmap.metal */,
+				688D3996221B488F0005B1F9 /* objectPS_forward_transparent_planarreflection.metal */,
+				688D399C221B48900005B1F9 /* objectPS_forward_transparent_pom.metal */,
+				688D3997221B488F0005B1F9 /* objectPS_forward_transparent.metal */,
+				688D3990221B488F0005B1F9 /* objectPS_forward_water.metal */,
+				688D3995221B488F0005B1F9 /* objectPS_forward.metal */,
+				688D3986221B394D0005B1F9 /* objectPS_deferred_normalmap.metal */,
+				688D3984221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal */,
+				688D3987221B394D0005B1F9 /* objectPS_deferred_pom.metal */,
+				688D3985221B394D0005B1F9 /* objectPS_deferred.metal */,
+				688D397F221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal */,
+				688D397E221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal */,
+			);
+			name = RenderPath;
+			sourceTree = "<group>";
+		};
+		688D3A42221DCBAA0005B1F9 /* PostProcessing */ = {
+			isa = PBXGroup;
+			children = (
+				688D3A8A221DD2D60005B1F9 /* bloomSeparatePS.metal */,
+				688D3A8B221DD2D60005B1F9 /* blurPS.metal */,
+				688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */,
+				688D3A98221DD2D70005B1F9 /* deferredPS.metal */,
+				688D3A95221DD2D70005B1F9 /* depthofFieldPS.metal */,
+				688D3A8D221DD2D70005B1F9 /* downsampleDepthBuffer4xPS.metal */,
+				688D3A88221DD2D60005B1F9 /* lightShaftPS.metal */,
+				688D3A89221DD2D60005B1F9 /* linDepthPS.metal */,
+				688D3A93221DD2D70005B1F9 /* motionBlurPS.metal */,
+				688D3A8E221DD2D70005B1F9 /* outlinePS.metal */,
+				688D3A94221DD2D70005B1F9 /* reprojectDepthBufferPS.metal */,
+				688D3A97221DD2D70005B1F9 /* sharpenPS.metal */,
+				688D3A8C221DD2D60005B1F9 /* ssao.metal */,
+				688D3A8F221DD2D70005B1F9 /* ssr.metal */,
+				688D3A99221DD2D70005B1F9 /* ssss.metal */,
+				688D3A90221DD2D70005B1F9 /* stereogramPS.metal */,
+				688D3A91221DD2D70005B1F9 /* temporalAAResolvePS.metal */,
+				688D3A92221DD2D70005B1F9 /* toneMapPS.metal */,
+				688D3A85221DCEB60005B1F9 /* postProcessHF.h */,
+				688D3A87221DCEB60005B1F9 /* reconstructPositionHF.h */,
+				688D3A1E221D73F80005B1F9 /* fxaa.h */,
+				688D3A1F221D73F80005B1F9 /* fxaa.metal */,
+			);
+			name = PostProcessing;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -963,6 +1071,7 @@
 			files = (
 				688D3A11221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				6853C2CF221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
+				688D3ABC221DD2D80005B1F9 /* deferredPS.metal in Sources */,
 				688D3A2E221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */,
 				688D3980221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2CB22158478000F7B58 /* wiSprite.cpp in Sources */,
@@ -974,19 +1083,30 @@
 				685F8C61220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
 				688D398E221B394D0005B1F9 /* objectPS_deferred_pom.metal in Sources */,
 				6853C2D22215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
+				688D3AA2221DD2D80005B1F9 /* blurPS.metal in Sources */,
+				688D3AAC221DD2D80005B1F9 /* stereogramPS.metal in Sources */,
 				688D3978221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
+				688D3AB0221DD2D80005B1F9 /* toneMapPS.metal in Sources */,
 				6853C23422143AE4000F7B58 /* wiArchive.cpp in Sources */,
+				688D3AA6221DD2D80005B1F9 /* downsampleDepthBuffer4xPS.metal in Sources */,
+				688D3AA8221DD2D80005B1F9 /* outlinePS.metal in Sources */,
 				6853C2BB221580B9000F7B58 /* wiProfiler.cpp in Sources */,
 				688D39F4221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */,
+				688D3ABE221DD2D80005B1F9 /* ssss.metal in Sources */,
 				6853C28422153EA2000F7B58 /* wiImage.cpp in Sources */,
 				688D3981221B38260005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
+				688D3ABA221DD2D80005B1F9 /* sharpenPS.metal in Sources */,
+				688D3AA0221DD2D80005B1F9 /* bloomSeparatePS.metal in Sources */,
+				688D3AA4221DD2D80005B1F9 /* ssao.metal in Sources */,
 				685F8BEB2209C30800A516B4 /* Renderer.m in Sources */,
+				688D3A9C221DD2D80005B1F9 /* lightShaftPS.metal in Sources */,
 				688D39CE221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
 				688D39FD221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */,
 				6853C2AA22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29A2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C74220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
 				688D3A3C221DC2F10005B1F9 /* imagePS_masked_bicubic.metal in Sources */,
+				688D3AC0221DD2D80005B1F9 /* colorGradePS.metal in Sources */,
 				688D39A1221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */,
 				685F8BCF2209C30800A516B4 /* GameViewController.m in Sources */,
 				6853C27C22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
@@ -1011,6 +1131,7 @@
 				6853C2F22215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				688D3A30221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */,
 				6853C27422153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
+				688D3AC2221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */,
 				688D39DA221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				688D3A1A221C689A0005B1F9 /* screenVS.metal in Sources */,
 				685F8C422209E0F400A516B4 /* wiGraphicsDevice.cpp in Sources */,
@@ -1020,15 +1141,19 @@
 				688D39A5221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */,
 				685F8BCC2209C30800A516B4 /* AppDelegate.m in Sources */,
 				6853C24F22144197000F7B58 /* wiHelper.cpp in Sources */,
+				688D3A9E221DD2D80005B1F9 /* linDepthPS.metal in Sources */,
 				688D39B5221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
 				688D3A36221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */,
 				6853C2AE22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25622144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C722158478000F7B58 /* wiOcean.cpp in Sources */,
+				688D3AB4221DD2D80005B1F9 /* reprojectDepthBufferPS.metal in Sources */,
 				688D39D2221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */,
+				688D3AB8221DD2D80005B1F9 /* screenPS.metal in Sources */,
 				688D398A221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
 				688D39E2221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
 				688D39D6221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
+				688D3AB6221DD2D80005B1F9 /* depthofFieldPS.metal in Sources */,
 				688D3A38221DC2F10005B1F9 /* imagePS_bicubic.metal in Sources */,
 				6853C28C22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27622153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
@@ -1036,6 +1161,7 @@
 				6853C2B9221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				688D39F8221BDFD00005B1F9 /* wiInitializer.cpp in Sources */,
 				685F8BED2209C30800A516B4 /* Shaders.metal in Sources */,
+				688D3AAE221DD2D80005B1F9 /* temporalAAResolvePS.metal in Sources */,
 				688D3A20221D73F80005B1F9 /* fxaa.metal in Sources */,
 				688D39F2221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
@@ -1048,9 +1174,11 @@
 				6853C2A22215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				688D3988221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
 				688D3A18221C689A0005B1F9 /* imageVS.metal in Sources */,
+				688D3AAA221DD2D80005B1F9 /* ssr.metal in Sources */,
 				688D39D0221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29522154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				688D39CC221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
+				688D3AB2221DD2D80005B1F9 /* motionBlurPS.metal in Sources */,
 				688D399D221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C442209E0F400A516B4 /* wiGraphicsResource.cpp in Sources */,
 				688D39EA221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */,
@@ -1080,6 +1208,7 @@
 			files = (
 				688D3A12221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				688D3982221B388D0005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
+				688D3ABD221DD2D80005B1F9 /* deferredPS.metal in Sources */,
 				688D3A2F221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */,
 				688D3983221B388D0005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
 				6853C2D0221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
@@ -1091,19 +1220,30 @@
 				6853C2FF2215E0CF000F7B58 /* RenderPath3D_PathTracing.cpp in Sources */,
 				688D398F221B394D0005B1F9 /* objectPS_deferred_pom.metal in Sources */,
 				685F8C62220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
+				688D3AA3221DD2D80005B1F9 /* blurPS.metal in Sources */,
+				688D3AAD221DD2D80005B1F9 /* stereogramPS.metal in Sources */,
 				6853C2D32215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
+				688D3AB1221DD2D80005B1F9 /* toneMapPS.metal in Sources */,
 				688D3979221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
+				688D3AA7221DD2D80005B1F9 /* downsampleDepthBuffer4xPS.metal in Sources */,
+				688D3AA9221DD2D80005B1F9 /* outlinePS.metal in Sources */,
 				6853C23522143AE4000F7B58 /* wiArchive.cpp in Sources */,
 				688D39F5221BD5F00005B1F9 /* objectVS_voxelizer.metal in Sources */,
+				688D3ABF221DD2D80005B1F9 /* ssss.metal in Sources */,
 				6853C2BC221580B9000F7B58 /* wiProfiler.cpp in Sources */,
 				6853C28522153EA2000F7B58 /* wiImage.cpp in Sources */,
+				688D3ABB221DD2D80005B1F9 /* sharpenPS.metal in Sources */,
+				688D3AA1221DD2D80005B1F9 /* bloomSeparatePS.metal in Sources */,
+				688D3AA5221DD2D80005B1F9 /* ssao.metal in Sources */,
 				685F8BEC2209C30800A516B4 /* Renderer.m in Sources */,
+				688D3A9D221DD2D80005B1F9 /* lightShaftPS.metal in Sources */,
 				688D39CF221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
 				688D39FE221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */,
 				6853C2AB22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29B2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C75220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
 				688D3A3D221DC2F10005B1F9 /* imagePS_masked_bicubic.metal in Sources */,
+				688D3AC1221DD2D80005B1F9 /* colorGradePS.metal in Sources */,
 				688D39A2221B48900005B1F9 /* objectPS_forward_transparent_normalmap.metal in Sources */,
 				685F8BE42209C30800A516B4 /* GameViewController.mm in Sources */,
 				6853C27D22153E7B000F7B58 /* wiSceneSystem.cpp in Sources */,
@@ -1128,6 +1268,7 @@
 				6853C2F32215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				688D3A31221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */,
 				6853C27522153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
+				688D3AC3221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */,
 				688D39DB221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				688D3A1B221C689A0005B1F9 /* screenVS.metal in Sources */,
 				685F8BE12209C30800A516B4 /* AppDelegate.m in Sources */,
@@ -1137,15 +1278,19 @@
 				688D39A6221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */,
 				685F8BEE2209C30800A516B4 /* Shaders.metal in Sources */,
 				6853C25022144197000F7B58 /* wiHelper.cpp in Sources */,
+				688D3A9F221DD2D80005B1F9 /* linDepthPS.metal in Sources */,
 				688D39B6221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
 				688D3A37221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */,
 				6853C2AF22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25722144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C822158478000F7B58 /* wiOcean.cpp in Sources */,
+				688D3AB5221DD2D80005B1F9 /* reprojectDepthBufferPS.metal in Sources */,
 				688D39D3221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */,
+				688D3AB9221DD2D80005B1F9 /* screenPS.metal in Sources */,
 				688D398B221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
 				688D39E3221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
 				688D39D7221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
+				688D3AB7221DD2D80005B1F9 /* depthofFieldPS.metal in Sources */,
 				688D3A39221DC2F10005B1F9 /* imagePS_bicubic.metal in Sources */,
 				6853C28D22153EF5000F7B58 /* wiFont.cpp in Sources */,
 				6853C27722153E17000F7B58 /* wiGPUSortLib.cpp in Sources */,
@@ -1153,6 +1298,7 @@
 				6853C2BA221580B9000F7B58 /* wiRectPacker.cpp in Sources */,
 				688D39F9221BDFD00005B1F9 /* wiInitializer.cpp in Sources */,
 				685F8C592209F50A00A516B4 /* wiGraphicsResource.cpp in Sources */,
+				688D3AAF221DD2D80005B1F9 /* temporalAAResolvePS.metal in Sources */,
 				688D3A21221D73F80005B1F9 /* fxaa.metal in Sources */,
 				688D39F3221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
@@ -1165,9 +1311,11 @@
 				6853C2A32215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				688D3989221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
 				688D3A19221C689A0005B1F9 /* imageVS.metal in Sources */,
+				688D3AAB221DD2D80005B1F9 /* ssr.metal in Sources */,
 				688D39D1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29622154052000F7B58 /* wiTextureHelper.cpp in Sources */,
 				688D39CD221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
+				688D3AB3221DD2D80005B1F9 /* motionBlurPS.metal in Sources */,
 				688D399E221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
 				685F8C582209F50700A516B4 /* wiGraphicsDevice.cpp in Sources */,
 				688D39EB221BD5F00005B1F9 /* objectVS_positionstream.metal in Sources */,

@@ -1,19 +1,19 @@
-#include "postProcessHF.hlsli"
+#include "postProcessHF.h"
 //#include "ViewProp.h"
 
 
-float4 main(VertexToPixelPostProcess PSIn) : SV_TARGET
+fragment float4 depthofFieldPS(VertexToPixelPostProcess PSIn [[stage_in]], constant GlobalData &gd)
 {
 	float4 color = float4(0,0,0,0);
 
-	color += xTexture.SampleLevel(Sampler,PSIn.tex,0);
+	color += xTexture.SampleLevel(gd.customsampler0, PSIn.tex,0);
 
-	float targetDepth = xPPParams0[2];
+	float targetDepth = gd.postproc.xPPParams0[2];
 
-	float fragmentDepth = texture_lineardepth.SampleLevel(Sampler, PSIn.tex, 0).r * g_xFrame_MainCamera_ZFarP;
+	float fragmentDepth = gd.texture_lineardepth.SampleLevel(gd.customsampler0, PSIn.tex, 0) * gd.frame.g_xFrame_MainCamera_ZFarP;
 	float difference = abs(targetDepth - fragmentDepth);
 
-	color = lerp(color,xMaskTex.SampleLevel(Sampler,PSIn.tex,0),abs(clamp(difference*0.008f,-1,1)));
+	color = mix(color,xMaskTex.SampleLevel(gd.customsampler0,PSIn.tex,0),abs(clamp(difference*0.008f,-1,1)));
 
 	return color;
 }
