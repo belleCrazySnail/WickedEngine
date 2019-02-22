@@ -310,17 +310,17 @@ void MainComponent::Compose()
 }
 
 #ifdef _WIN32
-bool MainComponent::SetWindow(wiWindowRegistration::window_type window)
-{
-    wiWindowRegistration::RegisterWindow(window);
-    
-    return true;
-}
-#elif WINSTORE_SUPPORT
 bool MainComponent::SetWindow(wiWindowRegistration::window_type window, HINSTANCE hInst)
 {
 	this->hInst = hInst;
 
+	wiWindowRegistration::RegisterWindow(window);
+
+	return true;
+}
+#elif WINSTORE_SUPPORT
+bool MainComponent::SetWindow(wiWindowRegistration::window_type window)
+{
 	wiWindowRegistration::RegisterWindow(window);
 
 	return true;

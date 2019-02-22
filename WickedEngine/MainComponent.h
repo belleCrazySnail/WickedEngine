@@ -60,12 +60,12 @@ public:
 	virtual void Compose();
 
 #ifdef _WIN32
-	// You need to call this before calling Run() or Initialize() if you want to render to a UWP window
-	bool SetWindow(wiWindowRegistration::window_type window);
-#elif WINSTORE_SUPPORT
     HINSTANCE hInst = NULL;
     // You need to call this before calling Run() or Initialize() if you want to render to a Win32 window handle
     bool SetWindow(wiWindowRegistration::window_type window, HINSTANCE hInst = NULL);
+#elif WINSTORE_SUPPORT
+	// You need to call this before calling Run() or Initialize() if you want to render to a UWP window
+	bool SetWindow(wiWindowRegistration::window_type window);
 #elif __APPLE__
     bool SetWindow(wiWindowRegistration::window_type window);
 #endif

@@ -1332,7 +1332,7 @@ ForwardEntityMaskCB ForwardEntityCullingCPU(const RenderQueue& renderQueue, cons
 	const FrameCulling& culling = frameCullings.at(camera);
 
 	uint32_t buckets[2] = { 0,0 };
-    for (size_t i = 0; i < std::min(64ul, culling.culledLights.size()); ++i) // only support indexing 64 lights at max for now
+    for (size_t i = 0; i < std::min((size_t)64, culling.culledLights.size()); ++i) // only support indexing 64 lights at max for now
 	{
 		const uint32_t lightIndex = culling.culledLights[i];
 		const AABB& light_aabb = scene.aabb_lights[lightIndex];
@@ -1348,7 +1348,7 @@ ForwardEntityMaskCB ForwardEntityCullingCPU(const RenderQueue& renderQueue, cons
 
 	if (renderPass == RENDERPASS_FORWARD || renderPass == RENDERPASS_ENVMAPCAPTURE)
 	{
-        for (size_t i = 0; i < std::min(32ul, culling.culledDecals.size()); ++i)
+        for (size_t i = 0; i < std::min((size_t)32, culling.culledDecals.size()); ++i)
 		{
 			const uint32_t decalIndex = culling.culledDecals[culling.culledDecals.size() - 1 - i]; // note: reverse order, for correct blending!
 			const AABB& decal_aabb = scene.aabb_decals[decalIndex];
@@ -1362,7 +1362,7 @@ ForwardEntityMaskCB ForwardEntityCullingCPU(const RenderQueue& renderQueue, cons
 
 	if (renderPass == RENDERPASS_FORWARD)
 	{
-        for (size_t i = 0; i < std::min(32ul, culling.culledEnvProbes.size()); ++i)
+        for (size_t i = 0; i < std::min((size_t)32, culling.culledEnvProbes.size()); ++i)
 		{
 			const uint32_t probeIndex = culling.culledEnvProbes[culling.culledEnvProbes.size() - 1 - i]; // note: reverse order, for correct blending!
 			const AABB& probe_aabb = scene.aabb_probes[probeIndex];

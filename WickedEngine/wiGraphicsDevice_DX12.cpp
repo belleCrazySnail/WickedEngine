@@ -2894,6 +2894,7 @@ namespace wiGraphicsTypes
 		pVertexShader->code.data = new BYTE[pCode->size];
 		memcpy(pVertexShader->code.data, pCode->data, pCode->size);
 		pVertexShader->code.size = pCode->size;
+		pVertexShader->code.ShaderName = pCode->ShaderName;
 
 		return (pVertexShader->code.data != nullptr && pVertexShader->code.size > 0 ? S_OK : E_FAIL);
 	}
@@ -2904,6 +2905,7 @@ namespace wiGraphicsTypes
 		pPixelShader->code.data = new BYTE[pCode->size];
 		memcpy(pPixelShader->code.data, pCode->data, pCode->size);
 		pPixelShader->code.size = pCode->size;
+		pPixelShader->code.ShaderName = pCode->ShaderName;
 
 		return (pPixelShader->code.data != nullptr && pPixelShader->code.size > 0 ? S_OK : E_FAIL);
 	}
@@ -2914,6 +2916,7 @@ namespace wiGraphicsTypes
 		pGeometryShader->code.data = new BYTE[pCode->size];
 		memcpy(pGeometryShader->code.data, pCode->data, pCode->size);
 		pGeometryShader->code.size = pCode->size;
+		pGeometryShader->code.ShaderName = pCode->ShaderName;
 
 		return (pGeometryShader->code.data != nullptr && pGeometryShader->code.size > 0 ? S_OK : E_FAIL);
 	}
@@ -2924,6 +2927,7 @@ namespace wiGraphicsTypes
 		pHullShader->code.data = new BYTE[pCode->size];
 		memcpy(pHullShader->code.data, pCode->data, pCode->size);
 		pHullShader->code.size = pCode->size;
+		pHullShader->code.ShaderName = pCode->ShaderName;
 
 		return (pHullShader->code.data != nullptr && pHullShader->code.size > 0 ? S_OK : E_FAIL);
 	}
@@ -2934,6 +2938,7 @@ namespace wiGraphicsTypes
 		pDomainShader->code.data = new BYTE[pCode->size];
 		memcpy(pDomainShader->code.data, pCode->data, pCode->size);
 		pDomainShader->code.size = pCode->size;
+		pDomainShader->code.ShaderName = pCode->ShaderName;
 
 		return (pDomainShader->code.data != nullptr && pDomainShader->code.size > 0 ? S_OK : E_FAIL);
 	}
@@ -2944,6 +2949,7 @@ namespace wiGraphicsTypes
 		pComputeShader->code.data = new BYTE[pCode->size];
 		memcpy(pComputeShader->code.data, pCode->data, pCode->size);
 		pComputeShader->code.size = pCode->size;
+		pComputeShader->code.ShaderName = pCode->ShaderName;
 
 		return (pComputeShader->code.data != nullptr && pComputeShader->code.size > 0 ? S_OK : E_FAIL);
 	}
