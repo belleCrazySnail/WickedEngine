@@ -3193,10 +3193,8 @@ namespace wiGraphicsTypes
 
 		return S_OK;
 	}
-	HRESULT GraphicsDevice_Vulkan::CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader)
-	{
-		pVertexShader->Register(this);
 
+	VkShaderModule GraphicsDevice_Vulkan::CreateShaderModule(const ShaderByteCode *pCode) {
 		VkShaderModuleCreateInfo moduleInfo = {};
 		moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		moduleInfo.codeSize = pCode->size;
@@ -3205,60 +3203,62 @@ namespace wiGraphicsTypes
 		if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create shader module!");
 		}
-		pVertexShader->resource = shaderModule;
+		return shaderModule;
+	}
+
+	HRESULT GraphicsDevice_Vulkan::CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader)
+	{
+		pVertexShader->Register(this);
+
+		pVertexShader->resource = CreateShaderModule(pCode);
 		pVertexShader->code.ShaderName = pCode->ShaderName;
 
-		return (pVertexShader->code.data != nullptr && pVertexShader->code.size > 0 ? S_OK : E_FAIL);
+		return (pVertexShader->resource != VK_NULL_HANDLE ? S_OK : E_FAIL);
 	}
 	HRESULT GraphicsDevice_Vulkan::CreatePixelShader(const ShaderByteCode *pCode, PixelShader *pPixelShader)
 	{
 		pPixelShader->Register(this);
 
-		pPixelShader->code.data = new BYTE[pCode->size];
-		memcpy(pPixelShader->code.data, pCode->data, pCode->size);
-		pPixelShader->code.size = pCode->size;
+		pPixelShader->resource = CreateShaderModule(pCode);
+		pPixelShader->code.ShaderName = pCode->ShaderName;
 
-		return (pPixelShader->code.data != nullptr && pPixelShader->code.size > 0 ? S_OK : E_FAIL);
+		return (pPixelShader->resource != VK_NULL_HANDLE ? S_OK : E_FAIL);
 	}
 	HRESULT GraphicsDevice_Vulkan::CreateGeometryShader(const ShaderByteCode *pCode, GeometryShader *pGeometryShader)
 	{
 		pGeometryShader->Register(this);
 
-		pGeometryShader->code.data = new BYTE[pCode->size];
-		memcpy(pGeometryShader->code.data, pCode->data, pCode->size);
-		pGeometryShader->code.size = pCode->size;
+		pGeometryShader->resource = CreateShaderModule(pCode);
+		pGeometryShader->code.ShaderName = pCode->ShaderName;
 
-		return (pGeometryShader->code.data != nullptr && pGeometryShader->code.size > 0 ? S_OK : E_FAIL);
+		return (pGeometryShader->resource != VK_NULL_HANDLE ? S_OK : E_FAIL);
 	}
 	HRESULT GraphicsDevice_Vulkan::CreateHullShader(const ShaderByteCode *pCode, HullShader *pHullShader)
 	{
 		pHullShader->Register(this);
 
-		pHullShader->code.data = new BYTE[pCode->size];
-		memcpy(pHullShader->code.data, pCode->data, pCode->size);
-		pHullShader->code.size = pCode->size;
+		pHullShader->resource = CreateShaderModule(pCode);
+		pHullShader->code.ShaderName = pCode->ShaderName;
 
-		return (pHullShader->code.data != nullptr && pHullShader->code.size > 0 ? S_OK : E_FAIL);
+		return (pHullShader->resource != VK_NULL_HANDLE ? S_OK : E_FAIL);
 	}
 	HRESULT GraphicsDevice_Vulkan::CreateDomainShader(const ShaderByteCode *pCode, DomainShader *pDomainShader)
 	{
 		pDomainShader->Register(this);
 
-		pDomainShader->code.data = new BYTE[pCode->size];
-		memcpy(pDomainShader->code.data, pCode->data, pCode->size);
-		pDomainShader->code.size = pCode->size;
+		pDomainShader->resource = CreateShaderModule(pCode);
+		pDomainShader->code.ShaderName = pCode->ShaderName;
 
-		return (pDomainShader->code.data != nullptr && pDomainShader->code.size > 0 ? S_OK : E_FAIL);
+		return (pDomainShader->resource != VK_NULL_HANDLE ? S_OK : E_FAIL);
 	}
 	HRESULT GraphicsDevice_Vulkan::CreateComputeShader(const ShaderByteCode *pCode, ComputeShader *pComputeShader)
 	{
 		pComputeShader->Register(this);
 
-		pComputeShader->code.data = new BYTE[pCode->size];
-		memcpy(pComputeShader->code.data, pCode->data, pCode->size);
-		pComputeShader->code.size = pCode->size;
+		pComputeShader->resource = CreateShaderModule(pCode);
+		pComputeShader->code.ShaderName = pCode->ShaderName;
 
-		return (pComputeShader->code.data != nullptr && pComputeShader->code.size > 0 ? S_OK : E_FAIL);
+		return (pComputeShader->resource != VK_NULL_HANDLE ? S_OK : E_FAIL);
 	}
 	HRESULT GraphicsDevice_Vulkan::CreateBlendState(const BlendStateDesc *pBlendStateDesc, BlendState *pBlendState)
 	{
@@ -3569,26 +3569,18 @@ namespace wiGraphicsTypes
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
 			stageInfo.module = pDesc->vs->resource;
-			stageInfo.pName = pDesc->vs->code.ShaderName.c_str();
+			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
 		}
 
 		if (pDesc->hs != nullptr)
 		{
-			VkShaderModuleCreateInfo moduleInfo = {};
-			moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-			moduleInfo.codeSize = pDesc->hs->code.size;
-			moduleInfo.pCode = reinterpret_cast<const uint32_t*>(pDesc->hs->code.data);
-			VkShaderModule shaderModule;
-			if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create shader module!");
-			}
 
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-			stageInfo.module = shaderModule;
+			stageInfo.module = pDesc->hs->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -3596,19 +3588,11 @@ namespace wiGraphicsTypes
 
 		if (pDesc->ds != nullptr)
 		{
-			VkShaderModuleCreateInfo moduleInfo = {};
-			moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-			moduleInfo.codeSize = pDesc->ds->code.size;
-			moduleInfo.pCode = reinterpret_cast<const uint32_t*>(pDesc->ds->code.data);
-			VkShaderModule shaderModule;
-			if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create shader module!");
-			}
 
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-			stageInfo.module = shaderModule;
+			stageInfo.module = pDesc->ds->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -3616,19 +3600,11 @@ namespace wiGraphicsTypes
 
 		if (pDesc->gs != nullptr)
 		{
-			VkShaderModuleCreateInfo moduleInfo = {};
-			moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-			moduleInfo.codeSize = pDesc->gs->code.size;
-			moduleInfo.pCode = reinterpret_cast<const uint32_t*>(pDesc->gs->code.data);
-			VkShaderModule shaderModule;
-			if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create shader module!");
-			}
 
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_GEOMETRY_BIT;
-			stageInfo.module = shaderModule;
+			stageInfo.module = pDesc->gs->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -3636,19 +3612,11 @@ namespace wiGraphicsTypes
 
 		if (pDesc->ps != nullptr)
 		{
-			VkShaderModuleCreateInfo moduleInfo = {};
-			moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-			moduleInfo.codeSize = pDesc->ps->code.size;
-			moduleInfo.pCode = reinterpret_cast<const uint32_t*>(pDesc->ps->code.data);
-			VkShaderModule shaderModule;
-			if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
-				throw std::runtime_error("failed to create shader module!");
-			}
 
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-			stageInfo.module = shaderModule;
+			stageInfo.module = pDesc->ps->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
