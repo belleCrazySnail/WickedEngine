@@ -1217,21 +1217,21 @@ namespace wiGraphicsTypes
         MTLRenderPassDescriptor *renderPassDesc = [[MTLRenderPassDescriptor alloc] init];
         for (UINT i = 0; i < pDesc->NumRenderTargets; ++i)
         {
-            renderPassDesc.colorAttachments[i].loadAction = _ConvertLoadAction(pDesc->RenderTargets[i].BeginningAccess.Type);
+            renderPassDesc.colorAttachments[i].loadAction = _ConvertLoadAction(pDesc->RenderTargets[i].BeginningAccess);
             renderPassDesc.colorAttachments[i].storeAction = _ConvertStoreAction(pDesc->RenderTargets[i].EndingAccess);
             if (renderPassDesc.colorAttachments[i].loadAction == MTLLoadActionClear) {
-                const FLOAT *temp = pDesc->RenderTargets[i].BeginningAccess.Clear.Color;
+                const FLOAT *temp = pDesc->RenderTargets[i].Clear.Color;
                 renderPassDesc.colorAttachments[i].clearColor = MTLClearColorMake(temp[0], temp[1], temp[2], temp[3]);
             }
         }
-        renderPassDesc.depthAttachment.loadAction = _ConvertLoadAction(pDesc->Depth.BeginningAccess.Type);
+        renderPassDesc.depthAttachment.loadAction = _ConvertLoadAction(pDesc->Depth.BeginningAccess);
         renderPassDesc.depthAttachment.storeAction = _ConvertStoreAction(pDesc->Depth.EndingAccess);
         if (renderPassDesc.depthAttachment.loadAction == MTLLoadActionClear)
-            renderPassDesc.depthAttachment.clearDepth = pDesc->Depth.BeginningAccess.Clear.DepthStencil.Depth;
-        renderPassDesc.stencilAttachment.loadAction = _ConvertLoadAction(pDesc->Stencil.BeginningAccess.Type);
+            renderPassDesc.depthAttachment.clearDepth = pDesc->Depth.Clear.DepthStencil.Depth;
+        renderPassDesc.stencilAttachment.loadAction = _ConvertLoadAction(pDesc->Stencil.BeginningAccess);
         renderPassDesc.stencilAttachment.storeAction = _ConvertStoreAction(pDesc->Stencil.EndingAccess);
         if (renderPassDesc.stencilAttachment.loadAction == MTLLoadActionClear)
-            renderPassDesc.stencilAttachment.clearStencil = pDesc->Stencil.BeginningAccess.Clear.DepthStencil.Stencil;
+            renderPassDesc.stencilAttachment.clearStencil = pDesc->Stencil.Clear.DepthStencil.Stencil;
         pRenderPass->resource = RETAIN_RES(renderPassDesc);
         
         return S_OK;
@@ -1322,6 +1322,10 @@ namespace wiGraphicsTypes
     {
         MTLRenderPassDescriptor *renderPassDesc = BRIDGE_RES1(MTLRenderPassDescriptor, pRenderPass->resource);
         GetFrameResources().drawInfo[threadID].commandLists = [_commandBuffer renderCommandEncoderWithDescriptor:renderPassDesc];
+    }
+
+    void GraphicsDevice_Metal::NextSubPass(GRAPHICSTHREAD threadID)
+    {
     }
 
     void GraphicsDevice_Metal::EndRenderPass(GRAPHICSTHREAD threadID)

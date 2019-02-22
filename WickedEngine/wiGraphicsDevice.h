@@ -25,6 +25,8 @@ namespace wiGraphicsTypes
 		bool CONSERVATIVE_RASTERIZATION = false;
 		bool RASTERIZER_ORDERED_VIEWS = false;
 		bool UNORDEREDACCESSTEXTURE_LOAD_EXT = false;
+        bool TILE_BASED = false;
+        bool TRANSIENT_IMAGE = false;
 
 	public:
 
@@ -71,7 +73,9 @@ namespace wiGraphicsTypes
 		virtual void SetName(GPUResource* pResource, const std::string& name) = 0;
 
         virtual void BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID) = 0;
+        virtual void NextSubPass(GRAPHICSTHREAD threadID) = 0;
         virtual void EndRenderPass(GRAPHICSTHREAD threadID) = 0;
+        
 		virtual void PresentBegin() = 0;
 		virtual void PresentEnd() = 0;
 
@@ -101,6 +105,8 @@ namespace wiGraphicsTypes
 			GRAPHICSDEVICE_CAPABILITY_CONSERVATIVE_RASTERIZATION,
 			GRAPHICSDEVICE_CAPABILITY_RASTERIZER_ORDERED_VIEWS,
 			GRAPHICSDEVICE_CAPABILITY_UNORDEREDACCESSTEXTURE_LOAD_FORMAT_EXT,
+            GRAPHICSDEVICE_CAPABILITY_TILE_BASED,
+            GRAPHICSDEVICE_CAPABILITY_TRANSIENT_IMAGE, 
 			GRAPHICSDEVICE_CAPABILITY_COUNT,
 		};
 		bool CheckCapability(GRAPHICSDEVICE_CAPABILITY capability) const;

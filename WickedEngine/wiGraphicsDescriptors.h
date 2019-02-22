@@ -44,6 +44,56 @@ namespace wiGraphicsTypes
         ACCESS_TYPE_CLEAR,
         ACCESS_TYPE_NO_ACCESS,
     };
+    enum IMAGE_LAYOUT
+    {
+        IMAGE_LAYOUT_UNDEFINED = 0,
+        IMAGE_LAYOUT_GENERAL = 1,
+        IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL = 2,
+        IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL = 3,
+        IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL = 4,
+        IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL = 5,
+        IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL = 6,
+        IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL = 7,
+        IMAGE_LAYOUT_PREINITIALIZED = 8,
+    };
+    enum PipelineStageFlag {
+        PIPELINE_STAGE_TOP_OF_PIPE_BIT = 0x00000001,
+        PIPELINE_STAGE_DRAW_INDIRECT_BIT = 0x00000002,
+        PIPELINE_STAGE_VERTEX_INPUT_BIT = 0x00000004,
+        PIPELINE_STAGE_VERTEX_SHADER_BIT = 0x00000008,
+        PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT = 0x00000010,
+        PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT = 0x00000020,
+        PIPELINE_STAGE_GEOMETRY_SHADER_BIT = 0x00000040,
+        PIPELINE_STAGE_FRAGMENT_SHADER_BIT = 0x00000080,
+        PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT = 0x00000100,
+        PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT = 0x00000200,
+        PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT = 0x00000400,
+        PIPELINE_STAGE_COMPUTE_SHADER_BIT = 0x00000800,
+        PIPELINE_STAGE_TRANSFER_BIT = 0x00001000,
+        PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT = 0x00002000,
+        PIPELINE_STAGE_HOST_BIT = 0x00004000,
+        PIPELINE_STAGE_ALL_GRAPHICS_BIT = 0x00008000,
+        PIPELINE_STAGE_ALL_COMMANDS_BIT = 0x00010000,
+    };
+    enum MemoryAccessFlag {
+        ACCESS_INDIRECT_COMMAND_READ_BIT = 0x00000001,
+        ACCESS_INDEX_READ_BIT = 0x00000002,
+        ACCESS_VERTEX_ATTRIBUTE_READ_BIT = 0x00000004,
+        ACCESS_UNIFORM_READ_BIT = 0x00000008,
+        ACCESS_INPUT_ATTACHMENT_READ_BIT = 0x00000010,
+        ACCESS_SHADER_READ_BIT = 0x00000020,
+        ACCESS_SHADER_WRITE_BIT = 0x00000040,
+        ACCESS_COLOR_ATTACHMENT_READ_BIT = 0x00000080,
+        ACCESS_COLOR_ATTACHMENT_WRITE_BIT = 0x00000100,
+        ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT = 0x00000200,
+        ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT = 0x00000400,
+        ACCESS_TRANSFER_READ_BIT = 0x00000800,
+        ACCESS_TRANSFER_WRITE_BIT = 0x00001000,
+        ACCESS_HOST_READ_BIT = 0x00002000,
+        ACCESS_HOST_WRITE_BIT = 0x00004000,
+        ACCESS_MEMORY_READ_BIT = 0x00008000,
+        ACCESS_MEMORY_WRITE_BIT = 0x00010000,
+    };
 	enum COMPARISON_FUNC
 	{
 		COMPARISON_NEVER,
@@ -507,22 +557,46 @@ namespace wiGraphicsTypes
             DepthStencilValue DepthStencil;
         };
     };
-    struct AccessDesc
+    struct AttachmentDesc
     {
-        ACCESS_TYPE Type;
+        FORMAT Format;
+        ACCESS_TYPE BeginningAccess;
         ClearValue Clear;
-    };
-    struct RenderTargetAccessDesc
-    {
-        AccessDesc BeginningAccess;
         ACCESS_TYPE EndingAccess;
+        IMAGE_LAYOUT InitialLayout;
+        IMAGE_LAYOUT FinalLayout;
+    };
+    struct AttachmentReference {
+        UINT Index;
+        IMAGE_LAYOUT Layout;
+    };
+    struct SubpassDescription
+    {
+        UINT inputAttachmentCount;
+        AttachmentReference InputAttachments[8] = {};
+        UINT colorAttachmentCount;
+        AttachmentReference ColorAttachments[8] = {};
+//        AttachmentReference ResolveAttachments;
+        AttachmentReference DepthStencilAttachment;
+    };
+    struct SubpassDependency {
+        UINT srcSubpass;
+        UINT dstSubpass;
+        PipelineStageFlag srcStageMask;
+        PipelineStageFlag dstStageMask;
+        MemoryAccessFlag srcAccessMask;
+        MemoryAccessFlag dstAccessMask;
     };
     struct RenderPassDesc
     {
         UINT NumRenderTargets;
-        RenderTargetAccessDesc RenderTargets[8] = {};
-        RenderTargetAccessDesc Depth;
-        RenderTargetAccessDesc Stencil;
+        AttachmentDesc RenderTargets[8] = {};
+        AttachmentDesc Depth;
+        AttachmentDesc Stencil;
+        UINT subpassCount;
+        SubpassDescription Subpasses[8] = {};
+        UINT dependencyCount;
+        SubpassDependency Dependencies[8] = {};
     };
 	struct GraphicsPSODesc
 	{

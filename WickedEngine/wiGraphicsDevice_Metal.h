@@ -111,7 +111,9 @@ namespace wiGraphicsTypes
 		void SetName(GPUResource* pResource, const std::string& name) override;
 
         void BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID) override;
+        void NextSubPass(GRAPHICSTHREAD threadID) override;
         void EndRenderPass(GRAPHICSTHREAD threadID) override;
+        
 		void PresentBegin() override;
 		void PresentEnd() override;
 

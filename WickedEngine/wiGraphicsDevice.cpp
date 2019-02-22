@@ -21,6 +21,12 @@ bool GraphicsDevice::CheckCapability(GRAPHICSDEVICE_CAPABILITY capability) const
 	case wiGraphicsTypes::GraphicsDevice::GRAPHICSDEVICE_CAPABILITY_UNORDEREDACCESSTEXTURE_LOAD_FORMAT_EXT:
 		return UNORDEREDACCESSTEXTURE_LOAD_EXT;
 		break;
+    case wiGraphicsTypes::GraphicsDevice::GRAPHICSDEVICE_CAPABILITY_TILE_BASED:
+        return TILE_BASED;
+        break;
+    case wiGraphicsTypes::GraphicsDevice::GRAPHICSDEVICE_CAPABILITY_TRANSIENT_IMAGE:
+        return TRANSIENT_IMAGE;
+        break;
 	default:
 		break;
 	}
