@@ -7,18 +7,7 @@
 #define xMaskTex		gd.texture_1
 #define xDistortionTex	gd.texture_2
 
-struct VertextoPixel
-{
-	float4 pos [[position]];
-	float2 tex_original;
-	float2 tex;
-	float4 pos2D;
-};
-struct VertexToPixelPostProcess
-{
-	float4 pos [[position]];
-	float2 tex;
-};
+#define VertexToPixelPostProcess VertexToPixel1
 
 #endif // _IMAGEHF_
 

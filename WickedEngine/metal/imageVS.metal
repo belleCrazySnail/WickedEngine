@@ -1,9 +1,9 @@
 #include "globals.h"
 #include "imageHF.h"
 
-vertex VertextoPixel imageVS(uint vI [[vertex_id]], constant GlobalData &gd)
+vertex VertexToPixel imageVS(uint vI [[vertex_id]], constant GlobalData &gd)
 {
-	VertextoPixel Out;
+	VertexToPixel Out;
 
 	// This vertex shader generates a trianglestrip like this:
 	//	1--2

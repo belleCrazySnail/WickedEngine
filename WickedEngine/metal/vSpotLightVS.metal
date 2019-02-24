@@ -1,16 +1,18 @@
-#include "volumeLightHF.hlsli"
-#include "cone.hlsli"
 
-VertexToPixel main(uint vID : SV_VertexID)
+#define VOLUMELIGHT_CB
+#include "globals.h"
+#include "cone.h"
+
+vertex VertexToPixel2 vSpotLightVS(uint vID [[vertex_id]], constant GlobalData &gd)
 {
-	VertexToPixel Out = (VertexToPixel)0;
+	VertexToPixel2 Out;
 		
 	float4 pos = CONE[vID];
-	pos = mul( pos,lightWorld );
-	Out.pos = mul(pos,g_xCamera_VP);
-	Out.col=lerp(
-		float4(lightColor.rgb,1),float4(0,0,0,0),
-		distance(pos.xyz,float3( lightWorld._41,lightWorld._42,lightWorld._43 ))/(lightEnerdis.w)
+	pos = mul( pos,gd.vol.lightWorld );
+	Out.pos = mul(pos,gd.camera.g_xCamera_VP);
+	Out.col=mix(
+		float4(gd.vol.lightColor.rgb,1),float4(0,0,0,0),
+		distance(pos.xyz,float3( gd.vol.lightWorld[0][3],gd.vol.lightWorld[1][3],gd.vol.lightWorld[2][3] ))/(gd.vol.lightEnerdis.w)
 		);
 
 	return Out;

@@ -1,6 +1,6 @@
-#include "volumeLightHF.hlsli"
+#include "globals.h"
 
-float4 main(VertexToPixel PSIn) : SV_TARGET
+fragment float4 lightVisualizerPS(VertexToPixel2 PSIn [[stage_in]])
 {
 	return max(PSIn.col,0);
 }

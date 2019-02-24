@@ -46,6 +46,10 @@ STRUCTUREDBUFFER(MatrixArray, float4x4, SBSLOT_MATRIXARRAY);
     constant APICB &api [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_API)]];
     constant MaterialCB &material [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_MATERIAL)]];
 
+#ifdef VOLUMELIGHT_CB
+    constant VolumeLightCB &vol [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_VOLUMELIGHT)]];
+#endif
+    
 SAMPLERSTATE(			sampler_linear_clamp,	SSLOT_LINEAR_CLAMP	)
 SAMPLERSTATE(			sampler_linear_wrap,	SSLOT_LINEAR_WRAP	)
 SAMPLERSTATE(			sampler_linear_mirror,	SSLOT_LINEAR_MIRROR	)
@@ -100,6 +104,29 @@ inline bool is_saturated(float4 a) { return any(bool4(a - saturate(a))); }
 #define DEGAMMA_SKY(x)	pow(abs(x),gd.frame.g_xFrame_StaticSkyGamma)
 #define DEGAMMA(x)		pow(abs(x),gd.frame.g_xFrame_Gamma)
 #define GAMMA(x)		pow(abs(x),1.0/gd.frame.g_xFrame_Gamma)
+
+struct VertexToPixel
+{
+    float4 pos [[position]];
+    float2 tex_original;
+    float2 tex;
+    float4 pos2D;
+};
+struct VertexToPixel1
+{
+    float4 pos [[position]];
+    float2 tex;
+};
+struct VertexToPixel2
+{
+    float4 pos [[position]];
+    float4 col;
+};
+struct VertexToPixel3
+{
+    float4 pos [[position]];
+    float4 pos2D;
+};
 
 inline float3 GetSunColor(constant GlobalData &gd) { return gd.frame.g_xFrame_SunColor; }
 inline float3 GetSunDirection(constant GlobalData &gd) { return gd.frame.g_xFrame_SunDirection; }

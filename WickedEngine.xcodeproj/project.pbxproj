@@ -280,6 +280,48 @@
 		688D3AC1221DD2D80005B1F9 /* colorGradePS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */; };
 		688D3AC2221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A9B221DD2D70005B1F9 /* screenPS_bicubic.metal */; };
 		688D3AC3221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3A9B221DD2D70005B1F9 /* screenPS_bicubic.metal */; };
+		688D3ADF222149070005B1F9 /* tubeLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ACD222149060005B1F9 /* tubeLightPS.metal */; };
+		688D3AE0222149070005B1F9 /* tubeLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ACD222149060005B1F9 /* tubeLightPS.metal */; };
+		688D3AE1222149070005B1F9 /* volumetricLight_DirectionalPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ACE222149060005B1F9 /* volumetricLight_DirectionalPS.metal */; };
+		688D3AE2222149070005B1F9 /* volumetricLight_DirectionalPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ACE222149060005B1F9 /* volumetricLight_DirectionalPS.metal */; };
+		688D3AE3222149070005B1F9 /* environmentalLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ACF222149060005B1F9 /* environmentalLightPS.metal */; };
+		688D3AE4222149070005B1F9 /* environmentalLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ACF222149060005B1F9 /* environmentalLightPS.metal */; };
+		688D3AE5222149070005B1F9 /* rectangleLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD1222149060005B1F9 /* rectangleLightPS.metal */; };
+		688D3AE6222149070005B1F9 /* rectangleLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD1222149060005B1F9 /* rectangleLightPS.metal */; };
+		688D3AE7222149070005B1F9 /* volumetricLight_PointPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD2222149060005B1F9 /* volumetricLight_PointPS.metal */; };
+		688D3AE8222149070005B1F9 /* volumetricLight_PointPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD2222149060005B1F9 /* volumetricLight_PointPS.metal */; };
+		688D3AE9222149070005B1F9 /* discLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD3222149060005B1F9 /* discLightPS.metal */; };
+		688D3AEA222149070005B1F9 /* discLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD3222149060005B1F9 /* discLightPS.metal */; };
+		688D3AED222149070005B1F9 /* volumetricLight_SpotPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD5222149060005B1F9 /* volumetricLight_SpotPS.metal */; };
+		688D3AEE222149070005B1F9 /* volumetricLight_SpotPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD5222149060005B1F9 /* volumetricLight_SpotPS.metal */; };
+		688D3AEF222149070005B1F9 /* spotLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD6222149070005B1F9 /* spotLightVS.metal */; };
+		688D3AF0222149070005B1F9 /* spotLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD6222149070005B1F9 /* spotLightVS.metal */; };
+		688D3AF1222149070005B1F9 /* dirLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD7222149070005B1F9 /* dirLightPS.metal */; };
+		688D3AF2222149070005B1F9 /* dirLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD7222149070005B1F9 /* dirLightPS.metal */; };
+		688D3AF3222149070005B1F9 /* pointLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD9222149070005B1F9 /* pointLightVS.metal */; };
+		688D3AF4222149070005B1F9 /* pointLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3AD9222149070005B1F9 /* pointLightVS.metal */; };
+		688D3AF5222149070005B1F9 /* spotLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADA222149070005B1F9 /* spotLightPS.metal */; };
+		688D3AF6222149070005B1F9 /* spotLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADA222149070005B1F9 /* spotLightPS.metal */; };
+		688D3AF7222149070005B1F9 /* sphereLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADB222149070005B1F9 /* sphereLightPS.metal */; };
+		688D3AF8222149070005B1F9 /* sphereLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADB222149070005B1F9 /* sphereLightPS.metal */; };
+		688D3AF9222149070005B1F9 /* lightVisualizerPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADC222149070005B1F9 /* lightVisualizerPS.metal */; };
+		688D3AFA222149070005B1F9 /* lightVisualizerPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADC222149070005B1F9 /* lightVisualizerPS.metal */; };
+		688D3AFB222149070005B1F9 /* dirLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADD222149070005B1F9 /* dirLightVS.metal */; };
+		688D3AFC222149070005B1F9 /* dirLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADD222149070005B1F9 /* dirLightVS.metal */; };
+		688D3AFD222149070005B1F9 /* pointLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADE222149070005B1F9 /* pointLightPS.metal */; };
+		688D3AFE222149070005B1F9 /* pointLightPS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3ADE222149070005B1F9 /* pointLightPS.metal */; };
+		688D3B0922214BDF0005B1F9 /* vPointLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0022214BDE0005B1F9 /* vPointLightVS.metal */; };
+		688D3B0A22214BDF0005B1F9 /* vPointLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0022214BDE0005B1F9 /* vPointLightVS.metal */; };
+		688D3B0B22214BDF0005B1F9 /* vDiscLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0322214BDF0005B1F9 /* vDiscLightVS.metal */; };
+		688D3B0C22214BDF0005B1F9 /* vDiscLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0322214BDF0005B1F9 /* vDiscLightVS.metal */; };
+		688D3B0D22214BDF0005B1F9 /* vSpotLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0422214BDF0005B1F9 /* vSpotLightVS.metal */; };
+		688D3B0E22214BDF0005B1F9 /* vSpotLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0422214BDF0005B1F9 /* vSpotLightVS.metal */; };
+		688D3B0F22214BDF0005B1F9 /* vRectangleLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0522214BDF0005B1F9 /* vRectangleLightVS.metal */; };
+		688D3B1022214BDF0005B1F9 /* vRectangleLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0522214BDF0005B1F9 /* vRectangleLightVS.metal */; };
+		688D3B1122214BDF0005B1F9 /* vTubeLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0622214BDF0005B1F9 /* vTubeLightVS.metal */; };
+		688D3B1222214BDF0005B1F9 /* vTubeLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0622214BDF0005B1F9 /* vTubeLightVS.metal */; };
+		688D3B1322214BDF0005B1F9 /* vSphereLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0822214BDF0005B1F9 /* vSphereLightVS.metal */; };
+		688D3B1422214BDF0005B1F9 /* vSphereLightVS.metal in Sources */ = {isa = PBXBuildFile; fileRef = 688D3B0822214BDF0005B1F9 /* vSphereLightVS.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -533,6 +575,34 @@
 		688D3A99221DD2D70005B1F9 /* ssss.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = ssss.metal; path = WickedEngine/metal/ssss.metal; sourceTree = "<group>"; };
 		688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = colorGradePS.metal; path = WickedEngine/metal/colorGradePS.metal; sourceTree = "<group>"; };
 		688D3A9B221DD2D70005B1F9 /* screenPS_bicubic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = screenPS_bicubic.metal; path = WickedEngine/metal/screenPS_bicubic.metal; sourceTree = "<group>"; };
+		688D3ACC222079DD0005B1F9 /* deferredLightHF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deferredLightHF.h; path = WickedEngine/metal/deferredLightHF.h; sourceTree = "<group>"; };
+		688D3ACD222149060005B1F9 /* tubeLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = tubeLightPS.metal; path = WickedEngine/metal/tubeLightPS.metal; sourceTree = "<group>"; };
+		688D3ACE222149060005B1F9 /* volumetricLight_DirectionalPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = volumetricLight_DirectionalPS.metal; path = WickedEngine/metal/volumetricLight_DirectionalPS.metal; sourceTree = "<group>"; };
+		688D3ACF222149060005B1F9 /* environmentalLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = environmentalLightPS.metal; path = WickedEngine/metal/environmentalLightPS.metal; sourceTree = "<group>"; };
+		688D3AD0222149060005B1F9 /* icosphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = icosphere.h; path = WickedEngine/metal/icosphere.h; sourceTree = "<group>"; };
+		688D3AD1222149060005B1F9 /* rectangleLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = rectangleLightPS.metal; path = WickedEngine/metal/rectangleLightPS.metal; sourceTree = "<group>"; };
+		688D3AD2222149060005B1F9 /* volumetricLight_PointPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = volumetricLight_PointPS.metal; path = WickedEngine/metal/volumetricLight_PointPS.metal; sourceTree = "<group>"; };
+		688D3AD3222149060005B1F9 /* discLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = discLightPS.metal; path = WickedEngine/metal/discLightPS.metal; sourceTree = "<group>"; };
+		688D3AD5222149060005B1F9 /* volumetricLight_SpotPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = volumetricLight_SpotPS.metal; path = WickedEngine/metal/volumetricLight_SpotPS.metal; sourceTree = "<group>"; };
+		688D3AD6222149070005B1F9 /* spotLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = spotLightVS.metal; path = WickedEngine/metal/spotLightVS.metal; sourceTree = "<group>"; };
+		688D3AD7222149070005B1F9 /* dirLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = dirLightPS.metal; path = WickedEngine/metal/dirLightPS.metal; sourceTree = "<group>"; };
+		688D3AD8222149070005B1F9 /* cone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cone.h; path = WickedEngine/metal/cone.h; sourceTree = "<group>"; };
+		688D3AD9222149070005B1F9 /* pointLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = pointLightVS.metal; path = WickedEngine/metal/pointLightVS.metal; sourceTree = "<group>"; };
+		688D3ADA222149070005B1F9 /* spotLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = spotLightPS.metal; path = WickedEngine/metal/spotLightPS.metal; sourceTree = "<group>"; };
+		688D3ADB222149070005B1F9 /* sphereLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = sphereLightPS.metal; path = WickedEngine/metal/sphereLightPS.metal; sourceTree = "<group>"; };
+		688D3ADC222149070005B1F9 /* lightVisualizerPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = lightVisualizerPS.metal; path = WickedEngine/metal/lightVisualizerPS.metal; sourceTree = "<group>"; };
+		688D3ADD222149070005B1F9 /* dirLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = dirLightVS.metal; path = WickedEngine/metal/dirLightVS.metal; sourceTree = "<group>"; };
+		688D3ADE222149070005B1F9 /* pointLightPS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = pointLightPS.metal; path = WickedEngine/metal/pointLightPS.metal; sourceTree = "<group>"; };
+		688D3AFF22214BDE0005B1F9 /* quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = quad.h; path = WickedEngine/metal/quad.h; sourceTree = "<group>"; };
+		688D3B0022214BDE0005B1F9 /* vPointLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = vPointLightVS.metal; path = WickedEngine/metal/vPointLightVS.metal; sourceTree = "<group>"; };
+		688D3B0122214BDF0005B1F9 /* circle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = circle.h; path = WickedEngine/metal/circle.h; sourceTree = "<group>"; };
+		688D3B0222214BDF0005B1F9 /* cylinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cylinder.h; path = WickedEngine/metal/cylinder.h; sourceTree = "<group>"; };
+		688D3B0322214BDF0005B1F9 /* vDiscLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = vDiscLightVS.metal; path = WickedEngine/metal/vDiscLightVS.metal; sourceTree = "<group>"; };
+		688D3B0422214BDF0005B1F9 /* vSpotLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = vSpotLightVS.metal; path = WickedEngine/metal/vSpotLightVS.metal; sourceTree = "<group>"; };
+		688D3B0522214BDF0005B1F9 /* vRectangleLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = vRectangleLightVS.metal; path = WickedEngine/metal/vRectangleLightVS.metal; sourceTree = "<group>"; };
+		688D3B0622214BDF0005B1F9 /* vTubeLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = vTubeLightVS.metal; path = WickedEngine/metal/vTubeLightVS.metal; sourceTree = "<group>"; };
+		688D3B0722214BDF0005B1F9 /* uvsphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uvsphere.h; path = WickedEngine/metal/uvsphere.h; sourceTree = "<group>"; };
+		688D3B0822214BDF0005B1F9 /* vSphereLightVS.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; name = vSphereLightVS.metal; path = WickedEngine/metal/vSphereLightVS.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -579,6 +649,7 @@
 		6853C30A2215E468000F7B58 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
+				688D3ACB222072C80005B1F9 /* light */,
 				688D3A42221DCBAA0005B1F9 /* PostProcessing */,
 				688D3A40221DC9100005B1F9 /* image */,
 				688D3A41221DC9270005B1F9 /* RenderPath */,
@@ -895,6 +966,7 @@
 		688D3A41221DC9270005B1F9 /* RenderPath */ = {
 			isa = PBXGroup;
 			children = (
+				688D3A98221DD2D70005B1F9 /* deferredPS.metal */,
 				6853C324221AC005000F7B58 /* objectHF.h */,
 				688D39B8221BC7AC0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal */,
 				688D39C5221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal */,
@@ -940,7 +1012,6 @@
 				688D3A8A221DD2D60005B1F9 /* bloomSeparatePS.metal */,
 				688D3A8B221DD2D60005B1F9 /* blurPS.metal */,
 				688D3A9A221DD2D70005B1F9 /* colorGradePS.metal */,
-				688D3A98221DD2D70005B1F9 /* deferredPS.metal */,
 				688D3A95221DD2D70005B1F9 /* depthofFieldPS.metal */,
 				688D3A8D221DD2D70005B1F9 /* downsampleDepthBuffer4xPS.metal */,
 				688D3A1E221D73F80005B1F9 /* fxaa.h */,
@@ -959,6 +1030,41 @@
 				688D3A92221DD2D70005B1F9 /* toneMapPS.metal */,
 			);
 			name = PostProcessing;
+			sourceTree = "<group>";
+		};
+		688D3ACB222072C80005B1F9 /* light */ = {
+			isa = PBXGroup;
+			children = (
+				688D3B0122214BDF0005B1F9 /* circle.h */,
+				688D3B0222214BDF0005B1F9 /* cylinder.h */,
+				688D3AFF22214BDE0005B1F9 /* quad.h */,
+				688D3B0722214BDF0005B1F9 /* uvsphere.h */,
+				688D3AD8222149070005B1F9 /* cone.h */,
+				688D3AD0222149060005B1F9 /* icosphere.h */,
+				688D3B0322214BDF0005B1F9 /* vDiscLightVS.metal */,
+				688D3B0022214BDE0005B1F9 /* vPointLightVS.metal */,
+				688D3B0522214BDF0005B1F9 /* vRectangleLightVS.metal */,
+				688D3B0822214BDF0005B1F9 /* vSphereLightVS.metal */,
+				688D3B0422214BDF0005B1F9 /* vSpotLightVS.metal */,
+				688D3B0622214BDF0005B1F9 /* vTubeLightVS.metal */,
+				688D3ACC222079DD0005B1F9 /* deferredLightHF.h */,
+				688D3AD7222149070005B1F9 /* dirLightPS.metal */,
+				688D3ADD222149070005B1F9 /* dirLightVS.metal */,
+				688D3AD3222149060005B1F9 /* discLightPS.metal */,
+				688D3ACF222149060005B1F9 /* environmentalLightPS.metal */,
+				688D3ADC222149070005B1F9 /* lightVisualizerPS.metal */,
+				688D3ADE222149070005B1F9 /* pointLightPS.metal */,
+				688D3AD9222149070005B1F9 /* pointLightVS.metal */,
+				688D3AD1222149060005B1F9 /* rectangleLightPS.metal */,
+				688D3ADB222149070005B1F9 /* sphereLightPS.metal */,
+				688D3ADA222149070005B1F9 /* spotLightPS.metal */,
+				688D3AD6222149070005B1F9 /* spotLightVS.metal */,
+				688D3ACD222149060005B1F9 /* tubeLightPS.metal */,
+				688D3ACE222149060005B1F9 /* volumetricLight_DirectionalPS.metal */,
+				688D3AD2222149060005B1F9 /* volumetricLight_PointPS.metal */,
+				688D3AD5222149060005B1F9 /* volumetricLight_SpotPS.metal */,
+			);
+			name = light;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1072,10 +1178,13 @@
 				688D3A11221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				6853C2CF221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
 				688D3ABC221DD2D80005B1F9 /* deferredPS.metal in Sources */,
+				688D3B1322214BDF0005B1F9 /* vSphereLightVS.metal in Sources */,
 				688D3A2E221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */,
 				688D3980221B38260005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
+				688D3AED222149070005B1F9 /* volumetricLight_SpotPS.metal in Sources */,
 				6853C2CB22158478000F7B58 /* wiSprite.cpp in Sources */,
 				688D3A14221C07290005B1F9 /* wiTimer.cpp in Sources */,
+				688D3AE5222149070005B1F9 /* rectangleLightPS.metal in Sources */,
 				688D399F221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
 				688D3A2C221DC2F10005B1F9 /* imagePS_distortion.metal in Sources */,
 				6853C2FA2215E0CF000F7B58 /* RenderPath2D.cpp in Sources */,
@@ -1085,6 +1194,8 @@
 				6853C2D22215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
 				688D3AA2221DD2D80005B1F9 /* blurPS.metal in Sources */,
 				688D3AAC221DD2D80005B1F9 /* stereogramPS.metal in Sources */,
+				688D3AE7222149070005B1F9 /* volumetricLight_PointPS.metal in Sources */,
+				688D3AF1222149070005B1F9 /* dirLightPS.metal in Sources */,
 				688D3978221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
 				688D3AB0221DD2D80005B1F9 /* toneMapPS.metal in Sources */,
 				6853C23422143AE4000F7B58 /* wiArchive.cpp in Sources */,
@@ -1099,9 +1210,11 @@
 				688D3AA0221DD2D80005B1F9 /* bloomSeparatePS.metal in Sources */,
 				688D3AA4221DD2D80005B1F9 /* ssao.metal in Sources */,
 				685F8BEB2209C30800A516B4 /* Renderer.m in Sources */,
+				688D3B0922214BDF0005B1F9 /* vPointLightVS.metal in Sources */,
 				688D3A9C221DD2D80005B1F9 /* lightShaftPS.metal in Sources */,
 				688D39CE221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
 				688D39FD221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */,
+				688D3AEF222149070005B1F9 /* spotLightVS.metal in Sources */,
 				6853C2AA22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29A2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C74220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
@@ -1124,33 +1237,42 @@
 				685F8C7E220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2FC2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				688D39AF221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
+				688D3ADF222149070005B1F9 /* tubeLightPS.metal in Sources */,
 				688D39EE221BD5F00005B1F9 /* objectVS_debug.metal in Sources */,
 				688D39C6221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2A02215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A622154123000F7B58 /* wiDepthTarget.cpp in Sources */,
 				6853C2F22215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				688D3A30221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */,
+				688D3B0B22214BDF0005B1F9 /* vDiscLightVS.metal in Sources */,
 				6853C27422153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				688D3AC2221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */,
 				688D39DA221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				688D3A1A221C689A0005B1F9 /* screenVS.metal in Sources */,
 				685F8C422209E0F400A516B4 /* wiGraphicsDevice.cpp in Sources */,
 				688D39C8221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */,
+				688D3AFD222149070005B1F9 /* pointLightPS.metal in Sources */,
 				6853C2F82215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
 				6853C3002215E0CF000F7B58 /* RenderPath.cpp in Sources */,
+				688D3AE9222149070005B1F9 /* discLightPS.metal in Sources */,
 				688D39A5221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */,
 				685F8BCC2209C30800A516B4 /* AppDelegate.m in Sources */,
+				688D3B1122214BDF0005B1F9 /* vTubeLightVS.metal in Sources */,
 				6853C24F22144197000F7B58 /* wiHelper.cpp in Sources */,
 				688D3A9E221DD2D80005B1F9 /* linDepthPS.metal in Sources */,
+				688D3AF9222149070005B1F9 /* lightVisualizerPS.metal in Sources */,
 				688D39B5221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
 				688D3A36221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */,
+				688D3AFB222149070005B1F9 /* dirLightVS.metal in Sources */,
 				6853C2AE22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25622144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C722158478000F7B58 /* wiOcean.cpp in Sources */,
+				688D3AF3222149070005B1F9 /* pointLightVS.metal in Sources */,
 				688D3AB4221DD2D80005B1F9 /* reprojectDepthBufferPS.metal in Sources */,
 				688D39D2221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */,
 				688D3AB8221DD2D80005B1F9 /* screenPS.metal in Sources */,
 				688D398A221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
+				688D3AE3222149070005B1F9 /* environmentalLightPS.metal in Sources */,
 				688D39E2221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
 				688D39D6221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
 				688D3AB6221DD2D80005B1F9 /* depthofFieldPS.metal in Sources */,
@@ -1166,17 +1288,21 @@
 				688D39F2221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F42215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28622153EA2000F7B58 /* wiRenderer.cpp in Sources */,
+				688D3AF5222149070005B1F9 /* spotLightPS.metal in Sources */,
 				688D3A09221BE7290005B1F9 /* wiVersion.cpp in Sources */,
 				688D39A3221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
+				688D3AF7222149070005B1F9 /* sphereLightPS.metal in Sources */,
 				6853C2C922158478000F7B58 /* wiLensFlare.cpp in Sources */,
 				688D397C221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */,
 				688D39B1221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */,
 				6853C2A22215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				688D3988221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
 				688D3A18221C689A0005B1F9 /* imageVS.metal in Sources */,
+				688D3AE1222149070005B1F9 /* volumetricLight_DirectionalPS.metal in Sources */,
 				688D3AAA221DD2D80005B1F9 /* ssr.metal in Sources */,
 				688D39D0221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29522154052000F7B58 /* wiTextureHelper.cpp in Sources */,
+				688D3B0F22214BDF0005B1F9 /* vRectangleLightVS.metal in Sources */,
 				688D39CC221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
 				688D3AB2221DD2D80005B1F9 /* motionBlurPS.metal in Sources */,
 				688D399D221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
@@ -1188,6 +1314,7 @@
 				688D39D4221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
 				688D3A05221BE1720005B1F9 /* MainComponent.cpp in Sources */,
 				688D39B3221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
+				688D3B0D22214BDF0005B1F9 /* vSpotLightVS.metal in Sources */,
 				688D39A9221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31B221891E3000F7B58 /* objectVS_common.metal in Sources */,
 				688D3A3E221DC2F10005B1F9 /* imagePS_masked.metal in Sources */,
@@ -1209,10 +1336,13 @@
 				688D3A12221C05EE0005B1F9 /* wiObjCHelper.mm in Sources */,
 				688D3982221B388D0005B1F9 /* objectPS_deferred_normalmap_planarreflection.metal in Sources */,
 				688D3ABD221DD2D80005B1F9 /* deferredPS.metal in Sources */,
+				688D3B1422214BDF0005B1F9 /* vSphereLightVS.metal in Sources */,
 				688D3A2F221DC2F10005B1F9 /* imagePS_distortion_masked_bicubic.metal in Sources */,
 				688D3983221B388D0005B1F9 /* objectPS_deferred_normalmap_pom.metal in Sources */,
+				688D3AEE222149070005B1F9 /* volumetricLight_SpotPS.metal in Sources */,
 				6853C2D0221584D9000F7B58 /* wiFFTGenerator.cpp in Sources */,
 				688D3A15221C07290005B1F9 /* wiTimer.cpp in Sources */,
+				688D3AE6222149070005B1F9 /* rectangleLightPS.metal in Sources */,
 				688D39A0221B48900005B1F9 /* objectPS_forward_planarreflection.metal in Sources */,
 				688D3A2D221DC2F10005B1F9 /* imagePS_distortion.metal in Sources */,
 				6853C2CC22158478000F7B58 /* wiSprite.cpp in Sources */,
@@ -1222,6 +1352,8 @@
 				685F8C62220B53E700A516B4 /* wiJobSystem.cpp in Sources */,
 				688D3AA3221DD2D80005B1F9 /* blurPS.metal in Sources */,
 				688D3AAD221DD2D80005B1F9 /* stereogramPS.metal in Sources */,
+				688D3AE8222149070005B1F9 /* volumetricLight_PointPS.metal in Sources */,
+				688D3AF2222149070005B1F9 /* dirLightPS.metal in Sources */,
 				6853C2D32215854B000F7B58 /* wiSceneSystem_Serializers.cpp in Sources */,
 				688D3AB1221DD2D80005B1F9 /* toneMapPS.metal in Sources */,
 				688D3979221B2B1A0005B1F9 /* objectPS_debug.metal in Sources */,
@@ -1236,9 +1368,11 @@
 				688D3AA1221DD2D80005B1F9 /* bloomSeparatePS.metal in Sources */,
 				688D3AA5221DD2D80005B1F9 /* ssao.metal in Sources */,
 				685F8BEC2209C30800A516B4 /* Renderer.m in Sources */,
+				688D3B0A22214BDF0005B1F9 /* vPointLightVS.metal in Sources */,
 				688D3A9D221DD2D80005B1F9 /* lightShaftPS.metal in Sources */,
 				688D39CF221BC7AD0005B1F9 /* objectPS_tiledforward_water.metal in Sources */,
 				688D39FE221BE0A00005B1F9 /* wiStartupArguments.cpp in Sources */,
+				688D3AF0222149070005B1F9 /* spotLightVS.metal in Sources */,
 				6853C2AB22154B94000F7B58 /* wiIntersect.cpp in Sources */,
 				6853C29B2215408D000F7B58 /* wiMath.cpp in Sources */,
 				685F8C75220B597500A516B4 /* wiWindowRegistration.cpp in Sources */,
@@ -1261,33 +1395,42 @@
 				685F8C7F220CC71A00A516B4 /* wiGraphicsDevice_Metal.mm in Sources */,
 				6853C2FD2215E0CF000F7B58 /* RenderPath3D_TiledForward.cpp in Sources */,
 				688D39B0221B48900005B1F9 /* objectPS_forward_pom.metal in Sources */,
+				688D3AE0222149070005B1F9 /* tubeLightPS.metal in Sources */,
 				688D39EF221BD5F00005B1F9 /* objectVS_debug.metal in Sources */,
 				688D39C7221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_planarreflection.metal in Sources */,
 				6853C2A12215410C000F7B58 /* wiHairParticle.cpp in Sources */,
 				6853C2A722154123000F7B58 /* wiDepthTarget.cpp in Sources */,
 				6853C2F32215E0CF000F7B58 /* RenderPath3D.cpp in Sources */,
 				688D3A31221DC2F10005B1F9 /* imagePS_separatenormalmap_bicubic.metal in Sources */,
+				688D3B0C22214BDF0005B1F9 /* vDiscLightVS.metal in Sources */,
 				6853C27522153E17000F7B58 /* wiGPUBVH.cpp in Sources */,
 				688D3AC3221DD2D80005B1F9 /* screenPS_bicubic.metal in Sources */,
 				688D39DB221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap.metal in Sources */,
 				688D3A1B221C689A0005B1F9 /* screenVS.metal in Sources */,
 				685F8BE12209C30800A516B4 /* AppDelegate.m in Sources */,
 				688D39C9221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_planarreflection.metal in Sources */,
+				688D3AFE222149070005B1F9 /* pointLightPS.metal in Sources */,
 				6853C2F92215E0CF000F7B58 /* RenderPath3D_Deferred.cpp in Sources */,
 				6853C3012215E0CF000F7B58 /* RenderPath.cpp in Sources */,
+				688D3AEA222149070005B1F9 /* discLightPS.metal in Sources */,
 				688D39A6221B48900005B1F9 /* objectPS_forward_normalmap.metal in Sources */,
 				685F8BEE2209C30800A516B4 /* Shaders.metal in Sources */,
+				688D3B1222214BDF0005B1F9 /* vTubeLightVS.metal in Sources */,
 				6853C25022144197000F7B58 /* wiHelper.cpp in Sources */,
 				688D3A9F221DD2D80005B1F9 /* linDepthPS.metal in Sources */,
+				688D3AFA222149070005B1F9 /* lightVisualizerPS.metal in Sources */,
 				688D39B6221B48900005B1F9 /* objectPS_forward_transparent_pom.metal in Sources */,
 				688D3A37221DC2F10005B1F9 /* imagePS_separatenormalmap.metal in Sources */,
+				688D3AFC222149070005B1F9 /* dirLightVS.metal in Sources */,
 				6853C2AF22154C31000F7B58 /* wiCube.cpp in Sources */,
 				6853C25722144F8A000F7B58 /* utility_common.cpp in Sources */,
 				6853C2C822158478000F7B58 /* wiOcean.cpp in Sources */,
+				688D3AF4222149070005B1F9 /* pointLightVS.metal in Sources */,
 				688D3AB5221DD2D80005B1F9 /* reprojectDepthBufferPS.metal in Sources */,
 				688D39D3221BC7AD0005B1F9 /* objectPS_tiledforward_transparent.metal in Sources */,
 				688D3AB9221DD2D80005B1F9 /* screenPS.metal in Sources */,
 				688D398B221B394D0005B1F9 /* objectPS_deferred.metal in Sources */,
+				688D3AE4222149070005B1F9 /* environmentalLightPS.metal in Sources */,
 				688D39E3221BC7AD0005B1F9 /* objectPS_tiledforward_normalmap_pom.metal in Sources */,
 				688D39D7221BC7AD0005B1F9 /* objectPS_tiledforward.metal in Sources */,
 				688D3AB7221DD2D80005B1F9 /* depthofFieldPS.metal in Sources */,
@@ -1303,17 +1446,21 @@
 				688D39F3221BD5F00005B1F9 /* objectVS_simple_tessellation.metal in Sources */,
 				6853C2F52215E0CF000F7B58 /* RenderPath3D_Forward.cpp in Sources */,
 				6853C28722153EA2000F7B58 /* wiRenderer.cpp in Sources */,
+				688D3AF6222149070005B1F9 /* spotLightPS.metal in Sources */,
 				688D3A0A221BE7290005B1F9 /* wiVersion.cpp in Sources */,
 				688D39A4221B48900005B1F9 /* objectPS_forward_transparent_normalmap_planarreflection.metal in Sources */,
+				688D3AF8222149070005B1F9 /* sphereLightPS.metal in Sources */,
 				6853C2CA22158478000F7B58 /* wiLensFlare.cpp in Sources */,
 				688D397D221B2B1A0005B1F9 /* objectPS_blackout.metal in Sources */,
 				688D39B2221B48900005B1F9 /* objectPS_forward_normalmap_planarreflection.metal in Sources */,
 				6853C2A32215410C000F7B58 /* wiEmittedParticle.cpp in Sources */,
 				688D3989221B394D0005B1F9 /* objectPS_deferred_planarreflection.metal in Sources */,
 				688D3A19221C689A0005B1F9 /* imageVS.metal in Sources */,
+				688D3AE2222149070005B1F9 /* volumetricLight_DirectionalPS.metal in Sources */,
 				688D3AAB221DD2D80005B1F9 /* ssr.metal in Sources */,
 				688D39D1221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_planarreflection.metal in Sources */,
 				6853C29622154052000F7B58 /* wiTextureHelper.cpp in Sources */,
+				688D3B1022214BDF0005B1F9 /* vRectangleLightVS.metal in Sources */,
 				688D39CD221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_normalmap_pom.metal in Sources */,
 				688D3AB3221DD2D80005B1F9 /* motionBlurPS.metal in Sources */,
 				688D399E221B48900005B1F9 /* objectPS_forward_water.metal in Sources */,
@@ -1325,6 +1472,7 @@
 				688D39D5221BC7AD0005B1F9 /* objectPS_tiledforward_transparent_pom.metal in Sources */,
 				688D3A06221BE1720005B1F9 /* MainComponent.cpp in Sources */,
 				688D39B4221B48900005B1F9 /* objectPS_forward_normalmap_pom.metal in Sources */,
+				688D3B0E22214BDF0005B1F9 /* vSpotLightVS.metal in Sources */,
 				688D39AA221B48900005B1F9 /* objectPS_forward_transparent_planarreflection.metal in Sources */,
 				6853C31C221891E3000F7B58 /* objectVS_common.metal in Sources */,
 				688D3A3F221DC2F10005B1F9 /* imagePS_masked.metal in Sources */,

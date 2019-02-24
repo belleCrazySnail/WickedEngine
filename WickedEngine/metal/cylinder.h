@@ -1,4 +1,4 @@
-static const float4 CYLINDER[] = {
+static constant float4 CYLINDER[] = {
 	float4(-1.0,0.0,0.0,1.0),
 	float4(-1.0,1.0,0.0,1.0),
 	float4(-1.0,0.9807852506637573,0.19509032368659973,1.0),

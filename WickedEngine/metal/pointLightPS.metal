@@ -1,6 +1,6 @@
-#include "deferredLightHF.hlsli"
+#include "deferredLightHF.h"
 
-LightOutputType main(VertexToPixel PSIn)
+fragment LightOutputType pointLightPS(VertexToPixel3 PSIn [[stage_in]], constant GlobalData &gd)
 { 
 	DEFERREDLIGHT_MAKEPARAMS
 

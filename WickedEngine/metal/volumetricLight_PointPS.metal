@@ -1,22 +1,21 @@
 #define DISABLE_TRANSPARENT_SHADOWMAP
-#include "deferredLightHF.hlsli"
-#include "fogHF.hlsli"
+#include "deferredLightHF.h"
 
-float4 main(VertexToPixel input) : SV_TARGET
+fragment float4 volumetricLight_PointPS(VertexToPixel3 input [[stage_in]], constant GlobalData &gd)
 {
-	ShaderEntityType light = EntityArray[(uint)g_xColor.x];
+	ShaderEntityType light = gd.EntityArray[(uint)gd.misc.g_xColor.x];
 
 	float2 ScreenCoord = input.pos2D.xy / input.pos2D.w * float2(0.5f, -0.5f) + 0.5f;
-	float depth = max(input.pos.z, texture_depth.SampleLevel(sampler_linear_clamp, ScreenCoord, 0));
-	float3 P = getPosition(ScreenCoord, depth);
-	float3 V = g_xCamera_CamPos - P;
+	float depth = max(input.pos.z, gd.texture_depth.SampleLevel(gd.sampler_linear_clamp, ScreenCoord, 0));
+	float3 P = getPosition(ScreenCoord, depth, gd);
+	float3 V = gd.camera.g_xCamera_CamPos - P;
 	float cameraDistance = length(V);
 	V /= cameraDistance;
 
 	float marchedDistance = 0;
 	float accumulation = 0;
 
-	float3 rayEnd = g_xCamera_CamPos;
+	float3 rayEnd = gd.camera.g_xCamera_CamPos;
 	if (length(rayEnd - light.positionWS) > light.range)
 	{
 		// if we are outside the light volume, then rayEnd will be the traced sphere frontface:
@@ -25,27 +24,27 @@ float4 main(VertexToPixel input) : SV_TARGET
 	}
 
 	const uint sampleCount = 128;
-	const float stepSize = length(P - rayEnd) / sampleCount;
+	float stepSize = length(P - rayEnd) / sampleCount;
 
 	// Perform ray marching to integrate light volume along view ray:
-	[loop]
+//    [loop]
 	for(uint i = 0; i < sampleCount; ++i)
 	{
 		float3 L = light.positionWS - P;
-		const float dist2 = dot(L, L);
-		const float dist = sqrt(dist2);
+		float dist2 = dot(L, L);
+		float dist = sqrt(dist2);
 		L /= dist;
 
-		const float range2 = light.range * light.range;
-		const float att = saturate(1.0 - (dist2 / range2));
+		float range2 = light.range * light.range;
+		float att = saturate(1.0 - (dist2 / range2));
 		float attenuation = att * att;
 
-		[branch]
+//        [branch]
 		if (light.IsCastingShadow()) {
-			attenuation *= texture_shadowarray_cube.SampleCmpLevelZero(sampler_cmp_depth, float4(-L, light.GetShadowMapIndex()), 1 - dist / light.range * (1 - light.shadowBias)).r;
+			attenuation *= gd.texture_shadowarray_cube.SampleCmpLevelZero(gd.sampler_cmp_depth, -L, light.GetShadowMapIndex(), 1 - dist / light.range * (1 - light.shadowBias));
 		}
 
-		attenuation *= GetFog(cameraDistance - marchedDistance);
+		attenuation *= GetFog(cameraDistance - marchedDistance, gd);
 
 		accumulation += attenuation;
 
@@ -55,5 +54,5 @@ float4 main(VertexToPixel input) : SV_TARGET
 
 	accumulation /= sampleCount;
 
-	return max(0, float4(accumulation.xxx * light.GetColor().rgb * light.energy, 1));
+	return max(0, float4(float3(accumulation) * light.GetColor().rgb * light.energy, 1));
 }

@@ -1,9 +1,9 @@
-#include "deferredLightHF.hlsli"
-#include "fullScreenTriangleHF.hlsli"
+#include "deferredLightHF.h"
+#include "fullScreenTriangleHF.h"
 
-VertexToPixel main(uint vid : SV_VERTEXID)
+vertex VertexToPixel3 dirLightVS(uint vid [[vertex_id]])
 {
-	VertexToPixel Out;
+	VertexToPixel3 Out;
 
 	FullScreenTriangle(vid, Out.pos);
 		

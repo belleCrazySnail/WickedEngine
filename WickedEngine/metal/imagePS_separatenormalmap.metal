@@ -1,6 +1,6 @@
 #include "imageHF.h"
 
-fragment float4 imagePS_separatenormalmap(VertextoPixel PSIn [[stage_in]], constant GlobalData &gd)
+fragment float4 imagePS_separatenormalmap(VertexToPixel PSIn [[stage_in]], constant GlobalData &gd)
 {
 	float4 color = xTexture.SampleLevel(gd.customsampler0, PSIn.tex.xy, gd.image.xMipLevel);
 
