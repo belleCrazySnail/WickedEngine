@@ -101,7 +101,7 @@ inline VertexSurface MakeVertexSurfaceFromInput(Input_Object_POS input, uint vid
     
     surface.position = simd::float4(input.pos[vid].xyz, 1);
     
-    uint normal_wind_matID = uint(input.pos[vid].w);
+    uint normal_wind_matID = as_type<uint>(input.pos[vid].w);
     surface.normal.x = (float)((normal_wind_matID >> 0) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
     surface.normal.y = (float)((normal_wind_matID >> 8) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
     surface.normal.z = (float)((normal_wind_matID >> 16) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
@@ -115,7 +115,7 @@ inline VertexSurface MakeVertexSurfaceFromInput(Input_Object_POS_TEX input, uint
     
     surface.position = simd::float4(input.pos[vid].xyz, 1);
     
-    uint normal_wind_matID = uint(input.pos[vid].w);
+    uint normal_wind_matID = as_type<uint>(input.pos[vid].w);
     surface.normal.x = (float)((normal_wind_matID >> 0) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
     surface.normal.y = (float)((normal_wind_matID >> 8) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
     surface.normal.z = (float)((normal_wind_matID >> 16) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
@@ -131,7 +131,7 @@ inline VertexSurface MakeVertexSurfaceFromInput(Input_Object_ALL input, uint vid
     
     surface.position = simd::float4(input.pos[vid].xyz, 1);
     
-    uint normal_wind_matID = uint(input.pos[vid].w);
+    uint normal_wind_matID = as_type<uint>(input.pos[vid].w);
     surface.normal.x = (float)((normal_wind_matID >> 0) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
     surface.normal.y = (float)((normal_wind_matID >> 8) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
     surface.normal.z = (float)((normal_wind_matID >> 16) & 0x000000FF) / 255.0f * 2.0f - 1.0f;
