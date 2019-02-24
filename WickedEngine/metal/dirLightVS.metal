@@ -1,4 +1,4 @@
-#include "deferredLightHF.h"
+#include "globals.h"
 #include "fullScreenTriangleHF.h"
 
 vertex VertexToPixel3 dirLightVS(uint vid [[vertex_id]])

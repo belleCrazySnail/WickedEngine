@@ -1,4 +1,4 @@
-#include "deferredLightHF.h"
+#include "globals.h"
 #include "icosphere.h"
 
 vertex VertexToPixel3 pointLightVS(uint vid [[vertex_id]], constant GlobalData &gd)

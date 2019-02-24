@@ -1,5 +1,7 @@
 #define DISABLE_TRANSPARENT_SHADOWMAP
-#include "deferredLightHF.h"
+#include "globals.h"
+#include "lightingHF.h"
+#include "reconstructPositionHF.h"
 
 fragment float4 volumetricLight_SpotPS(VertexToPixel3 input [[stage_in]], constant GlobalData &gd)
 {

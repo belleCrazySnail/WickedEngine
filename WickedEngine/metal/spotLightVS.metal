@@ -1,4 +1,4 @@
-#include "deferredLightHF.h"
+#include "globals.h"
 #include "cone.h"
 
 

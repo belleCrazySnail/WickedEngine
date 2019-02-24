@@ -1,6 +1,8 @@
 #define DISABLE_TRANSPARENT_SHADOWMAP
 #define DISABLE_SOFT_SHADOWS
-#include "deferredLightHF.h"
+#include "globals.h"
+#include "lightingHF.h"
+#include "reconstructPositionHF.h"
 
 fragment float4 volumetricLight_DirectionalPS(VertexToPixel3 input [[stage_in]], constant GlobalData &gd)
 {
