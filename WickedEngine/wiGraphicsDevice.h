@@ -69,6 +69,7 @@ namespace wiGraphicsTypes
 		virtual void DestroyQuery(GPUQuery *pQuery) = 0;
 		virtual void DestroyGraphicsPSO(GraphicsPSO* pso) = 0;
 		virtual void DestroyComputePSO(ComputePSO* pso) = 0;
+		virtual void DestroyRenderPass(RenderPass* pRenderPass) = 0;
 
 		virtual void SetName(GPUResource* pResource, const std::string& name) = 0;
 

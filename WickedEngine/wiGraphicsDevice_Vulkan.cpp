@@ -16,7 +16,40 @@
 namespace wiGraphicsTypes
 {
 
+	inline VkAttachmentLoadOp _ConvertLoadOp(ACCESS_TYPE value) {
+		switch (value)
+		{
+		case wiGraphicsTypes::ACCESS_TYPE_DISCARD:
+			return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+			break;
+		case wiGraphicsTypes::ACCESS_TYPE_PRESERVE:
+			return VK_ATTACHMENT_LOAD_OP_LOAD;
+			break;
+		case wiGraphicsTypes::ACCESS_TYPE_CLEAR:
+			return VK_ATTACHMENT_LOAD_OP_CLEAR;
+			break;
+		default:
+			assert(0 && "wrong load op");
+			break;
+		}
+		return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	}
 
+	inline VkAttachmentStoreOp _ConvertStoreOp(ACCESS_TYPE value) {
+		switch (value)
+		{
+		case wiGraphicsTypes::ACCESS_TYPE_DISCARD:
+			return VK_ATTACHMENT_STORE_OP_DONT_CARE;
+			break;
+		case wiGraphicsTypes::ACCESS_TYPE_PRESERVE:
+			return VK_ATTACHMENT_STORE_OP_STORE;
+			break;
+		default:
+			assert(0 && "wrong store op");
+			break;
+		}
+		return VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	}
 
 	// Converters:
 	inline VkFormat _ConvertFormat(FORMAT value)
@@ -3959,6 +3992,94 @@ namespace wiGraphicsTypes
 
 	HRESULT GraphicsDevice_Vulkan::CreateRenderPass(const RenderPassDesc *pDesc, RenderPass *pRenderPass)
 	{
+		pRenderPass->Register(this);
+
+		pRenderPass->desc = *pDesc;
+
+		VkAttachmentDescription attachmentDescriptions[9];
+
+		for (UINT i = 0; i < pDesc->NumRenderTargets; ++i)
+		{
+			VkAttachmentDescription attachment = {};
+			const AttachmentDesc &attachDesc = pDesc->RenderTargets[i];
+			attachment.format = _ConvertFormat(attachDesc.Target->desc.Format);
+			attachment.samples = VK_SAMPLE_COUNT_1_BIT;
+			attachment.loadOp = _ConvertLoadOp(attachDesc.BeginningAccess);
+			attachment.storeOp = _ConvertStoreOp(attachDesc.EndingAccess);
+			attachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+			attachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+			attachment.initialLayout = (VkImageLayout)attachDesc.InitialLayout;
+			attachment.finalLayout = (VkImageLayout)attachDesc.FinalLayout;
+			attachmentDescriptions[i] = attachment;
+
+		}
+
+		int attach_count = pDesc->NumRenderTargets;
+		VkAttachmentDescription depthAttachment = {};
+		if (pDesc->DepthStencil.Target->desc.Format != FORMAT_UNKNOWN)
+		{
+			depthAttachment.format = _ConvertFormat(pDesc->DepthStencil.Target->desc.Format);
+			depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+			depthAttachment.loadOp = _ConvertLoadOp(static_cast<ACCESS_TYPE>(pDesc->DepthStencil.BeginningAccess & 0x0f));
+			depthAttachment.storeOp = _ConvertStoreOp(static_cast<ACCESS_TYPE>(pDesc->DepthStencil.EndingAccess & 0x0f));
+			depthAttachment.stencilLoadOp = _ConvertLoadOp(static_cast<ACCESS_TYPE>(pDesc->DepthStencil.BeginningAccess & 0xf0));
+			depthAttachment.stencilStoreOp = _ConvertStoreOp(static_cast<ACCESS_TYPE>(pDesc->DepthStencil.EndingAccess & 0xf0));
+			depthAttachment.initialLayout = (VkImageLayout)pDesc->DepthStencil.InitialLayout;
+			depthAttachment.finalLayout = (VkImageLayout)pDesc->DepthStencil.FinalLayout;
+			attachmentDescriptions[pDesc->NumRenderTargets] = depthAttachment;
+			++attach_count;
+		}
+
+		std::vector<VkSubpassDescription> subpass;
+		subpass.resize(pDesc->Subpasses.size());
+		for (UINT i = 0; i < pDesc->Subpasses.size(); ++i) {
+			const SubpassDescription &pas = pDesc->Subpasses[i];
+			subpass[i] = {};
+			subpass[i].pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+			subpass[i].inputAttachmentCount = pas.InputAttachments.size();
+			subpass[i].pInputAttachments = (const VkAttachmentReference *)pas.InputAttachments.data();
+			subpass[i].colorAttachmentCount = pas.ColorAttachments.size();
+			subpass[i].pColorAttachments = (const VkAttachmentReference *)pas.ColorAttachments.data();
+			subpass[i].pDepthStencilAttachment = (const VkAttachmentReference *)(&pas.DepthStencilAttachment);
+		}
+
+		VkRenderPassCreateInfo renderPassInfo = {};
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+		renderPassInfo.attachmentCount = attach_count;
+		renderPassInfo.pAttachments = attachmentDescriptions;
+		renderPassInfo.subpassCount = subpass.size();
+		renderPassInfo.pSubpasses = subpass.data();
+		renderPassInfo.dependencyCount = pDesc->Dependencies.size();
+		renderPassInfo.pDependencies = (const VkSubpassDependency *)pDesc->Dependencies.data();
+
+		if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &pRenderPass->resource) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create render pass!");
+		}
+
+		//this simplified a lot of things
+		//frame buffer constraints all attachment's use area to be the same, but attachment's actual size could be bigger
+		//render pass is independent of frame buffer, and the same render pass can be used with framebuffers of different sizes
+		std::vector<VkImageView> rtv;
+		rtv.resize(attach_count);
+		for (UINT i = 0; i < pDesc->NumRenderTargets; ++i) {
+			rtv[i] = pDesc->RenderTargets[i].Target->RTV;
+		}
+		if (attach_count != pDesc->NumRenderTargets) {
+			rtv[pDesc->NumRenderTargets] = pDesc->DepthStencil.Target->DSV;
+		}
+
+		VkFramebufferCreateInfo framebufferInfo = {};
+		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebufferInfo.renderPass = pRenderPass->resource;
+		framebufferInfo.attachmentCount = attach_count;
+		framebufferInfo.pAttachments = rtv.data();
+		framebufferInfo.width = pDesc->RenderArea.right - pDesc->RenderArea.left;
+		framebufferInfo.height = pDesc->RenderArea.top - pDesc->RenderArea.bottom;
+		framebufferInfo.layers = 1;
+
+		if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &pRenderPass->resource1) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create framebuffer!");
+		}
 
 		return S_OK;
 	}
@@ -4112,6 +4233,11 @@ namespace wiGraphicsTypes
 		vkDestroyPipeline(device, (VkPipeline)pso->pipeline, nullptr);
 	}
 
+	void GraphicsDevice_Vulkan::DestroyRenderPass(RenderPass* pRenderPass)
+	{
+		vkDestroyRenderPass(device, pRenderPass->resource, nullptr);
+		vkDestroyFramebuffer(device, pRenderPass->resource1, nullptr);
+	}
 
 	void GraphicsDevice_Vulkan::SetName(GPUResource* pResource, const std::string& name)
 	{
@@ -4120,10 +4246,36 @@ namespace wiGraphicsTypes
 
 	void GraphicsDevice_Vulkan::BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID)
 	{
+		const RenderPassDesc &desc = pRenderPass->desc;
+		std::vector<VkClearValue> clear_val;
+		clear_val.resize(desc.NumRenderTargets + 1);
+		for (UINT i = 0; i < desc.NumRenderTargets; ++i) {
+			memcpy(&(clear_val[i]), &(desc.RenderTargets[i].Clear), sizeof(VkClearValue));
+		}
+		memcpy(&(clear_val[desc.NumRenderTargets]), &(desc.DepthStencil.Clear), sizeof(VkClearValue));
+
+		VkRenderPassBeginInfo renderPassInfo = {};
+		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+		renderPassInfo.renderPass = pRenderPass->resource;
+		renderPassInfo.framebuffer = pRenderPass->resource1;
+		renderPassInfo.renderArea.offset = { desc.RenderArea.left, desc.RenderArea.top };
+		renderPassInfo.renderArea.extent = { UINT(desc.RenderArea.right - desc.RenderArea.left), UINT(desc.RenderArea.top - desc.RenderArea.bottom) };
+		renderPassInfo.clearValueCount = desc.NumRenderTargets + 1;
+		renderPassInfo.pClearValues = clear_val.data();
+		vkCmdBeginRenderPass(GetDirectCommandList(GRAPHICSTHREAD_IMMEDIATE), &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+	}
+
+	void GraphicsDevice_Vulkan::NextSubPass(GRAPHICSTHREAD threadID)
+	{
+		vkCmdNextSubpass(GetDirectCommandList(GRAPHICSTHREAD_IMMEDIATE), VK_SUBPASS_CONTENTS_INLINE);
+
 	}
 
 	void GraphicsDevice_Vulkan::EndRenderPass(GRAPHICSTHREAD threadID)
 	{
+		vkCmdEndRenderPass(GetDirectCommandList(GRAPHICSTHREAD_IMMEDIATE));
+
 	}
 
 	void GraphicsDevice_Vulkan::PresentBegin()

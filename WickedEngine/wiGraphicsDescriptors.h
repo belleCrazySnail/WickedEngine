@@ -3,6 +3,7 @@
 
 #include "CommonInclude.h"
 #include <string>
+#include <vector>
 
 namespace wiGraphicsTypes
 {
@@ -16,7 +17,7 @@ namespace wiGraphicsTypes
 	struct RasterizerState;
 	struct DepthStencilState;
 	struct VertexLayout;
-	struct Texture;
+	struct Texture2D;
 
 	enum SHADERSTAGE
 	{
@@ -37,11 +38,12 @@ namespace wiGraphicsTypes
 		LINELIST,
 		PATCHLIST,
 	};
-    enum ACCESS_TYPE
+    enum ACCESS_TYPE : int
     {
         ACCESS_TYPE_DISCARD,
         ACCESS_TYPE_PRESERVE,
         ACCESS_TYPE_CLEAR,
+		//ACCESS_TYPE_RESOLVE, 
         ACCESS_TYPE_NO_ACCESS,
     };
     enum IMAGE_LAYOUT
@@ -559,7 +561,7 @@ namespace wiGraphicsTypes
     };
     struct AttachmentDesc
     {
-        FORMAT Format;
+        const Texture2D *Target;
         ACCESS_TYPE BeginningAccess;
         ClearValue Clear;
         ACCESS_TYPE EndingAccess;
@@ -572,14 +574,13 @@ namespace wiGraphicsTypes
     };
     struct SubpassDescription
     {
-        UINT inputAttachmentCount;
-        AttachmentReference InputAttachments[8] = {};
-        UINT colorAttachmentCount;
-        AttachmentReference ColorAttachments[8] = {};
-//        AttachmentReference ResolveAttachments;
+		std::vector<AttachmentReference> InputAttachments;
+		std::vector<AttachmentReference> ColorAttachments;
+//       std::vector<AttachmentReference> ResolveAttachments;
         AttachmentReference DepthStencilAttachment;
     };
-    struct SubpassDependency {
+#define SUBPASS_EXTERNAL (~0U)
+	struct SubpassDependency {
         UINT srcSubpass;
         UINT dstSubpass;
         PipelineStageFlag srcStageMask;
@@ -587,16 +588,21 @@ namespace wiGraphicsTypes
         MemoryAccessFlag srcAccessMask;
         MemoryAccessFlag dstAccessMask;
     };
-    struct RenderPassDesc
+	struct Rect
+	{
+		LONG left = 0;
+		LONG top = 0;
+		LONG right = 0;
+		LONG bottom = 0;
+	};
+	struct RenderPassDesc
     {
         UINT NumRenderTargets;
         AttachmentDesc RenderTargets[8] = {};
-        AttachmentDesc Depth;
-        AttachmentDesc Stencil;
-        UINT subpassCount;
-        SubpassDescription Subpasses[8] = {};
-        UINT dependencyCount;
-        SubpassDependency Dependencies[8] = {};
+        AttachmentDesc DepthStencil;
+		Rect RenderArea;
+		std::vector<SubpassDescription> Subpasses;
+		std::vector<SubpassDependency> Dependencies;
     };
 	struct GraphicsPSODesc
 	{
@@ -646,13 +652,6 @@ namespace wiGraphicsTypes
 		const void *pSysMem = nullptr;
 		UINT SysMemPitch = 0;
 		UINT SysMemSlicePitch = 0;
-	};
-	struct Rect
-	{
-		LONG left = 0;
-		LONG top = 0;
-		LONG right = 0;
-		LONG bottom = 0;
 	};
 
 }
