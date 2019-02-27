@@ -197,7 +197,7 @@ namespace wiGraphicsTypes
 		UploadBuffer* textureUploader;
 
 	protected:
-		VkShaderModule CreateShaderModule(const ShaderByteCode *pCode);
+		wiCPUHandle CreateShaderModule(const ShaderByteCode *pCode);
 
 	public:
 		GraphicsDevice_Vulkan(wiWindowRegistration::window_type window, bool fullscreen = false, bool debuglayer = false);

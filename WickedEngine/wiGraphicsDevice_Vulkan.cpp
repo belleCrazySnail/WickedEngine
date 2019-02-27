@@ -3227,7 +3227,7 @@ namespace wiGraphicsTypes
 		return S_OK;
 	}
 
-	VkShaderModule GraphicsDevice_Vulkan::CreateShaderModule(const ShaderByteCode *pCode) {
+	wiCPUHandle GraphicsDevice_Vulkan::CreateShaderModule(const ShaderByteCode *pCode) {
 		VkShaderModuleCreateInfo moduleInfo = {};
 		moduleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
 		moduleInfo.codeSize = pCode->size;
@@ -3236,7 +3236,7 @@ namespace wiGraphicsTypes
 		if (vkCreateShaderModule(device, &moduleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create shader module!");
 		}
-		return shaderModule;
+		return (wiCPUHandle)shaderModule;
 	}
 
 	HRESULT GraphicsDevice_Vulkan::CreateVertexShader(const ShaderByteCode *pCode, VertexShader *pVertexShader)
@@ -3601,7 +3601,7 @@ namespace wiGraphicsTypes
 			VkPipelineShaderStageCreateInfo stageInfo = {}; 
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-			stageInfo.module = pDesc->vs->resource;
+			stageInfo.module = (VkShaderModule)pDesc->vs->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -3613,7 +3613,7 @@ namespace wiGraphicsTypes
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-			stageInfo.module = pDesc->hs->resource;
+			stageInfo.module = (VkShaderModule)pDesc->hs->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -3625,7 +3625,7 @@ namespace wiGraphicsTypes
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-			stageInfo.module = pDesc->ds->resource;
+			stageInfo.module = (VkShaderModule)pDesc->ds->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -3637,7 +3637,7 @@ namespace wiGraphicsTypes
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_GEOMETRY_BIT;
-			stageInfo.module = pDesc->gs->resource;
+			stageInfo.module = (VkShaderModule)pDesc->gs->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -3649,7 +3649,7 @@ namespace wiGraphicsTypes
 			VkPipelineShaderStageCreateInfo stageInfo = {};
 			stageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 			stageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-			stageInfo.module = pDesc->ps->resource;
+			stageInfo.module = (VkShaderModule)pDesc->ps->resource;
 			stageInfo.pName = "main";
 
 			shaderStages.push_back(stageInfo);
@@ -4052,7 +4052,7 @@ namespace wiGraphicsTypes
 		renderPassInfo.dependencyCount = pDesc->Dependencies.size();
 		renderPassInfo.pDependencies = (const VkSubpassDependency *)pDesc->Dependencies.data();
 
-		if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &pRenderPass->resource) != VK_SUCCESS) {
+		if (vkCreateRenderPass(device, &renderPassInfo, nullptr, reinterpret_cast<VkRenderPass *>(&pRenderPass->resource)) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create render pass!");
 		}
 
@@ -4062,22 +4062,22 @@ namespace wiGraphicsTypes
 		std::vector<VkImageView> rtv;
 		rtv.resize(attach_count);
 		for (UINT i = 0; i < pDesc->NumRenderTargets; ++i) {
-			rtv[i] = pDesc->RenderTargets[i].Target->RTV;
+			rtv[i] = (VkImageView)(pDesc->RenderTargets[i].Target->RTV);
 		}
 		if (attach_count != pDesc->NumRenderTargets) {
-			rtv[pDesc->NumRenderTargets] = pDesc->DepthStencil.Target->DSV;
+			rtv[pDesc->NumRenderTargets] = (VkImageView)(pDesc->DepthStencil.Target->DSV);
 		}
 
 		VkFramebufferCreateInfo framebufferInfo = {};
 		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		framebufferInfo.renderPass = pRenderPass->resource;
+		framebufferInfo.renderPass = (VkRenderPass)pRenderPass->resource;
 		framebufferInfo.attachmentCount = attach_count;
 		framebufferInfo.pAttachments = rtv.data();
 		framebufferInfo.width = pDesc->RenderArea.right - pDesc->RenderArea.left;
 		framebufferInfo.height = pDesc->RenderArea.top - pDesc->RenderArea.bottom;
 		framebufferInfo.layers = 1;
 
-		if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &pRenderPass->resource1) != VK_SUCCESS) {
+		if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, reinterpret_cast<VkFramebuffer *>(&pRenderPass->resource1)) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create framebuffer!");
 		}
 
@@ -4235,8 +4235,8 @@ namespace wiGraphicsTypes
 
 	void GraphicsDevice_Vulkan::DestroyRenderPass(RenderPass* pRenderPass)
 	{
-		vkDestroyRenderPass(device, pRenderPass->resource, nullptr);
-		vkDestroyFramebuffer(device, pRenderPass->resource1, nullptr);
+		vkDestroyRenderPass(device, (VkRenderPass)pRenderPass->resource, nullptr);
+		vkDestroyFramebuffer(device, (VkFramebuffer)pRenderPass->resource1, nullptr);
 	}
 
 	void GraphicsDevice_Vulkan::SetName(GPUResource* pResource, const std::string& name)
@@ -4256,8 +4256,8 @@ namespace wiGraphicsTypes
 
 		VkRenderPassBeginInfo renderPassInfo = {};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassInfo.renderPass = pRenderPass->resource;
-		renderPassInfo.framebuffer = pRenderPass->resource1;
+		renderPassInfo.renderPass = (VkRenderPass)pRenderPass->resource;
+		renderPassInfo.framebuffer = (VkFramebuffer)pRenderPass->resource1;
 		renderPassInfo.renderArea.offset = { desc.RenderArea.left, desc.RenderArea.top };
 		renderPassInfo.renderArea.extent = { UINT(desc.RenderArea.right - desc.RenderArea.left), UINT(desc.RenderArea.top - desc.RenderArea.bottom) };
 		renderPassInfo.clearValueCount = desc.NumRenderTargets + 1;
