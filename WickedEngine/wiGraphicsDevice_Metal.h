@@ -107,6 +107,7 @@ namespace wiGraphicsTypes
 		void DestroyQuery(GPUQuery *pQuery) override;
 		void DestroyGraphicsPSO(GraphicsPSO* pso) override;
 		void DestroyComputePSO(ComputePSO* pso) override;
+        void DestroyRenderPass(RenderPass* pRenderPass) override;
 
 		void SetName(GPUResource* pResource, const std::string& name) override;
 
