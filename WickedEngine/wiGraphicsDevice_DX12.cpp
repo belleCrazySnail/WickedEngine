@@ -3296,6 +3296,9 @@ namespace wiGraphicsTypes
 		}
 	}
 
+	void GraphicsDevice_DX12::DestroyRenderPass(RenderPass* pRenderPass)
+	{
+	}
 
 	void GraphicsDevice_DX12::SetName(GPUResource* pResource, const std::string& name)
 	{
@@ -3303,6 +3306,10 @@ namespace wiGraphicsTypes
 	}
 
 	void GraphicsDevice_DX12::BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID)
+	{
+	}
+
+	void GraphicsDevice_DX12::NextSubPass(GRAPHICSTHREAD threadID)
 	{
 	}
 

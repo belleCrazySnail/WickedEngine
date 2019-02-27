@@ -243,7 +243,8 @@ namespace wiGraphicsTypes
     struct RenderPass : public GraphicsDeviceChild
     {
         wiCPUHandle resource = WI_NULL_HANDLE;
-        RenderPassDesc desc;
+		wiCPUHandle resource1 = WI_NULL_HANDLE;
+		RenderPassDesc desc;
         
         const RenderPassDesc& GetDesc() const { return desc; }
         

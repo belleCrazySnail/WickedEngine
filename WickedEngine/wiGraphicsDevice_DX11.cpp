@@ -2996,12 +2996,20 @@ void GraphicsDevice_DX11::DestroyComputePSO(ComputePSO* pso)
 {
 }
 
+void GraphicsDevice_DX11::DestroyRenderPass(RenderPass* pRenderPass)
+{
+}
+
 void GraphicsDevice_DX11::SetName(GPUResource* pResource, const std::string& name)
 {
 	((ID3D11Resource*)pResource->resource)->SetPrivateData(WKPDID_D3DDebugObjectName, (UINT)name.length(), name.c_str());
 }
 
 void GraphicsDevice_DX11::BeginRenderPass(RenderPass *pRenderPass, GRAPHICSTHREAD threadID)
+{
+}
+
+void GraphicsDevice_DX11::NextSubPass(GRAPHICSTHREAD threadID)
 {
 }
 

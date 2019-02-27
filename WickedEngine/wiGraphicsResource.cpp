@@ -217,6 +217,16 @@ namespace wiGraphicsTypes
 		}
 	}
 
+	RenderPass::RenderPass()
+	{
+	}
+	RenderPass::~RenderPass()
+	{
+		if (device != nullptr)
+		{
+			device->DestroyRenderPass(this);
+		}
+	}
 
 	GraphicsPSO::GraphicsPSO()
 	{
