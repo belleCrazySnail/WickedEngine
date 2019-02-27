@@ -3830,7 +3830,7 @@ GraphicsDevice::GPUAllocation GraphicsDevice_DX11::AllocateGPU(size_t dataSize, 
 	allocator.dirty = true;
 
 
-	dataSize = min(allocator.buffer.desc.ByteWidth, dataSize);
+	dataSize = std::min((size_t)allocator.buffer.desc.ByteWidth, dataSize);
 
 	size_t position = allocator.byteOffset;
 	bool wrap = position + dataSize > allocator.buffer.desc.ByteWidth || allocator.residentFrame != FRAMECOUNT;

@@ -123,6 +123,8 @@ void* wiResourceManager::add(const wiHashString& name, Data_Type newType)
                 }
                     break;
             }
+			//code's data is managed by vector<uint8_t> buffer
+			code.data = nullptr;
         }
 
 		switch(type)
