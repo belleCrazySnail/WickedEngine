@@ -853,8 +853,6 @@ namespace wiSceneSystem
 	}
 	void CameraComponent::UpdateCamera()
 	{
-		SetDirty(false);
-
 		XMVECTOR _Eye = XMLoadFloat3(&Eye);
 		XMVECTOR _At = XMLoadFloat3(&At);
 		XMVECTOR _Up = XMLoadFloat3(&Up);
@@ -878,8 +876,6 @@ namespace wiSceneSystem
 	}
 	void CameraComponent::TransformCamera(const TransformComponent& transform)
 	{
-		SetDirty();
-
 		XMVECTOR S, R, T;
 		XMMatrixDecompose(&S, &R, &T, XMLoadFloat4x4(&transform.world));
 
