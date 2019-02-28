@@ -5,12 +5,12 @@ vertex PixelInputType objectVS_common(Input_Object_ALL input, constant GlobalDat
 {
 	PixelInputType Out;
 
-	simd::float4x4 WORLD = MakeWorldMatrixFromInstance(input.data[iid].instance);
-	simd::float4x4 WORLDPREV = MakeWorldMatrixFromInstance(input.data[iid].instancePrev);
+	simd::float4x4 WORLD = MakeWorldMatrixFromInstance(input.instance[iid]);
+	simd::float4x4 WORLDPREV = MakeWorldMatrixFromPrevInstance(input.instance[iid]);
 	VertexSurface surface = MakeVertexSurfaceFromInput(input, vid, iid);
 
-	Out.instanceColor = input.data[iid].instance.color_dither.rgb;
-	Out.dither = input.data[iid].instance.color_dither.a;
+	Out.instanceColor = input.instance[iid].color_dither.rgb;
+	Out.dither = input.instance[iid].color_dither.a;
 
 	surface.position = mul(surface.position, WORLD);
 	surface.prevPos = mul(surface.prevPos, WORLDPREV);

@@ -3,88 +3,64 @@
 
 #import <simd/simd.h>
 
-enum {
-    MATI0 = 0,
-    MATI1 = 1,
-    MATI2 = 2,
-    COLOR_DITHER = 3,
-    MATIPREV0 = 4, 
-    MATIPREV1 = 5,
-    MATIPREV2 = 6,
-    INSTANCEATLAS = 7,
-};
-
-enum {
-    POSITION_NORMAL_SUBSETINDEX = 0,
-    TEXCOORD0 = 1,
-    ATLAS = 2,
-    PREVPOS = 3,
-    PER_INSTANCE = 4,
-};
-
 struct Input_Instance
 {
-    simd::float4 wi0 [[attribute(MATI0)]];
-    simd::float4 wi1 [[attribute(MATI1)]];
-    simd::float4 wi2 [[attribute(MATI2)]];
-    simd::float4 color_dither [[attribute(COLOR_DITHER)]];
+    simd::float4 wi0 [[attribute(0)]];
+    simd::float4 wi1 [[attribute(1)]];
+    simd::float4 wi2 [[attribute(2)]];
+    simd::float4 color_dither [[attribute(3)]];
 };
 struct Input_InstancePrev
 {
-    simd::float4 wiPrev0 [[attribute(MATIPREV0)]];
-    simd::float4 wiPrev1 [[attribute(MATIPREV1)]];
-    simd::float4 wiPrev2 [[attribute(MATIPREV2)]];
+    simd::float4 wiPrev0 [[attribute(0)]];
+    simd::float4 wiPrev1 [[attribute(1)]];
+    simd::float4 wiPrev2 [[attribute(2)]];
 };
-struct Input_InstanceAtlas
+struct Input_InstanceAll
 {
-    simd::float4 atlasMulAdd [[attribute(INSTANCEATLAS)]];
-};
-
-struct PerInstanceData
-{
-    Input_Instance instance;
-    Input_InstancePrev instancePrev;
-    Input_InstanceAtlas instanceAtlas;
+    simd::float4 wi0 [[attribute(0)]];
+    simd::float4 wi1 [[attribute(1)]];
+    simd::float4 wi2 [[attribute(2)]];
+    simd::float4 color_dither [[attribute(3)]];
+    simd::float4 wiPrev0 [[attribute(4)]];
+    simd::float4 wiPrev1 [[attribute(5)]];
+    simd::float4 wiPrev2 [[attribute(6)]];
+    simd::float4 atlasMulAdd [[attribute(7)]];
 };
 
 struct Input_Object_POS
 {
-    device const float4 *pos [[buffer(POSITION_NORMAL_SUBSETINDEX)]];
-    device const Input_Instance *instance [[buffer(PER_INSTANCE)]];
+    device const float4 *pos [[buffer(0)]];
+    device const Input_Instance *instance [[buffer(1)]];
 };
 struct Input_Object_POS_TEX
 {
-    device const float4 *pos [[buffer(POSITION_NORMAL_SUBSETINDEX)]];
-    device const float2 *tex [[buffer(TEXCOORD0)]];
-    device const Input_Instance *instance [[buffer(PER_INSTANCE)]];
+    device const float4 *pos [[buffer(0)]];
+    device const float2 *tex [[buffer(1)]];
+    device const Input_Instance *instance [[buffer(2)]];
 };
 struct Input_Object_ALL
 {
-    device const float4 *pos [[buffer(POSITION_NORMAL_SUBSETINDEX)]];
-    device const float2 *tex [[buffer(TEXCOORD0)]];
-    device const float2 *atl [[buffer(ATLAS)]];
-    device const float4 *pre [[buffer(PREVPOS)]];
-    device const PerInstanceData *data [[buffer(PER_INSTANCE)]];
+    device const float4 *pos [[buffer(0)]];
+    device const float2 *tex [[buffer(1)]];
+    device const float2 *atl [[buffer(2)]];
+    device const float4 *pre [[buffer(3)]];
+    device const Input_InstanceAll *instance [[buffer(4)]];
 };
 
-inline simd::float4x4 MakeWorldMatrixFromInstance(Input_Instance input)
-{
-    return simd::float4x4(
-                    simd::float4(input.wi0.x, input.wi1.x, input.wi2.x, 0)
-                    , simd::float4(input.wi0.y, input.wi1.y, input.wi2.y, 0)
-                    , simd::float4(input.wi0.z, input.wi1.z, input.wi2.z, 0)
-                    , simd::float4(input.wi0.w, input.wi1.w, input.wi2.w, 1)
+#define MakeWorldMatrixFromInstance(input) simd::float4x4( \
+                    simd::float4(input.wi0.x, input.wi1.x, input.wi2.x, 0) \
+                    , simd::float4(input.wi0.y, input.wi1.y, input.wi2.y, 0) \
+                    , simd::float4(input.wi0.z, input.wi1.z, input.wi2.z, 0) \
+                    , simd::float4(input.wi0.w, input.wi1.w, input.wi2.w, 1) \
                     );
-}
-inline simd::float4x4 MakeWorldMatrixFromInstance(Input_InstancePrev input)
-{
-    return simd::float4x4(
-                    simd::float4(input.wiPrev0.x, input.wiPrev1.x, input.wiPrev2.x, 0)
-                    , simd::float4(input.wiPrev0.y, input.wiPrev1.y, input.wiPrev2.y, 0)
-                    , simd::float4(input.wiPrev0.z, input.wiPrev1.z, input.wiPrev2.z, 0)
-                    , simd::float4(input.wiPrev0.w, input.wiPrev1.w, input.wiPrev2.w, 1)
+
+#define MakeWorldMatrixFromPrevInstance(input) simd::float4x4( \
+                    simd::float4(input.wiPrev0.x, input.wiPrev1.x, input.wiPrev2.x, 0) \
+                    , simd::float4(input.wiPrev0.y, input.wiPrev1.y, input.wiPrev2.y, 0) \
+                    , simd::float4(input.wiPrev0.z, input.wiPrev1.z, input.wiPrev2.z, 0) \
+                    , simd::float4(input.wiPrev0.w, input.wiPrev1.w, input.wiPrev2.w, 1) \
                     );
-}
 
 struct VertexSurface
 {
@@ -139,7 +115,7 @@ inline VertexSurface MakeVertexSurfaceFromInput(Input_Object_ALL input, uint vid
     
     surface.uv = input.tex[vid];
     
-    surface.atlas = input.atl[vid] * input.data[iid].instanceAtlas.atlasMulAdd.xy + input.data[iid].instanceAtlas.atlasMulAdd.zw;
+    surface.atlas = input.atl[vid] * input.instance[iid].atlasMulAdd.xy + input.instance[iid].atlasMulAdd.zw;
     
     surface.prevPos = simd::float4(input.pre[vid].xyz, 1);
     

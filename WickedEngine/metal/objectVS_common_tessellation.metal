@@ -17,8 +17,8 @@ vertex HullInputType objectVS_common_tessellation(Input_Object_ALL input, consta
 	HullInputType Out;
 
 	
-	float4x4 WORLD = MakeWorldMatrixFromInstance(input.data[iid].instance);
-	float4x4 WORLDPREV = MakeWorldMatrixFromInstance(input.data[iid].instancePrev);
+	float4x4 WORLD = MakeWorldMatrixFromInstance(input.instance[iid]);
+	float4x4 WORLDPREV = MakeWorldMatrixFromPrevInstance(input.instance[iid]);
 	VertexSurface surface = MakeVertexSurfaceFromInput(input, vid, iid);
 		
 
@@ -32,8 +32,8 @@ vertex HullInputType objectVS_common_tessellation(Input_Object_ALL input, consta
 	Out.tex = float4(surface.uv, surface.atlas);
 	Out.nor = float4(surface.normal, 1);
 
-	Out.instanceColor = input.data[iid].instance.color_dither.rgb;
-	Out.dither = input.data[iid].instance.color_dither.a;
+	Out.instanceColor = input.instance[iid].color_dither.rgb;
+	Out.dither = input.instance[iid].color_dither.a;
 
 	return Out;
 }

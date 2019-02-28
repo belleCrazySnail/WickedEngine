@@ -872,25 +872,28 @@ namespace wiGraphicsTypes
         MTLVertexDescriptor *vertexDesc = [[MTLVertexDescriptor alloc] init];
         uint32_t offset = 0;
         uint32_t lastBuffer = 0;
+        int attrib_index = 0;
         std::vector<uint32_t> vertex_stride;
         for (UINT i = 0; i < NumElements; ++i)
         {
             const VertexLayoutDesc &x = pInputElementDescs[i];
-            vertexDesc.attributes[i].bufferIndex = x.InputSlot;
             if (x.InputSlot != lastBuffer) {
+                attrib_index = 0;
                 vertex_stride.push_back(offset);
                 lastBuffer = x.InputSlot;
                 offset = 0;
             }
-            vertexDesc.attributes[i].format = _ConvertVertexFormat(x.Format);
+            vertexDesc.attributes[attrib_index].bufferIndex = x.InputSlot;
+            vertexDesc.attributes[attrib_index].format = _ConvertVertexFormat(x.Format);
             UINT off = x.AlignedByteOffset;
             if (off == VertexLayoutDesc::APPEND_ALIGNED_ELEMENT)
             {
                 // need to manually resolve this from the format spec.
                 off = offset;
             }
-            vertexDesc.attributes[i].offset = off;
+            vertexDesc.attributes[attrib_index].offset = off;
             offset += GetFormatStride(x.Format);
+            ++attrib_index;
         }
         vertex_stride.push_back(offset);
         for (UINT i = 0; i < NumElements; ++i)

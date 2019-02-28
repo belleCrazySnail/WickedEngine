@@ -16,7 +16,7 @@ vertex HullInputType objectVS_simple_tessellation(Input_Object_ALL input, uint v
 {
 	HullInputType Out;
 
-	float4x4 WORLD = MakeWorldMatrixFromInstance(input.data[iid].instance);
+	float4x4 WORLD = MakeWorldMatrixFromInstance(input.instance[iid]);
 	VertexSurface surface = MakeVertexSurfaceFromInput(input, vid, iid);
 
 	surface.position = mul(surface.position, WORLD);
