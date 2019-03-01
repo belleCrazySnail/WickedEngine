@@ -112,6 +112,7 @@ bool occlusionCulling = false;
 bool temporalAA = false;
 bool temporalAADEBUG = false;
 uint32_t lightmapBakeBounceCount = 4;
+bool raytraceDebugVisualizer = false;
 
 struct VoxelizedSceneData
 {
@@ -259,6 +260,8 @@ struct FrameCulling
 	}
 };
 unordered_map<const CameraComponent*, FrameCulling> frameCullings;
+
+vector<uint32_t> pendingMaterialUpdates;
 
 GFX_STRUCT Instance
 {
@@ -1133,6 +1136,7 @@ enum DEBUGRENDERING
 	DEBUGRENDERING_VOXEL,
 	DEBUGRENDERING_FORCEFIELD_POINT,
 	DEBUGRENDERING_FORCEFIELD_PLANE,
+	DEBUGRENDERING_RAYTRACE_BVH,
 	DEBUGRENDERING_COUNT
 };
 GraphicsPSO* PSO_debug[DEBUGRENDERING_COUNT] = {};
@@ -1964,7 +1968,7 @@ void LoadShaders()
 	vertexShaders[VSTYPE_VOXEL] = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("voxelVS", wiResourceManager::VERTEXSHADER));
 	vertexShaders[VSTYPE_FORCEFIELDVISUALIZER_POINT] = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("forceFieldPointVisualizerVS", wiResourceManager::VERTEXSHADER));
 	vertexShaders[VSTYPE_FORCEFIELDVISUALIZER_PLANE] = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("forceFieldPlaneVisualizerVS", wiResourceManager::VERTEXSHADER));
-
+    vertexShaders[VSTYPE_RAYTRACE_SCREEN] = static_cast<VertexShader*>(wiResourceManager::GetShaderManager().add("raytrace_screenVS", wiResourceManager::VERTEXSHADER));
 
 	pixelShaders[PSTYPE_OBJECT_DEFERRED] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("objectPS_deferred", wiResourceManager::PIXELSHADER));
 	pixelShaders[PSTYPE_OBJECT_DEFERRED_NORMALMAP] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("objectPS_deferred_normalmap", wiResourceManager::PIXELSHADER));
@@ -2049,6 +2053,7 @@ void LoadShaders()
 	pixelShaders[PSTYPE_FORCEFIELDVISUALIZER] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("forceFieldVisualizerPS", wiResourceManager::PIXELSHADER));
 	pixelShaders[PSTYPE_RENDERLIGHTMAP_INDIRECT] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("renderlightmapPS_indirect", wiResourceManager::PIXELSHADER));
 	pixelShaders[PSTYPE_RENDERLIGHTMAP_DIRECT] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("renderlightmapPS_direct", wiResourceManager::PIXELSHADER));
+    pixelShaders[PSTYPE_RAYTRACE_DEBUGBVH] = static_cast<PixelShader*>(wiResourceManager::GetShaderManager().add("raytrace_debugbvhPS", wiResourceManager::PIXELSHADER));
 
 	geometryShaders[GSTYPE_ENVMAP] = static_cast<GeometryShader*>(wiResourceManager::GetShaderManager().add("envMapGS", wiResourceManager::GEOMETRYSHADER));
 	geometryShaders[GSTYPE_ENVMAP_SKY] = static_cast<GeometryShader*>(wiResourceManager::GetShaderManager().add("envMap_skyGS", wiResourceManager::GEOMETRYSHADER));
@@ -2740,6 +2745,10 @@ void LoadShaders()
 	{
 		GraphicsPSODesc desc;
 
+		desc.numRTs = 1;
+		desc.RTFormats[0] = RTFormat_hdr;
+		desc.DSFormat = DSFormat_full;
+
 		switch (debug)
 		{
 		case DEBUGRENDERING_ENVPROBE:
@@ -2811,11 +2820,16 @@ void LoadShaders()
 			desc.bs = blendStates[BSTYPE_TRANSPARENT];
 			desc.pt = TRIANGLESTRIP;
 			break;
+		case DEBUGRENDERING_RAYTRACE_BVH:
+			desc.vs = vertexShaders[VSTYPE_RAYTRACE_SCREEN];
+			desc.ps = pixelShaders[PSTYPE_RAYTRACE_DEBUGBVH];
+			desc.dss = depthStencils[DSSTYPE_XRAY];
+			desc.rs = rasterizers[RSTYPE_DOUBLESIDED];
+			desc.bs = blendStates[BSTYPE_TRANSPARENT];
+			desc.pt = TRIANGLELIST;
+			desc.DSFormat = FORMAT_UNKNOWN;
+			break;
 		}
-
-		desc.numRTs = 1;
-		desc.RTFormats[0] = RTFormat_hdr;
-		desc.DSFormat = DSFormat_full;
 
 		RECREATE(PSO_debug[debug]);
 		HRESULT hr = device->CreateGraphicsPSO(&desc, PSO_debug[debug]);
@@ -3493,7 +3507,35 @@ void UpdatePerFrameData(float dt)
 
 	scene.Update(dt * GetGameSpeed());
 
-	// Need to swap prev and current vertex buffers for any dynamic meshes BEFORE render threads are kicked:
+	// See which materials will need to update their GPU render data:
+	wiJobSystem::Execute([&] {
+		pendingMaterialUpdates.clear();
+		for (size_t i = 0; i < scene.materials.GetCount(); ++i)
+		{
+			MaterialComponent& material = scene.materials[i];
+
+			if (material.IsDirty())
+			{
+				material.SetDirty(false);
+				pendingMaterialUpdates.push_back(uint32_t(i));
+
+				if (material.constantBuffer == nullptr)
+				{
+					GPUBufferDesc desc;
+					desc.Usage = USAGE_DEFAULT;
+					desc.BindFlags = BIND_CONSTANT_BUFFER;
+					desc.ByteWidth = sizeof(MaterialCB);
+
+					material.constantBuffer.reset(new GPUBuffer);
+					HRESULT hr = device->CreateBuffer(&desc, nullptr, material.constantBuffer.get());
+					assert(SUCCEEDED(hr));
+				}
+			}
+		}
+	});
+
+	// Need to swap prev and current vertex buffers for any dynamic meshes BEFORE render threads are kicked 
+	//	and also create skinning bone buffers:
 	wiJobSystem::Execute([&] {
 		for (size_t i = 0; i < scene.meshes.GetCount(); ++i)
 		{
@@ -3501,6 +3543,23 @@ void UpdatePerFrameData(float dt)
 
 			if (mesh.IsSkinned() && scene.armatures.Contains(mesh.armatureID))
 			{
+				ArmatureComponent& armature = *scene.armatures.GetComponent(mesh.armatureID);
+
+				if (armature.boneBuffer == nullptr)
+				{
+					GPUBufferDesc bd;
+					bd.Usage = USAGE_DYNAMIC;
+					bd.CPUAccessFlags = CPU_ACCESS_WRITE;
+
+					bd.ByteWidth = sizeof(ArmatureComponent::ShaderBoneType) * (UINT)armature.boneCollection.size();
+					bd.BindFlags = BIND_SHADER_RESOURCE;
+					bd.MiscFlags = RESOURCE_MISC_BUFFER_STRUCTURED;
+					bd.StructureByteStride = sizeof(ArmatureComponent::ShaderBoneType);
+
+					armature.boneBuffer.reset(new GPUBuffer);
+					HRESULT hr = device->CreateBuffer(&bd, nullptr, armature.boneBuffer.get());
+					assert(SUCCEEDED(hr));
+				}
 				if (mesh.vertexBuffer_PRE == nullptr)
 				{
 					mesh.vertexBuffer_PRE.reset(new GPUBuffer);
@@ -3721,7 +3780,7 @@ void UpdatePerFrameData(float dt)
 void UpdateRenderData(GRAPHICSTHREAD threadID)
 {
 	GraphicsDevice* device = GetDevice();
-	Scene& scene = GetScene(); // this is not const, so that means that later render passes will depend on this
+	const Scene& scene = GetScene();
 
 	// Process deferred MIP generation:
 	deferredMIPGenLock.lock();
@@ -3734,45 +3793,22 @@ void UpdateRenderData(GRAPHICSTHREAD threadID)
 
 	// Update material constant buffers:
 	MaterialCB materialGPUData;
-	for (size_t i = 0; i < scene.materials.GetCount(); ++i)
+	for (auto& materialIndex : pendingMaterialUpdates)
 	{
-		MaterialComponent& material = scene.materials[i];
+		const MaterialComponent& material = scene.materials[materialIndex];
 
-		if (material.IsDirty())
-		{
-			material.SetDirty(false);
+		materialGPUData.g_xMat_baseColor = material.baseColor;
+		materialGPUData.g_xMat_texMulAdd = material.texMulAdd;
+		materialGPUData.g_xMat_roughness = material.roughness;
+		materialGPUData.g_xMat_reflectance = material.reflectance;
+		materialGPUData.g_xMat_metalness = material.metalness;
+		materialGPUData.g_xMat_emissive = material.emissive;
+		materialGPUData.g_xMat_refractionIndex = material.refractionIndex;
+		materialGPUData.g_xMat_subsurfaceScattering = material.subsurfaceScattering;
+		materialGPUData.g_xMat_normalMapStrength = (material.normalMap == nullptr ? 0 : material.normalMapStrength);
+		materialGPUData.g_xMat_parallaxOcclusionMapping = material.parallaxOcclusionMapping;
 
-			materialGPUData.g_xMat_baseColor = material.baseColor;
-			materialGPUData.g_xMat_texMulAdd = material.texMulAdd;
-			materialGPUData.g_xMat_roughness = material.roughness;
-			materialGPUData.g_xMat_reflectance = material.reflectance;
-			materialGPUData.g_xMat_metalness = material.metalness;
-			materialGPUData.g_xMat_emissive = material.emissive;
-			materialGPUData.g_xMat_refractionIndex = material.refractionIndex;
-			materialGPUData.g_xMat_subsurfaceScattering = material.subsurfaceScattering;
-			materialGPUData.g_xMat_normalMapStrength = (material.normalMap == nullptr ? 0 : material.normalMapStrength);
-			materialGPUData.g_xMat_parallaxOcclusionMapping = material.parallaxOcclusionMapping;
-
-			if (material.constantBuffer == nullptr)
-			{
-				GPUBufferDesc desc;
-				desc.Usage = USAGE_DEFAULT;
-				desc.BindFlags = BIND_CONSTANT_BUFFER;
-				desc.ByteWidth = sizeof(MaterialCB);
-
-				SubresourceData InitData;
-				InitData.pSysMem = &materialGPUData;
-
-				material.constantBuffer.reset(new GPUBuffer);
-				device->CreateBuffer(&desc, &InitData, material.constantBuffer.get());
-			}
-			else
-			{
-				device->UpdateBuffer(material.constantBuffer.get(), &materialGPUData, threadID);
-			}
-
-		}
-
+		device->UpdateBuffer(material.constantBuffer.get(), &materialGPUData, threadID);
 	}
 
 
@@ -4021,23 +4057,7 @@ void UpdateRenderData(GRAPHICSTHREAD threadID)
 
 			if (mesh.IsSkinned() && scene.armatures.Contains(mesh.armatureID))
 			{
-				ArmatureComponent& armature = *scene.armatures.GetComponent(mesh.armatureID);
-
-				if (armature.boneBuffer == nullptr)
-				{
-					GPUBufferDesc bd;
-					bd.Usage = USAGE_DYNAMIC;
-					bd.CPUAccessFlags = CPU_ACCESS_WRITE;
-
-					bd.ByteWidth = sizeof(ArmatureComponent::ShaderBoneType) * (UINT)armature.boneCollection.size();
-					bd.BindFlags = BIND_SHADER_RESOURCE;
-					bd.MiscFlags = RESOURCE_MISC_BUFFER_STRUCTURED;
-					bd.StructureByteStride = sizeof(ArmatureComponent::ShaderBoneType);
-
-					armature.boneBuffer.reset(new GPUBuffer);
-					HRESULT hr = device->CreateBuffer(&bd, nullptr, armature.boneBuffer.get());
-					assert(SUCCEEDED(hr));
-				}
+				const ArmatureComponent& armature = *scene.armatures.GetComponent(mesh.armatureID);
 
 				if (!streamOutSetUp)
 				{
@@ -4132,19 +4152,19 @@ void UpdateRenderData(GRAPHICSTHREAD threadID)
 	// GPU Particle systems simulation/sorting/culling:
 	for (size_t i = 0; i < scene.emitters.GetCount(); ++i)
 	{
-		wiEmittedParticle& emitter = scene.emitters[i];
+		const wiEmittedParticle& emitter = scene.emitters[i];
 		Entity entity = scene.emitters.GetEntity(i);
 		const TransformComponent& transform = *scene.transforms.GetComponent(entity);
 		const MaterialComponent& material = *scene.materials.GetComponent(entity);
 		const MeshComponent* mesh = scene.meshes.GetComponent(emitter.meshID);
 
-		emitter.UpdateRenderData(transform, material, mesh, threadID);
+		emitter.UpdateGPU(transform, material, mesh, threadID);
 	}
 
-	// Hair particle systems simulation:
+	// Hair particle systems GPU simulation:
 	for (size_t i = 0; i < scene.hairs.GetCount(); ++i)
 	{
-		wiHairParticle& hair = scene.hairs[i];
+		const wiHairParticle& hair = scene.hairs[i];
 
 		if (hair.meshID != INVALID_ENTITY && GetCamera().frustum.CheckBox(hair.aabb))
 		{
@@ -4155,7 +4175,7 @@ void UpdateRenderData(GRAPHICSTHREAD threadID)
 				Entity entity = scene.hairs.GetEntity(i);
 				const MaterialComponent& material = *scene.materials.GetComponent(entity);
 
-				hair.UpdateRenderData(*mesh, material, threadID);
+				hair.UpdateGPU(*mesh, material, threadID);
 			}
 		}
 	}
@@ -4220,6 +4240,7 @@ void OcclusionCulling_Render(GRAPHICSTHREAD threadID)
 
 		device->BindGraphicsPSO(PSO_occlusionquery, threadID);
 
+		// TODO: This is not const, so not thread safe!
 		Scene& scene = GetScene();
 
 		int queryID = 0;
@@ -5781,12 +5802,18 @@ void DrawDebugWorld(const CameraComponent& camera, GRAPHICSTHREAD threadID)
 		device->EventEnd(threadID);
 	}
 
+	if (GetRaytraceDebugBVHVisualizerEnabled())
+	{
+		DrawTracedSceneBVH(threadID);
+	}
+
 	device->EventEnd(threadID);
 }
 
 void DrawSky(GRAPHICSTHREAD threadID)
 {
 	GraphicsDevice* device = GetDevice();
+	const Scene& scene = GetScene();
 
 	device->EventBegin("DrawSky", threadID);
 	
@@ -5797,7 +5824,7 @@ void DrawSky(GRAPHICSTHREAD threadID)
 	else
 	{
 		device->BindGraphicsPSO(PSO_sky[SKYRENDERING_DYNAMIC], threadID);
-		if (GetScene().weather.cloudiness > 0)
+		if (scene.weather.cloudiness > 0)
 		{
 			device->BindResource(PS, textures[TEXTYPE_2D_CLOUDS], TEXSLOT_ONDEMAND0, threadID);
 		}
@@ -6292,7 +6319,7 @@ void RefreshImpostors(GRAPHICSTHREAD threadID)
 						{
 							continue;
 						}
-						MaterialComponent& material = *GetScene().materials.GetComponent(subset.materialID);
+						const MaterialComponent& material = *scene.materials.GetComponent(subset.materialID);
 
 						device->BindConstantBuffer(PS, material.constantBuffer.get(), CB_GETBINDSLOT(MaterialCB), threadID);
 
@@ -7498,6 +7525,16 @@ void DrawTracedScene(const CameraComponent& camera, Texture2D* result, GRAPHICST
 
 	device->EventEnd(threadID); // DrawTracedScene
 }
+void DrawTracedSceneBVH(GRAPHICSTHREAD threadID)
+{
+	GraphicsDevice* device = GetDevice();
+
+	device->EventBegin("DebugRaytraceBVH", threadID);
+	device->BindGraphicsPSO(PSO_debug[DEBUGRENDERING_RAYTRACE_BVH], threadID);
+	sceneBVH.Bind(PS, threadID);
+	device->Draw(3, 0, threadID);
+	device->EventEnd(threadID);
+}
 
 void GenerateClouds(Texture2D* dst, UINT refinementCount, float randomness, GRAPHICSTHREAD threadID)
 {
@@ -7659,7 +7696,7 @@ unordered_map<Texture2D*, wiRectPacker::rect_xywh> packedLightmaps;
 void RenderObjectLightMap(ObjectComponent& object, bool updateBVHAndScene, GRAPHICSTHREAD threadID)
 {
 	GraphicsDevice* device = GetDevice();
-	Scene& scene = GetScene();
+	const Scene& scene = GetScene();
 	HRESULT hr;
 
 	device->EventBegin("RenderObjectLightMap", threadID);
@@ -8614,6 +8651,14 @@ void SetLightmapBakeBounceCount(uint32_t bounces)
 uint32_t GetLightmapBakeBounceCount()
 {
 	return lightmapBakeBounceCount;
+}
+void SetRaytraceDebugBVHVisualizerEnabled(bool value)
+{
+	raytraceDebugVisualizer = value;
+}
+bool GetRaytraceDebugBVHVisualizerEnabled()
+{
+	return raytraceDebugVisualizer;
 }
 
 }
