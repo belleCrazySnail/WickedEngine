@@ -1,8 +1,8 @@
+#include "objectHF.h"
 #include "postProcessHF.h"
 #include "reconstructPositionHF.h"
 #include "brdf.h"
 #include "packHF.h"
-#include "objectHF.h"
 
 
 fragment float4 deferredPS(VertexToPixelPostProcess PSIn [[stage_in]], constant GlobalData &gd)

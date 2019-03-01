@@ -1,5 +1,10 @@
 #ifndef _IMAGEHF_
 #define _IMAGEHF_
+
+#define TEXSLOT0
+#define TEXSLOT1
+#define TEXSLOT2
+
 #include "globals.h"
 #include "ShaderInterop_Image.h"
 

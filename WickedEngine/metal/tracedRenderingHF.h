@@ -1,19 +1,17 @@
 #ifndef _TRACEDRENDERING_HF_
 #define _TRACEDRENDERING_HF_
-#include "lightingHF.hlsli"
-#include "ShaderInterop_TracedRendering.h"
-#include "ShaderInterop_BVH.h"
+#include "lightingHF.h"
 
 #define NOSUN
-#include "skyHF.hlsli"
+#include "skyHF.h"
 
-static const float INFINITE_RAYHIT = 1000000;
-static const float EPSILON = 0.0001f;
+constant float INFINITE_RAYHIT = 1000000;
+constant float EPSILON = 0.0001f;
 
 // returns a position that is sligtly above the surface position to avoid self intersection
 //	P	: surface postion
 //	N	: surface normal
-inline float3 trace_bias_position(in float3 P, in float3 N)
+inline float3 trace_bias_position(float3 P, float3 N)
 {
 	return P + N * EPSILON; // this is the original version
 	//return P + sign(N) * abs(P * 0.0000002); // this is from https://ndotl.wordpress.com/2018/08/29/baking-artifact-free-lightmaps/ 
@@ -40,29 +38,34 @@ struct Ray
 
 	inline void Update()
 	{
-		direction_inverse = rcp(direction);
+		direction_inverse = 1.0 / direction;
 	}
 };
 
-inline TracedRenderingStoredRay CreateStoredRay(in Ray ray, in uint pixelID)
+inline TracedRenderingStoredRay CreateStoredRay(Ray ray, uint pixelID)
 {
 	TracedRenderingStoredRay storedray;
 
 	storedray.pixelID = pixelID;
 	storedray.origin = ray.origin;
-	storedray.direction_energy = f32tof16(ray.direction) | (f32tof16(ray.energy) << 16);
+	storedray.direction_energy.x = pack_float_to_snorm2x16(ray.direction.xy);
+    storedray.direction_energy.y = pack_float_to_snorm2x16(float2(ray.direction.z, ray.energy.x));
+    storedray.direction_energy.z = pack_float_to_snorm2x16(ray.direction.yz);
 	storedray.primitiveID = ray.primitiveID;
 	storedray.bary = ray.bary;
 
 	return storedray;
 }
-inline void LoadRay(in TracedRenderingStoredRay storedray, out Ray ray, out uint pixelID)
+inline void LoadRay(TracedRenderingStoredRay storedray, thread Ray &ray, thread uint &pixelID)
 {
 	pixelID = storedray.pixelID;
 
 	ray.origin = storedray.origin;
-	ray.direction = asfloat(f16tof32(storedray.direction_energy));
-	ray.energy = asfloat(f16tof32(storedray.direction_energy >> 16));
+    ray.direction.xy = unpack_snorm2x16_to_float(storedray.direction_energy.x);
+    float2 val = unpack_snorm2x16_to_float(storedray.direction_energy.y);
+    ray.direction.z = val.x;
+    ray.energy.x = val.y;
+    ray.energy.yz = unpack_snorm2x16_to_float(storedray.direction_energy.z);
 	ray.primitiveID = storedray.primitiveID;
 	ray.bary = storedray.bary;
 	ray.Update();
@@ -80,12 +83,12 @@ inline Ray CreateRay(float3 origin, float3 direction)
 	return ray;
 }
 
-inline Ray CreateCameraRay(float2 uv)
+inline Ray CreateCameraRay(float2 uv, constant GlobalData &gd)
 {
-	float4 unprojected = mul(float4(uv, 0.0f, 1.0f), g_xFrame_MainCamera_InvVP);
+	float4 unprojected = mul(float4(uv, 0.0f, 1.0f), gd.frame.g_xFrame_MainCamera_InvVP);
 	unprojected.xyz /= unprojected.w;
 
-	const float3 origin = g_xFrame_MainCamera_CamPos;
+	const float3 origin = gd.frame.g_xFrame_MainCamera_CamPos;
 	const float3 direction = normalize(unprojected.xyz - origin);
 
 	return CreateRay(origin, direction);
@@ -151,7 +154,7 @@ inline RayHit CreateRayHit()
 
 
 
-inline void IntersectTriangle(in Ray ray, inout RayHit bestHit, in BVHMeshTriangle tri, uint primitiveID)
+inline void IntersectTriangle(Ray ray, thread RayHit &bestHit, BVHMeshTriangle tri, uint primitiveID)
 {
 	float3 v0v1 = tri.v1 - tri.v0;
 	float3 v0v2 = tri.v2 - tri.v0;
@@ -196,7 +199,7 @@ inline void IntersectTriangle(in Ray ray, inout RayHit bestHit, in BVHMeshTriang
 	}
 }
 
-inline bool IntersectTriangleANY(in Ray ray, in float maxDistance, in BVHMeshTriangle tri)
+inline bool IntersectTriangleANY(Ray ray, float maxDistance, BVHMeshTriangle tri)
 {
 	float3 v0v1 = tri.v1 - tri.v0;
 	float3 v0v2 = tri.v2 - tri.v0;
@@ -235,7 +238,7 @@ inline bool IntersectTriangleANY(in Ray ray, in float maxDistance, in BVHMeshTri
 }
 
 
-inline bool IntersectBox(in Ray ray, in BVHAABB box)
+inline bool IntersectBox(Ray ray, BVHAABB box)
 {
 	if (ray.origin.x >= box.min.x && ray.origin.x <= box.max.x &&
 		ray.origin.y >= box.min.y && ray.origin.y <= box.max.y &&
@@ -266,7 +269,7 @@ inline float3x3 GetTangentSpace(float3 normal)
 	return float3x3(tangent, binormal, normal);
 }
 
-inline float3 SampleHemisphere(float3 normal, inout float seed, in float2 pixel)
+inline float3 SampleHemisphere(float3 normal, thread float &seed, float2 pixel)
 {
 	// Sample the hemisphere, where alpha determines the kind of the sampling
 	float cosTheta = rand(seed, pixel);

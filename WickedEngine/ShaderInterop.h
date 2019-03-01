@@ -19,8 +19,8 @@ using namespace metal;
 
 #define CBUFFER(name, slot) struct name
 
-#define RAWBUFFER(name,slot)
-#define RWRAWBUFFER(name,slot)
+#define RAWBUFFER(name,slot) device const uchar *name [[buffer(slot)]]
+#define RWRAWBUFFER(name,slot) device uchar *name [[buffer(slot)]]
 
 #define TYPEDBUFFER(name, type, slot) device const type *name [[buffer(slot)]]
 #define RWTYPEDBUFFER(name, type, slot) device type *name [[buffer(slot)]]

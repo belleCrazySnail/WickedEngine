@@ -17,6 +17,16 @@
 
 #define LIGHTMAP_QUALITY_BICUBIC
 
+#define TEXSLOT0
+#define TEXSLOT1
+#define TEXSLOT2
+#define TEXSLOT3
+#define TEXSLOT4
+#define TEXSLOT5
+#define TEXSLOT6
+#define TEXSLOT7
+#define TEXSLOT8
+#define TEXSLOT9
 
 #include "globals.h"
 #include "objectInputLayoutHF.h"

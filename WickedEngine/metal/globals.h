@@ -5,6 +5,13 @@
 #include "ShaderInterop_Image.h"
 #include "ShaderInterop_Font.h"
 
+#ifdef TRANCEDRENDERING_CB
+#include "ShaderInterop_TracedRendering.h"
+#endif
+#ifdef RAY_INTERSECT_DATA
+#include "ShaderInterop_BVH.h"
+#endif
+
 struct GlobalData
 {
 DEPTH2D(texture_depth, float, TEXSLOT_DEPTH)
@@ -21,17 +28,49 @@ DEPTHCUBEARRAY(texture_shadowarray_cube, float, TEXSLOT_SHADOWARRAY_CUBE)
 DEPTH2DARRAY(texture_shadowarray_transparent, float, TEXSLOT_SHADOWARRAY_TRANSPARENT)
 TEXTURE3D(texture_voxelradiance, float, TEXSLOT_VOXELRADIANCE)
 
+#ifdef TEXSLOT0
 TEXTURE2D(texture_0, float, TEXSLOT_ONDEMAND0)
+#endif
+#ifdef TEXSLOT1
 TEXTURE2D(texture_1, float, TEXSLOT_ONDEMAND1)
+#endif
+#ifdef TEXSLOT2
 TEXTURE2D(texture_2, float, TEXSLOT_ONDEMAND2)
+#endif
+#ifdef TEXSLOT3
 TEXTURE2D(texture_3, float, TEXSLOT_ONDEMAND3)
+#endif
+#ifdef TEXSLOT4
 TEXTURE2D(texture_4, float, TEXSLOT_ONDEMAND4)
+#endif
+#ifdef TEXSLOT5
 TEXTURE2D(texture_5, float, TEXSLOT_ONDEMAND5)
+#endif
+#ifdef TEXSLOT6
 TEXTURE2D(texture_6, float, TEXSLOT_ONDEMAND6)
+#endif
+#ifdef TEXSLOT7
 TEXTURE2D(texture_7, float, TEXSLOT_ONDEMAND7)
+#endif
+#ifdef TEXSLOT8
 TEXTURE2D(texture_8, float, TEXSLOT_ONDEMAND8)
+#endif
+#ifdef TEXSLOT9
 TEXTURE2D(texture_9, float, TEXSLOT_ONDEMAND9)
+#endif
 
+#ifdef RAY_INTERSECT_DATA
+    STRUCTUREDBUFFER(materialBuffer, TracedRenderingMaterial, TEXSLOT_ONDEMAND0);
+    STRUCTUREDBUFFER(triangleBuffer, BVHMeshTriangle, TEXSLOT_ONDEMAND1);
+    RAWBUFFER(clusterCounterBuffer, TEXSLOT_ONDEMAND2);
+    STRUCTUREDBUFFER(clusterIndexBuffer, uint, TEXSLOT_ONDEMAND3);
+    STRUCTUREDBUFFER(clusterOffsetBuffer, uint2, TEXSLOT_ONDEMAND4);
+    STRUCTUREDBUFFER(clusterConeBuffer, ClusterCone, TEXSLOT_ONDEMAND5);
+    STRUCTUREDBUFFER(bvhNodeBuffer, BVHNode, TEXSLOT_ONDEMAND6);
+    STRUCTUREDBUFFER(bvhAABBBuffer, BVHAABB, TEXSLOT_ONDEMAND7);
+    
+    TEXTURE2D(materialTextureAtlas, float, TEXSLOT_ONDEMAND8);
+#endif
 
 STRUCTUREDBUFFER(EntityTiles, uint, SBSLOT_ENTITYTILES);
 STRUCTUREDBUFFER(EntityArray, ShaderEntityType, SBSLOT_ENTITYARRAY);
@@ -48,6 +87,9 @@ STRUCTUREDBUFFER(MatrixArray, float4x4, SBSLOT_MATRIXARRAY);
 
 #ifdef VOLUMELIGHT_CB
     constant VolumeLightCB &vol [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_VOLUMELIGHT)]];
+#endif
+#ifdef TRANCEDRENDERING_CB
+    constant TracedRenderingCB &traced [[buffer(METAL_DESCRIPTOR_SET_OFFSET_CBV + CBSLOT_RENDERER_TRACED)]];
 #endif
     
 SAMPLERSTATE(			sampler_linear_clamp,	SSLOT_LINEAR_CLAMP	)
@@ -126,6 +168,13 @@ struct VertexToPixel3
 {
     float4 pos [[position]];
     float4 pos2D;
+};
+struct VertexToPixel4
+{
+    float4 pos [[position]];
+    float2 uv;
+    float3 pos3D;
+    float3 normal;
 };
 
 inline float3 GetSunColor(constant GlobalData &gd) { return gd.frame.g_xFrame_SunColor; }

@@ -1,24 +1,18 @@
 #ifndef _RAY_SCENE_INTERSECT_HF_
 #define _RAY_SCENE_INTERSECT_HF_
-#include "globals.hlsli"
-#include "tracedRenderingHF.hlsli"
+
+#define TRANCEDRENDERING_CB
+#define RAY_INTERSECT_DATA
+#define TEXSLOT0
+
+#include "globals.h"
+#include "tracedRenderingHF.h"
 
 #ifndef RAYTRACE_STACKSIZE
 #define RAYTRACE_STACKSIZE 32
 #endif // RAYTRACE_STACKSIZE
 
-STRUCTUREDBUFFER(materialBuffer, TracedRenderingMaterial, TEXSLOT_ONDEMAND0);
-STRUCTUREDBUFFER(triangleBuffer, BVHMeshTriangle, TEXSLOT_ONDEMAND1);
-RAWBUFFER(clusterCounterBuffer, TEXSLOT_ONDEMAND2);
-STRUCTUREDBUFFER(clusterIndexBuffer, uint, TEXSLOT_ONDEMAND3);
-STRUCTUREDBUFFER(clusterOffsetBuffer, uint2, TEXSLOT_ONDEMAND4);
-STRUCTUREDBUFFER(clusterConeBuffer, ClusterCone, TEXSLOT_ONDEMAND5);
-STRUCTUREDBUFFER(bvhNodeBuffer, BVHNode, TEXSLOT_ONDEMAND6);
-STRUCTUREDBUFFER(bvhAABBBuffer, BVHAABB, TEXSLOT_ONDEMAND7);
-
-TEXTURE2D(materialTextureAtlas, float4, TEXSLOT_ONDEMAND8);
-
-inline RayHit TraceScene(Ray ray)
+inline RayHit TraceScene(Ray ray, constant GlobalData &gd)
 {
 	RayHit bestHit = CreateRayHit();
 
@@ -28,8 +22,8 @@ inline RayHit TraceScene(Ray ray)
 	uint stack[RAYTRACE_STACKSIZE];
 	uint stackpos = 0;
 
-	const uint clusterCount = clusterCounterBuffer.Load(0);
-	const uint leafNodeOffset = clusterCount - 1;
+	uint clusterCount = gd.clusterCounterBuffer[0];
+	uint leafNodeOffset = clusterCount - 1;
 
 	// push root node
 	stack[stackpos] = 0;
@@ -47,8 +41,8 @@ inline RayHit TraceScene(Ray ray)
 		stackpos--;
 		const uint nodeIndex = stack[stackpos];
 
-		BVHNode node = bvhNodeBuffer[nodeIndex];
-		BVHAABB box = bvhAABBBuffer[nodeIndex];
+		BVHNode node = gd.bvhNodeBuffer[nodeIndex];
+		BVHAABB box = gd.bvhAABBBuffer[nodeIndex];
 
 		if (IntersectBox(ray, box))
 		{
@@ -56,8 +50,8 @@ inline RayHit TraceScene(Ray ray)
 			if (nodeIndex >= clusterCount - 1)
 			{
 				// Leaf node
-				const uint nodeToClusterID = nodeIndex - leafNodeOffset;
-				const uint clusterIndex = clusterIndexBuffer[nodeToClusterID];
+				uint nodeToClusterID = nodeIndex - leafNodeOffset;
+				uint clusterIndex = gd.clusterIndexBuffer[nodeToClusterID];
 				bool cullCluster = false;
 
 				//// Compute per cluster visibility:
@@ -73,14 +67,14 @@ inline RayHit TraceScene(Ray ray)
 
 				if (!cullCluster)
 				{
-					const uint2 cluster = clusterOffsetBuffer[clusterIndex];
-					const uint triangleOffset = cluster.x;
-					const uint triangleCount = cluster.y;
+					uint2 cluster = gd.clusterOffsetBuffer[clusterIndex];
+					uint triangleOffset = cluster.x;
+					uint triangleCount = cluster.y;
 
 					for (uint tri = 0; tri < triangleCount; ++tri)
 					{
-						const uint primitiveID = triangleOffset + tri;
-						IntersectTriangle(ray, bestHit, triangleBuffer[primitiveID], primitiveID);
+						uint primitiveID = triangleOffset + tri;
+						IntersectTriangle(ray, bestHit, gd.triangleBuffer[primitiveID], primitiveID);
 					}
 				}
 			}
@@ -111,7 +105,7 @@ inline RayHit TraceScene(Ray ray)
 	return bestHit;
 }
 
-inline bool TraceSceneANY(Ray ray, float maxDistance)
+inline bool TraceSceneANY(Ray ray, float maxDistance, constant GlobalData &gd)
 {
 	bool shadow = false;
 
@@ -121,8 +115,8 @@ inline bool TraceSceneANY(Ray ray, float maxDistance)
 	uint stack[RAYTRACE_STACKSIZE];
 	uint stackpos = 0;
 
-	const uint clusterCount = clusterCounterBuffer.Load(0);
-	const uint leafNodeOffset = clusterCount - 1;
+	uint clusterCount = gd.clusterCounterBuffer[0];
+	uint leafNodeOffset = clusterCount - 1;
 
 	// push root node
 	stack[stackpos] = 0;
@@ -138,10 +132,10 @@ inline bool TraceSceneANY(Ray ray, float maxDistance)
 
 		// pop untraversed node
 		stackpos--;
-		const uint nodeIndex = stack[stackpos];
+		uint nodeIndex = stack[stackpos];
 
-		BVHNode node = bvhNodeBuffer[nodeIndex];
-		BVHAABB box = bvhAABBBuffer[nodeIndex];
+		BVHNode node = gd.bvhNodeBuffer[nodeIndex];
+		BVHAABB box = gd.bvhAABBBuffer[nodeIndex];
 
 		if (IntersectBox(ray, box))
 		{
@@ -149,8 +143,8 @@ inline bool TraceSceneANY(Ray ray, float maxDistance)
 			if (nodeIndex >= clusterCount - 1)
 			{
 				// Leaf node
-				const uint nodeToClusterID = nodeIndex - leafNodeOffset;
-				const uint clusterIndex = clusterIndexBuffer[nodeToClusterID];
+				uint nodeToClusterID = nodeIndex - leafNodeOffset;
+				uint clusterIndex = gd.clusterIndexBuffer[nodeToClusterID];
 				bool cullCluster = false;
 
 				//// Compute per cluster visibility:
@@ -166,14 +160,14 @@ inline bool TraceSceneANY(Ray ray, float maxDistance)
 
 				if (!cullCluster)
 				{
-					const uint2 cluster = clusterOffsetBuffer[clusterIndex];
-					const uint triangleOffset = cluster.x;
-					const uint triangleCount = cluster.y;
+					uint2 cluster = gd.clusterOffsetBuffer[clusterIndex];
+					uint triangleOffset = cluster.x;
+					uint triangleCount = cluster.y;
 
 					for (uint tri = 0; tri < triangleCount; ++tri)
 					{
 						const uint primitiveID = triangleOffset + tri;
-						if (IntersectTriangleANY(ray, maxDistance, triangleBuffer[primitiveID]))
+						if (IntersectTriangleANY(ray, maxDistance, gd.triangleBuffer[primitiveID]))
 						{
 							shadow = true;
 							break;
@@ -211,11 +205,11 @@ inline bool TraceSceneANY(Ray ray, float maxDistance)
 //	Also fill the final params of rayHit, such as normal, uv, materialIndex
 //	seed should be > 0
 //	pixel should be normalized uv coordinates of the ray start position (used to randomize)
-inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2 pixel)
+inline float3 Shade(thread Ray &ray, thread RayHit &hit, thread float &seed, float2 pixel, constant GlobalData &gd)
 {
 	if (hit.distance < INFINITE_RAYHIT)
 	{
-		BVHMeshTriangle tri = triangleBuffer[hit.primitiveID];
+		BVHMeshTriangle tri = gd.triangleBuffer[hit.primitiveID];
 
 		float u = hit.bary.x;
 		float v = hit.bary.y;
@@ -225,19 +219,19 @@ inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2
 		hit.UV = tri.t0 * w + tri.t1 * u + tri.t2 * v;
 		hit.materialIndex = tri.materialIndex;
 
-		TracedRenderingMaterial mat = materialBuffer[hit.materialIndex];
+		TracedRenderingMaterial mat = gd.materialBuffer[hit.materialIndex];
 
-		hit.UV = frac(hit.UV); // emulate wrap
-		float4 baseColorMap = materialTextureAtlas.SampleLevel(sampler_linear_clamp, hit.UV * mat.baseColorAtlasMulAdd.xy + mat.baseColorAtlasMulAdd.zw, 0);
-		float4 surfaceMap = materialTextureAtlas.SampleLevel(sampler_linear_clamp, hit.UV * mat.surfaceMapAtlasMulAdd.xy + mat.surfaceMapAtlasMulAdd.zw, 0);
-		float4 normalMap = materialTextureAtlas.SampleLevel(sampler_linear_clamp, hit.UV * mat.normalMapAtlasMulAdd.xy + mat.normalMapAtlasMulAdd.zw, 0);
+		hit.UV = fract(hit.UV); // emulate wrap
+		float4 baseColorMap = gd.materialTextureAtlas.SampleLevel(gd.sampler_linear_clamp, hit.UV * mat.baseColorAtlasMulAdd.xy + mat.baseColorAtlasMulAdd.zw, 0);
+		float4 surfaceMap = gd.materialTextureAtlas.SampleLevel(gd.sampler_linear_clamp, hit.UV * mat.surfaceMapAtlasMulAdd.xy + mat.surfaceMapAtlasMulAdd.zw, 0);
+		float4 normalMap = gd.materialTextureAtlas.SampleLevel(gd.sampler_linear_clamp, hit.UV * mat.normalMapAtlasMulAdd.xy + mat.normalMapAtlasMulAdd.zw, 0);
 
 		float4 baseColor = DEGAMMA(mat.baseColor * baseColorMap);
 		float reflectance = mat.reflectance * surfaceMap.r;
 		float metalness = mat.metalness * surfaceMap.g;
 		float3 emissive = baseColor.rgb * mat.emissive * surfaceMap.b;
 		float roughness = mat.roughness * normalMap.a;
-		roughness = sqr(roughness); // convert linear roughness to cone aperture
+		roughness = sqrt(roughness); // convert linear roughness to cone aperture
 		float sss = mat.subsurfaceScattering;
 
 
@@ -250,8 +244,8 @@ inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2
 		{
 			// Refraction
 			float3 R = refract(ray.direction, hit.N, 1 - mat.refractionIndex);
-			ray.direction = lerp(R, SampleHemisphere(R, seed, pixel), roughness);
-			ray.energy *= lerp(baseColor.rgb, 1, refractChance);
+			ray.direction = mix(R, SampleHemisphere(R, seed, pixel), roughness);
+			ray.energy *= mix(baseColor.rgb, 1, refractChance);
 
 			// The ray penetrates the surface, so push DOWN along normal to avoid self-intersection:
 			ray.origin = trace_bias_position(hit.position, -hit.N);
@@ -264,7 +258,7 @@ inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2
 			float3 F = F_Fresnel(f0, saturate(dot(-ray.direction, hit.N)));
 			float specChance = dot(F, 0.33);
 			float diffChance = dot(albedo, 0.33);
-			float inv = rcp(specChance + diffChance);
+			float inv = 1.0 / (specChance + diffChance);
 			specChance *= inv;
 			diffChance *= inv;
 
@@ -273,7 +267,7 @@ inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2
 			{
 				// Specular reflection
 				float3 R = reflect(ray.direction, hit.N);
-				ray.direction = lerp(R, SampleHemisphere(R, seed, pixel), roughness);
+				ray.direction = mix(R, SampleHemisphere(R, seed, pixel), roughness);
 				ray.energy *= F / specChance;
 			}
 			else
@@ -299,15 +293,15 @@ inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2
 		ray.energy = 0.0f;
 
 		float3 envColor;
-		[branch]
-		if (IsStaticSky())
+//        [branch]
+		if (IsStaticSky(gd))
 		{
 			// We have envmap information in a texture:
-			envColor = DEGAMMA_SKY(texture_globalenvmap.SampleLevel(sampler_linear_clamp, ray.direction, 0).rgb);
+			envColor = DEGAMMA_SKY(gd.texture_globalenvmap.SampleLevel(gd.sampler_linear_clamp, ray.direction, level(0)).rgb);
 		}
 		else
 		{
-			envColor = GetDynamicSkyColor(ray.direction);
+			envColor = GetDynamicSkyColor(ray.direction, gd);
 		}
 		return envColor;
 	}
