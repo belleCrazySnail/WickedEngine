@@ -15,14 +15,11 @@ float4 main(PSIn input) : SV_TARGET
 
 	float4 color = float4(xOceanWaterColor, 1);
 	float opacity = 1; // keep edge diffuse shading
-	color.rgb = DEGAMMA(color.rgb);
 	float3 V = g_xCamera_CamPos - input.pos3D;
 	float dist = length(V);
 	V /= dist;
 	float emissive = 0;
-	Surface surface = CreateSurface(input.pos3D, normalize(float3(gradient.x, xOceanTexelLength * 2, gradient.y)), V, color, 0.001, 0.02, 0);
-	float ao = 1;
-	float sss = 0;
+	Surface surface = CreateSurface(input.pos3D, normalize(float3(gradient.x, xOceanTexelLength * 2, gradient.y)), V, color, 1, 0.001, 0, 0.02);
 	float2 pixel = input.pos.xy;
 	float depth = input.pos.z;
 	float3 diffuse = 0;
@@ -55,7 +52,7 @@ float4 main(PSIn input) : SV_TARGET
 
 	specular += reflection * fresnelTerm;
 
-	ApplyLighting(surface, diffuse, specular, ao, color);
+	ApplyLighting(surface, diffuse, specular, color);
 
 	//SOFT EDGE
 	float fade = saturate(0.3 * abs(refDepth - lineardepth));

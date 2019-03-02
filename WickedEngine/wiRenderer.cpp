@@ -1319,7 +1319,7 @@ void CreateDirLightShadowCams(const LightComponent& light, const CameraComponent
 }
 
 
-ForwardEntityMaskCB ForwardEntityCullingCPU(const RenderQueue& renderQueue, const AABB& batch_aabb, RENDERPASS renderPass)
+ForwardEntityMaskCB ForwardEntityCullingCPU(const FrameCulling& culling, const AABB& batch_aabb, RENDERPASS renderPass)
 {
 	// Performs CPU light culling for a renderable batch:
 	//	Similar to GPU-based tiled light culling, but this is only for simple forward passes (drawcall-granularity)
@@ -1331,9 +1331,6 @@ ForwardEntityMaskCB ForwardEntityCullingCPU(const RenderQueue& renderQueue, cons
 	cb.xForwardLightMask.y = 0;
 	cb.xForwardDecalMask = 0;
 	cb.xForwardEnvProbeMask = 0;
-
-	const CameraComponent* camera = renderQueue.camera == nullptr ? &GetCamera() : renderQueue.camera;
-	const FrameCulling& culling = frameCullings.at(camera);
 
 	uint32_t buckets[2] = { 0,0 };
     for (size_t i = 0; i < std::min((size_t)64, culling.culledLights.size()); ++i) // only support indexing 64 lights at max for now
@@ -1413,8 +1410,7 @@ void RenderMeshes(const RenderQueue& renderQueue, RENDERPASS renderPass, UINT re
 			renderPass == RENDERPASS_TEXTURE ||
 			renderPass == RENDERPASS_SHADOW ||
 			renderPass == RENDERPASS_SHADOWCUBE ||
-			renderPass == RENDERPASS_DEPTHONLY ||
-			renderPass == RENDERPASS_VOXELIZE;
+			renderPass == RENDERPASS_DEPTHONLY;
 
 		// Do we need to compute a light mask for this pass on the CPU?
 		const bool forwardLightmaskRequest = 
@@ -1531,7 +1527,9 @@ void RenderMeshes(const RenderQueue& renderQueue, RENDERPASS renderPass, UINT re
 
 			if (forwardLightmaskRequest)
 			{
-				ForwardEntityMaskCB cb = ForwardEntityCullingCPU(renderQueue, instancedBatch.aabb, renderPass);
+				const CameraComponent* camera = renderQueue.camera == nullptr ? &GetCamera() : renderQueue.camera;
+				const FrameCulling& culling = frameCullings.at(camera);
+				ForwardEntityMaskCB cb = ForwardEntityCullingCPU(culling, instancedBatch.aabb, renderPass);
 				device->UpdateBuffer(constantBuffers[CBTYPE_FORWARDENTITYMASK], &cb, threadID);
 				device->BindConstantBuffer(PS, constantBuffers[CBTYPE_FORWARDENTITYMASK], CB_GETBINDSLOT(ForwardEntityMaskCB), threadID);
 			}
@@ -1707,6 +1705,7 @@ void RenderMeshes(const RenderQueue& renderQueue, RENDERPASS renderPass, UINT re
 					material.GetNormalMap(),
 					material.GetSurfaceMap(),
 					material.GetDisplacementMap(),
+					material.GetEmissiveMap(),
 				};
 				device->BindResources(PS, res, TEXSLOT_ONDEMAND0, (easyTextureBind ? 2 : ARRAYSIZE(res)), threadID);
 
@@ -3798,14 +3797,15 @@ void UpdateRenderData(GRAPHICSTHREAD threadID)
 		const MaterialComponent& material = scene.materials[materialIndex];
 
 		materialGPUData.g_xMat_baseColor = material.baseColor;
+		materialGPUData.g_xMat_emissiveColor = material.emissiveColor;
 		materialGPUData.g_xMat_texMulAdd = material.texMulAdd;
 		materialGPUData.g_xMat_roughness = material.roughness;
 		materialGPUData.g_xMat_reflectance = material.reflectance;
 		materialGPUData.g_xMat_metalness = material.metalness;
-		materialGPUData.g_xMat_emissive = material.emissive;
 		materialGPUData.g_xMat_refractionIndex = material.refractionIndex;
 		materialGPUData.g_xMat_subsurfaceScattering = material.subsurfaceScattering;
 		materialGPUData.g_xMat_normalMapStrength = (material.normalMap == nullptr ? 0 : material.normalMapStrength);
+		materialGPUData.g_xMat_normalMapFlip = (material._flags & MaterialComponent::FLIP_NORMALMAP ? -1.0f : 1.0f);
 		materialGPUData.g_xMat_parallaxOcclusionMapping = material.parallaxOcclusionMapping;
 
 		device->UpdateBuffer(material.constantBuffer.get(), &materialGPUData, threadID);
@@ -5196,6 +5196,13 @@ void DrawScene(const CameraComponent& camera, bool tessellation, GRAPHICSTHREAD 
 				Entity entity = scene.hairs.GetEntity(i);
 				const MaterialComponent& material = *scene.materials.GetComponent(entity);
 
+				if (renderPass == RENDERPASS_FORWARD)
+				{
+					ForwardEntityMaskCB cb = ForwardEntityCullingCPU(culling, hair.aabb, renderPass);
+					device->UpdateBuffer(constantBuffers[CBTYPE_FORWARDENTITYMASK], &cb, threadID);
+					device->BindConstantBuffer(PS, constantBuffers[CBTYPE_FORWARDENTITYMASK], CB_GETBINDSLOT(ForwardEntityMaskCB), threadID);
+				}
+
 				hair.Draw(camera, material, renderPass, false, threadID);
 			}
 		}
@@ -5279,6 +5286,13 @@ void DrawScene_Transparent(const CameraComponent& camera, RENDERPASS renderPass,
 			{
 				Entity entity = scene.hairs.GetEntity(i);
 				const MaterialComponent& material = *scene.materials.GetComponent(entity);
+
+				if (renderPass == RENDERPASS_FORWARD)
+				{
+					ForwardEntityMaskCB cb = ForwardEntityCullingCPU(culling, hair.aabb, renderPass);
+					device->UpdateBuffer(constantBuffers[CBTYPE_FORWARDENTITYMASK], &cb, threadID);
+					device->BindConstantBuffer(PS, constantBuffers[CBTYPE_FORWARDENTITYMASK], CB_GETBINDSLOT(ForwardEntityMaskCB), threadID);
+				}
 
 				hair.Draw(camera, material, renderPass, true, threadID);
 			}
@@ -7067,7 +7081,7 @@ void UpdateGlobalMaterialResources(GRAPHICSTHREAD threadID)
 
 				sceneTextures.insert(material.GetBaseColorMap());
 				sceneTextures.insert(material.GetSurfaceMap());
-				sceneTextures.insert(material.GetNormalMap());
+				sceneTextures.insert(material.GetEmissiveMap());
 			}
 		}
 
@@ -7158,14 +7172,15 @@ void UpdateGlobalMaterialResources(GRAPHICSTHREAD threadID)
 
 				// Copy base params:
 				global_material.baseColor = material.baseColor;
+				global_material.emissiveColor = material.emissiveColor;
 				global_material.texMulAdd = material.texMulAdd;
 				global_material.roughness = material.roughness;
 				global_material.reflectance = material.reflectance;
 				global_material.metalness = material.metalness;
-				global_material.emissive = material.emissive;
 				global_material.refractionIndex = material.refractionIndex;
 				global_material.subsurfaceScattering = material.subsurfaceScattering;
 				global_material.normalMapStrength = material.normalMapStrength;
+				global_material.normalMapFlip = (material._flags & MaterialComponent::FLIP_NORMALMAP ? -1.0f : 1.0f);
 				global_material.parallaxOcclusionMapping = material.parallaxOcclusionMapping;
 
 				// Add extended properties:
@@ -7209,21 +7224,21 @@ void UpdateGlobalMaterialResources(GRAPHICSTHREAD threadID)
 
 
 
-				if (material.GetNormalMap() != nullptr)
+				if (material.GetEmissiveMap() != nullptr)
 				{
-					rect = storedTextures[material.GetNormalMap()];
+					rect = storedTextures[material.GetEmissiveMap()];
 				}
 				else
 				{
 
-					rect = storedTextures[wiTextureHelper::getNormalMapDefault()];
+					rect = storedTextures[wiTextureHelper::getWhite()];
 				}
 				// eliminate border expansion:
 				rect.x += atlasWrapBorder;
 				rect.y += atlasWrapBorder;
 				rect.w -= atlasWrapBorder * 2;
 				rect.h -= atlasWrapBorder * 2;
-				global_material.normalMapAtlasMulAdd = XMFLOAT4((float)rect.w / (float)desc.Width, (float)rect.h / (float)desc.Height,
+				global_material.emissiveMapAtlasMulAdd = XMFLOAT4((float)rect.w / (float)desc.Width, (float)rect.h / (float)desc.Height,
 					(float)rect.x / (float)desc.Width, (float)rect.y / (float)desc.Height);
 
 				materialArray.push_back(global_material);

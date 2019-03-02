@@ -26,6 +26,7 @@ public:
 	wiCheckBox* waterCheckBox;
 	wiCheckBox* planarReflCheckBox;
 	wiCheckBox* shadowCasterCheckBox;
+	wiCheckBox* flipNormalMapCheckBox;
 	wiSlider*	normalMapSlider;
 	wiSlider*	roughnessSlider;
 	wiSlider*	reflectanceSlider;
@@ -40,7 +41,8 @@ public:
 	wiSlider*	texAnimDirectionSliderV;
 	wiSlider*	texMulSliderX;
 	wiSlider*	texMulSliderY;
-	wiColorPicker* colorPicker;
+	wiColorPicker* baseColorPicker;
+	wiColorPicker* emissiveColorPicker;
 	wiSlider*	alphaRefSlider;
 	wiComboBox* blendModeComboBox;
 	wiComboBox* shaderTypeComboBox;
@@ -49,10 +51,12 @@ public:
 	wiLabel*	texture_normal_Label;
 	wiLabel*	texture_surface_Label;
 	wiLabel*	texture_displacement_Label;
+	wiLabel*	texture_emissive_Label;
 
 	wiButton*	texture_baseColor_Button;
 	wiButton*	texture_normal_Button;
 	wiButton*	texture_surface_Button;
 	wiButton*	texture_displacement_Button;
+	wiButton*	texture_emissive_Button;
 };
 

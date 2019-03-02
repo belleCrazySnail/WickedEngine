@@ -33,9 +33,10 @@
 
 // These are bound by wiRenderer (based on Material):
 #define xBaseColorMap			texture_0	// rgb: baseColor, a: opacity
-#define xNormalMap				texture_1	// rgb: normal, a: roughness
-#define xSurfaceMap				texture_2	// r: reflectance, g: metalness, b: emissive, a: subsurface scattering
+#define xNormalMap				texture_1	// rgb: normal
+#define xSurfaceMap				texture_2	// r: ao, g: roughness, b: metallic, a: reflectance
 #define xDisplacementMap		texture_3	// r: heightmap
+#define xEmissiveMap			texture_4	// rgba: emissive
 
 // These are bound by RenderPath (based on Render Path):
 #define xReflection				texture_6	// rgba: scene color from reflected camera angle
@@ -77,12 +78,12 @@ struct GBUFFEROutputType
 	float4 diffuse	: SV_Target3;
 	float4 specular	: SV_Target4;
 };
-inline GBUFFEROutputType CreateGbuffer(in float4 color, in Surface surface, in float2 velocity, in float3 diffuse, in float3 specular, in float ao)
+inline GBUFFEROutputType CreateGbuffer(in float4 color, in Surface surface, in float2 velocity, in float3 diffuse, in float3 specular)
 {
 	GBUFFEROutputType Out;
-	Out.g0 = float4(color.rgb, ao);																/*FORMAT_R8G8B8A8_UNORM*/
+	Out.g0 = float4(color.rgb, surface.sss);													/*FORMAT_R8G8B8A8_UNORM*/
 	Out.g1 = float4(encode(surface.N), velocity);												/*FORMAT_R16G16B16A16_FLOAT*/
-	Out.g2 = float4(surface.roughness, surface.reflectance, surface.metalness, surface.sss);	/*FORMAT_R8G8B8A8_UNORM*/
+	Out.g2 = float4(surface.ao, surface.roughness, surface.metalness, surface.reflectance);		/*FORMAT_R8G8B8A8_UNORM*/
 	Out.diffuse = float4(diffuse, 1);															/*wiRenderer::RTFormat_deferred_lightbuffer*/
 	Out.specular = float4(specular, 1);															/*wiRenderer::RTFormat_deferred_lightbuffer*/
 	return Out;
@@ -107,7 +108,7 @@ inline GBUFFEROutputType_Thin CreateGbuffer_Thin(in float4 color, in Surface sur
 
 inline void ApplyEmissive(in Surface surface, inout float3 specular)
 {
-	specular += surface.baseColor.rgb * surface.emissive;
+	specular += surface.emissiveColor.rgb * surface.emissiveColor.a;
 }
 
 inline void LightMapping(in float2 ATLAS, inout float3 diffuse, inout float3 specular, inout float ao, in float ssao)
@@ -124,13 +125,13 @@ inline void LightMapping(in float2 ATLAS, inout float3 diffuse, inout float3 spe
 	}
 }
 
-inline void NormalMapping(in float2 UV, in float3 V, inout float3 N, in float3x3 TBN, inout float3 bumpColor, inout float roughness)
+inline void NormalMapping(in float2 UV, in float3 V, inout float3 N, in float3x3 TBN, inout float3 bumpColor)
 {
-	float4 normal_roughness = xNormalMap.Sample(sampler_objectshader, UV);
-	bumpColor = 2.0f * normal_roughness.rgb - 1.0f;
+	float3 normalMap = xNormalMap.Sample(sampler_objectshader, UV).rgb;
+	bumpColor = normalMap.rgb * 2 - 1;
+	bumpColor.g *= g_xMat_normalMapFlip;
 	N = normalize(lerp(N, mul(bumpColor, TBN), g_xMat_normalMapStrength));
 	bumpColor *= g_xMat_normalMapStrength;
-	roughness *= normal_roughness.a;
 }
 
 inline void SpecularAA(in float3 N, inout float roughness)
@@ -145,9 +146,9 @@ inline void SpecularAA(in float3 N, inout float roughness)
 	}
 }
 
-inline float3 PlanarReflection(in float2 reflectionUV, in Surface surface)
+inline float3 PlanarReflection(in float2 reflectionUV, in float2 bumpColor)
 {
-	return xReflection.SampleLevel(sampler_linear_clamp, reflectionUV + surface.N.xz*g_xMat_normalMapStrength, 0).rgb;
+	return xReflection.SampleLevel(sampler_linear_clamp, reflectionUV + bumpColor*g_xMat_normalMapStrength, 0).rgb;
 }
 
 #define NUM_PARALLAX_OCCLUSION_STEPS 32
@@ -661,9 +662,9 @@ inline void TiledLighting(in float2 pixel, inout Surface surface, inout float3 d
 
 }
 
-inline void ApplyLighting(in Surface surface, in float3 diffuse, in float3 specular, in float ao, inout float4 color)
+inline void ApplyLighting(in Surface surface, in float3 diffuse, in float3 specular, inout float4 color)
 {
-	color.rgb = (GetAmbient(surface.N) * ao + diffuse) * surface.albedo + specular;
+	color.rgb = (GetAmbient(surface.N) * surface.ao + diffuse) * surface.albedo + specular;
 }
 
 inline void ApplyFog(in float dist, inout float4 color)
@@ -751,8 +752,9 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 	ParallaxOcclusionMapping(UV, surface.V, TBN);
 #endif // POM
 
-	float4 color = g_xMat_baseColor * float4(input.instanceColor, 1) * xBaseColorMap.Sample(sampler_objectshader, UV);
+	float4 color = xBaseColorMap.Sample(sampler_objectshader, UV);
 	color.rgb = DEGAMMA(color.rgb);
+	color *= g_xMat_baseColor * float4(input.instanceColor, 1);
 	ALPHATEST(color.a);
 
 #ifndef SIMPLE_INPUT
@@ -762,7 +764,6 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 	float3 bumpColor = 0;
 	float opacity = color.a;
 	float depth = input.pos.z;
-	float ao = 1;
 	float ssao = 1;
 #ifndef ENVMAPRENDERING
 	const float lineardepth = input.pos2D.w;
@@ -780,20 +781,35 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 #endif // ENVMAPRENDERING
 #endif // SIMPLE_INPUT
 
-	float roughness = g_xMat_roughness;
-
 #ifdef NORMALMAP
-	NormalMapping(UV, surface.P, surface.N, TBN, bumpColor, roughness);
+	NormalMapping(UV, surface.P, surface.N, TBN, bumpColor);
 #endif // NORMALMAP
 
-	float4 surface_ref_met_emi_sss = xSurfaceMap.Sample(sampler_objectshader, UV);
+	float4 surface_ao_roughness_metallic_reflectance = xSurfaceMap.Sample(sampler_objectshader, UV);
+	float4 emissiveColor;
+	[branch]
+	if (g_xMat_emissiveColor.a > 0)
+	{
+		emissiveColor = xEmissiveMap.Sample(sampler_objectshader, UV);
+		emissiveColor.rgb = DEGAMMA(emissiveColor.rgb);
+		emissiveColor *= g_xMat_emissiveColor;
+	}
+	else 
+	{
+		emissiveColor = 0;
+	}
 
 	surface = CreateSurface(
-		surface.P, surface.N, surface.V, color, roughness,
-		g_xMat_reflectance * surface_ref_met_emi_sss.r,
-		g_xMat_metalness * surface_ref_met_emi_sss.g,
-		g_xMat_emissive * surface_ref_met_emi_sss.b,
-		g_xMat_subsurfaceScattering * surface_ref_met_emi_sss.a
+		surface.P, 
+		surface.N, 
+		surface.V, 
+		color,
+		surface_ao_roughness_metallic_reflectance.r,
+		g_xMat_roughness * surface_ao_roughness_metallic_reflectance.g,
+		g_xMat_metalness * surface_ao_roughness_metallic_reflectance.b,
+		g_xMat_reflectance * surface_ao_roughness_metallic_reflectance.a,
+		emissiveColor,
+		g_xMat_subsurfaceScattering
 	);
 
 
@@ -833,7 +849,7 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 #ifndef ENVMAPRENDERING
 #ifndef TRANSPARENT
 	ssao = xSSAO.SampleLevel(sampler_linear_clamp, ReprojectedScreenCoord, 0).r;
-	ao *= ssao;
+	surface.ao *= ssao;
 #endif // TRANSPARENT
 #endif // ENVMAPRENDERING
 
@@ -843,7 +859,7 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 	ApplyEmissive(surface, specular);
 
-	LightMapping(input.atl, diffuse, specular, ao, ssao);
+	LightMapping(input.atl, diffuse, specular, surface.ao, ssao);
 
 
 
@@ -851,7 +867,7 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 
 #ifdef PLANARREFLECTION
-	specular += PlanarReflection(refUV, surface) * surface.F;
+	specular += PlanarReflection(refUV, bumpColor.rg) * surface.F;
 #endif
 
 
@@ -870,10 +886,10 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 #ifndef WATER
 #ifndef ENVMAPRENDERING
 
-	VoxelGI(surface, diffuse, reflection, ao);
+	VoxelGI(surface, diffuse, reflection);
 
 #ifdef PLANARREFLECTION
-	reflection = PlanarReflection(refUV, surface);
+	reflection = PlanarReflection(refUV, bumpColor.rg);
 #endif
 
 
@@ -890,7 +906,7 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 	specular += reflection * surface.F;
 
-	ApplyLighting(surface, diffuse, specular, ao, color);
+	ApplyLighting(surface, diffuse, specular, color);
 
 #ifdef WATER
 	// SOFT EDGE
@@ -905,7 +921,7 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 
 
 #ifdef TEXTUREONLY
-	color.rgb += color.rgb * surface.emissive;
+	color.rgb += surface.emissiveColor.rgb * surface.emissiveColor.a;
 #endif // TEXTUREONLY
 
 
@@ -923,7 +939,7 @@ GBUFFEROutputType_Thin main(PIXELINPUT input)
 	return color;
 #else
 #if defined(DEFERRED)	
-	return CreateGbuffer(color, surface, velocity, diffuse, specular, ao);
+	return CreateGbuffer(color, surface, velocity, diffuse, specular);
 #elif defined(FORWARD) || defined(TILEDFORWARD)
 	return CreateGbuffer_Thin(color, surface, velocity);
 #endif // DEFERRED

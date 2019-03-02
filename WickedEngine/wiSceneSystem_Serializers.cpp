@@ -85,11 +85,18 @@ namespace wiSceneSystem
 			archive >> userStencilRef;
 			archive >> (uint8_t&)blendMode;
 			archive >> baseColor;
+			if (archive.GetVersion() >= 25)
+			{
+				archive >> emissiveColor;
+			}
 			archive >> texMulAdd;
 			archive >> roughness;
 			archive >> reflectance;
 			archive >> metalness;
-			archive >> emissive;
+			if (archive.GetVersion() < 25)
+			{
+				archive >> emissiveColor.w;
+			}
 			archive >> refractionIndex;
 			archive >> subsurfaceScattering;
 			archive >> normalMapStrength;
@@ -103,6 +110,11 @@ namespace wiSceneSystem
 			archive >> surfaceMapName;
 			archive >> normalMapName;
 			archive >> displacementMapName;
+
+			if (archive.GetVersion() >= 24)
+			{
+				archive >> emissiveMapName;
+			}
 
 			SetDirty();
 
@@ -122,6 +134,10 @@ namespace wiSceneSystem
 			{
 				displacementMap = (wiGraphicsTypes::Texture2D*)wiResourceManager::GetGlobal().add(dir + displacementMapName);
 			}
+			if (!emissiveMapName.empty())
+			{
+				emissiveMap = (wiGraphicsTypes::Texture2D*)wiResourceManager::GetGlobal().add(dir + emissiveMapName);
+			}
 
 		}
 		else
@@ -131,11 +147,18 @@ namespace wiSceneSystem
 			archive << userStencilRef;
 			archive << (uint8_t)blendMode;
 			archive << baseColor;
+			if (archive.GetVersion() >= 25)
+			{
+				archive << emissiveColor;
+			}
 			archive << texMulAdd;
 			archive << roughness;
 			archive << reflectance;
 			archive << metalness;
-			archive << emissive;
+			if (archive.GetVersion() < 25)
+			{
+				archive << emissiveColor.w;
+			}
 			archive << refractionIndex;
 			archive << subsurfaceScattering;
 			archive << normalMapStrength;
@@ -170,12 +193,23 @@ namespace wiSceneSystem
 				{
 					displacementMapName = displacementMapName.substr(found + dir.length());
 				}
+
+				found = emissiveMapName.rfind(dir);
+				if (found != std::string::npos)
+				{
+					emissiveMapName = emissiveMapName.substr(found + dir.length());
+				}
 			}
 
 			archive << baseColorMapName;
 			archive << surfaceMapName;
 			archive << normalMapName;
 			archive << displacementMapName;
+
+			if (archive.GetVersion() >= 24)
+			{
+				archive << emissiveMapName;
+			}
 		}
 	}
 	void MeshComponent::Serialize(wiArchive& archive, uint32_t seed)

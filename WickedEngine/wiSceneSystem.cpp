@@ -256,6 +256,14 @@ namespace wiSceneSystem
 		}
 		return wiTextureHelper::getWhite();
 	}
+	Texture2D* MaterialComponent::GetEmissiveMap() const
+	{
+		if (emissiveMap != nullptr)
+		{
+			return emissiveMap;
+		}
+		return wiTextureHelper::getWhite();
+	}
 
 	void MeshComponent::CreateRenderData()
 	{
@@ -1671,11 +1679,12 @@ namespace wiSceneSystem
 
 					if (mesh != nullptr)
 					{
-						aabb = mesh->aabb.get(transform.world);
+						XMMATRIX W = XMLoadFloat4x4(&transform.world);
+						aabb = mesh->aabb.get(W);
 
 						// This is instance bounding box matrix:
 						XMFLOAT4X4 meshMatrix;
-						XMStoreFloat4x4(&meshMatrix, mesh->aabb.getAsBoxMatrix() * XMLoadFloat4x4(&transform.world));
+						XMStoreFloat4x4(&meshMatrix, mesh->aabb.getAsBoxMatrix() * W);
 
 						// We need sometimes the center of the instance bounding box, not the transform position (which can be outside the bounding box)
 						object.center = *((XMFLOAT3*)&meshMatrix._41);
@@ -1807,7 +1816,7 @@ namespace wiSceneSystem
 
 			const MaterialComponent& material = *materials.GetComponent(entity);
 			decal.color = material.baseColor;
-			decal.emissive = material.emissive;
+			decal.emissive = material.emissiveColor.w;
 			decal.texture = material.GetBaseColorMap();
 			decal.normal = material.GetNormalMap();
 		});

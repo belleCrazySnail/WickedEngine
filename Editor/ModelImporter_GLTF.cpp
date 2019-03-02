@@ -12,6 +12,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
 
 using namespace std;
 using namespace wiGraphicsTypes;
@@ -90,10 +91,10 @@ namespace tinygltf
 	}
 }
 
-
-void RegisterTexture2D(tinygltf::Image *image)
+void RegisterTexture2D(tinygltf::Image *image, const string& type_name)
 {
-	// We will load the texture2d by hand here and register to the resource manager
+	// We will load the texture2d by hand here and register to the resource manager (if it was not already registered)
+	if (wiResourceManager::GetGlobal().get(wiHashString(image->uri)) == nullptr)
 	{
 		int width = image->width;
 		int height = image->height;
@@ -113,7 +114,7 @@ void RegisterTexture2D(tinygltf::Image *image)
 			desc.Usage = USAGE_DEFAULT;
 
 			UINT mipwidth = width;
-			SubresourceData* InitData = new SubresourceData[desc.MipLevels];
+			vector<SubresourceData> InitData(desc.MipLevels);
 			for (UINT mip = 0; mip < desc.MipLevels; ++mip)
 			{
 				InitData[mip].pSysMem = image->image.data();
@@ -124,20 +125,20 @@ void RegisterTexture2D(tinygltf::Image *image)
 			Texture2D* tex = new Texture2D;
 			tex->RequestIndependentShaderResourcesForMIPs(true);
 			tex->RequestIndependentUnorderedAccessResourcesForMIPs(true);
-			HRESULT hr = wiRenderer::GetDevice()->CreateTexture2D(&desc, InitData, tex);
+			HRESULT hr = wiRenderer::GetDevice()->CreateTexture2D(&desc, InitData.data(), tex);
 			assert(SUCCEEDED(hr));
 
 			if (tex != nullptr)
 			{
 				wiRenderer::AddDeferredMIPGen(tex);
 
-				//if (image->uri.empty())
+				if (image->uri.empty())
 				{
-					// Always export the images, because they were interleaved to engine layout after importing from gltf:
+					// If the texture was embedded, export it as a file:
 					stringstream ss;
 					do {
 						ss.str("");
-						ss << "gltfLoader_image_" << wiRandom::getRandom(INT_MAX) << ".png";
+						ss << "gltfimport_" << type_name << "_" << wiRandom::getRandom(INT_MAX) << ".png";
 					} while (wiHelper::FileExists(ss.str())); // this is to avoid overwriting an existing exported image
 					image->uri = ss.str();
 					bool success = wiHelper::saveTextureToFile(image->image, desc, ss.str());
@@ -150,6 +151,7 @@ void RegisterTexture2D(tinygltf::Image *image)
 		}
 	}
 }
+
 
 
 struct LoaderState
@@ -313,7 +315,6 @@ void ImportModel_GLTF(const std::string& fileName)
 		material.roughness = 1.0f;
 		material.metalness = 1.0f;
 		material.reflectance = 0.02f;
-		material.emissive = 0;
 
 		auto& baseColorTexture = x.values.find("baseColorTexture");
 		auto& metallicRoughnessTexture = x.values.find("metallicRoughnessTexture");
@@ -326,12 +327,13 @@ void ImportModel_GLTF(const std::string& fileName)
 		auto& metallicFactor = x.values.find("metallicFactor");
 		auto& emissiveFactor = x.additionalValues.find("emissiveFactor");
 		auto& alphaCutoff = x.additionalValues.find("alphaCutoff");
+		auto& alphaMode = x.additionalValues.find("alphaMode");
 
 		if (baseColorTexture != x.values.end())
 		{
 			auto& tex = state.gltfModel.textures[baseColorTexture->second.TextureIndex()];
 			auto& img = state.gltfModel.images[tex.source];
-			RegisterTexture2D(&img);
+			RegisterTexture2D(&img, "basecolor");
 			material.baseColorMapName = img.uri;
 		}
 		else if(!state.gltfModel.images.empty())
@@ -339,153 +341,31 @@ void ImportModel_GLTF(const std::string& fileName)
 			// For some reason, we don't have diffuse texture, but have other textures
 			//	I have a problem, because one model viewer displays textures on a model which has no basecolor set in its material...
 			//	This is probably not how it should be (todo)
-			RegisterTexture2D(&state.gltfModel.images[0]);
+			RegisterTexture2D(&state.gltfModel.images[0], "basecolor");
 			material.baseColorMapName = state.gltfModel.images[0].uri;
 		}
-
-		tinygltf::Image* img_nor = nullptr;
-		tinygltf::Image* img_met_rough = nullptr;
-		tinygltf::Image* img_emissive = nullptr;
 
 		if (normalTexture != x.additionalValues.end())
 		{
 			auto& tex = state.gltfModel.textures[normalTexture->second.TextureIndex()];
-			img_nor = &state.gltfModel.images[tex.source];
+			auto& img = state.gltfModel.images[tex.source];
+			RegisterTexture2D(&img, "normal");
+			material.normalMapName = img.uri;
+			material.SetFlipNormalMap(true);
 		}
 		if (metallicRoughnessTexture != x.values.end())
 		{
 			auto& tex = state.gltfModel.textures[metallicRoughnessTexture->second.TextureIndex()];
-			img_met_rough = &state.gltfModel.images[tex.source];
+			auto& img = state.gltfModel.images[tex.source];
+			RegisterTexture2D(&img, "roughness_metallic");
+			material.surfaceMapName = img.uri;
 		}
 		if (emissiveTexture != x.additionalValues.end())
 		{
 			auto& tex = state.gltfModel.textures[emissiveTexture->second.TextureIndex()];
-			img_emissive = &state.gltfModel.images[tex.source];
-		}
-
-		// Now we will begin interleaving texture data to match engine layout:
-
-		if (img_nor != nullptr)
-		{
-			uint32_t* data32_roughness = nullptr;
-			if (img_met_rough != nullptr && img_met_rough->width == img_nor->width && img_met_rough->height == img_nor->height)
-			{
-				data32_roughness = (uint32_t*)img_met_rough->image.data();
-			}
-			else if (img_met_rough != nullptr)
-			{
-				wiBackLog::post("[gltf] Warning: there is a normalmap and roughness texture, but not the same size! Roughness will not be baked in!");
-			}
-
-			// Convert normal map:
-			uint32_t* data32 = (uint32_t*)img_nor->image.data();
-			for (int i = 0; i < img_nor->width * img_nor->height; ++i)
-			{
-				uint32_t pixel = data32[i];
-				float r = ((pixel >> 0)  & 255) / 255.0f;
-				float g = ((pixel >> 8)  & 255) / 255.0f;
-				float b = ((pixel >> 16) & 255) / 255.0f;
-				float a = ((pixel >> 24) & 255) / 255.0f;
-
-				// swap normal y direction:
-				g = 1 - g;
-
-				// reset roughness:
-				a = 1;
-
-				if (data32_roughness != nullptr)
-				{
-					// add roughness from texture (G):
-					a = ((data32_roughness[i] >> 8) & 255) / 255.0f;
-					a = max(1.0f / 255.0f, a); // disallow 0 roughness (but is it really a good idea to do it here???)
-				}
-
-				uint32_t rgba8 = 0;
-				rgba8 |= (uint32_t)(r * 255.0f) << 0;
-				rgba8 |= (uint32_t)(g * 255.0f) << 8;
-				rgba8 |= (uint32_t)(b * 255.0f) << 16;
-				rgba8 |= (uint32_t)(a * 255.0f) << 24;
-
-				data32[i] = rgba8;
-			}
-
-			RegisterTexture2D(img_nor);
-			material.normalMapName = img_nor->uri;
-		}
-
-		if (img_met_rough != nullptr)
-		{
-			uint32_t* data32_emissive = nullptr;
-			if (img_emissive != nullptr && img_emissive->width == img_met_rough->width && img_emissive->height == img_met_rough->height)
-			{
-				data32_emissive = (uint32_t*)img_emissive->image.data();
-			}
-
-			uint32_t* data32 = (uint32_t*)img_met_rough->image.data();
-			for (int i = 0; i < img_met_rough->width * img_met_rough->height; ++i)
-			{
-				uint32_t pixel = data32[i];
-				float r = ((pixel >> 0) & 255) / 255.0f;
-				float g = ((pixel >> 8) & 255) / 255.0f;
-				float b = ((pixel >> 16) & 255) / 255.0f;
-				float a = ((pixel >> 24) & 255) / 255.0f;
-
-				float reflectance = 1;
-				float metalness = b;
-				float emissive = 0;
-				float sss = 1;
-
-				if (data32_emissive != nullptr)
-				{
-					// add emissive from texture (R):
-					//	(Currently only supporting single channel emissive)
-					emissive = ((data32_emissive[i] >> 0) & 255) / 255.0f;
-				}
-
-				uint32_t rgba8 = 0;
-				rgba8 |= (uint32_t)(reflectance * 255.0f) << 0;
-				rgba8 |= (uint32_t)(metalness * 255.0f) << 8;
-				rgba8 |= (uint32_t)(emissive * 255.0f) << 16;
-				rgba8 |= (uint32_t)(sss * 255.0f) << 24;
-
-				data32[i] = rgba8;
-			}
-
-			RegisterTexture2D(img_met_rough);
-			material.surfaceMapName = img_met_rough->uri;
-		}
-		else if (img_emissive != nullptr)
-		{
-			// No metalness texture, just emissive...
-			uint32_t* data32 = (uint32_t*)img_emissive->image.data();
-
-			if (data32 != nullptr)
-			{
-				for (int i = 0; i < img_emissive->width * img_emissive->height; ++i)
-				{
-					uint32_t pixel = data32[i];
-					float r = ((pixel >> 0) & 255) / 255.0f;
-					float g = ((pixel >> 8) & 255) / 255.0f;
-					float b = ((pixel >> 16) & 255) / 255.0f;
-					float a = ((pixel >> 24) & 255) / 255.0f;
-
-					float reflectance = 1;
-					float metalness = 1;
-					float emissive = r;
-					float sss = 1;
-
-					uint32_t rgba8 = 0;
-					rgba8 |= (uint32_t)(reflectance * 255.0f) << 0;
-					rgba8 |= (uint32_t)(metalness * 255.0f) << 8;
-					rgba8 |= (uint32_t)(emissive * 255.0f) << 16;
-					rgba8 |= (uint32_t)(sss * 255.0f) << 24;
-
-					data32[i] = rgba8;
-				}
-
-				RegisterTexture2D(img_emissive);
-				material.surfaceMapName = img_emissive->uri;
-			}
+			auto& img = state.gltfModel.images[tex.source];
+			RegisterTexture2D(&img, "emissive");
+			material.emissiveMapName = img.uri;
 		}
 
 		// Retrieve textures by name:
@@ -495,12 +375,15 @@ void ImportModel_GLTF(const std::string& fileName)
 			material.normalMap = (Texture2D*)wiResourceManager::GetGlobal().add(material.normalMapName);
 		if (!material.surfaceMapName.empty())
 			material.surfaceMap = (Texture2D*)wiResourceManager::GetGlobal().add(material.surfaceMapName);
+		if (!material.emissiveMapName.empty())
+			material.emissiveMap = (Texture2D*)wiResourceManager::GetGlobal().add(material.emissiveMapName);
 
 		if (baseColorFactor != x.values.end())
 		{
 			material.baseColor.x = static_cast<float>(baseColorFactor->second.ColorFactor()[0]);
 			material.baseColor.y = static_cast<float>(baseColorFactor->second.ColorFactor()[1]);
 			material.baseColor.z = static_cast<float>(baseColorFactor->second.ColorFactor()[2]);
+			material.baseColor.w = static_cast<float>(baseColorFactor->second.ColorFactor()[3]);
 		}
 		if (roughnessFactor != x.values.end())
 		{
@@ -512,11 +395,21 @@ void ImportModel_GLTF(const std::string& fileName)
 		}
 		if (emissiveFactor != x.additionalValues.end())
 		{
-			material.emissive = static_cast<float>(emissiveFactor->second.ColorFactor()[0]);
+			material.emissiveColor.x = static_cast<float>(emissiveFactor->second.ColorFactor()[0]);
+			material.emissiveColor.y = static_cast<float>(emissiveFactor->second.ColorFactor()[1]);
+			material.emissiveColor.z = static_cast<float>(emissiveFactor->second.ColorFactor()[2]);
+			material.emissiveColor.w = static_cast<float>(emissiveFactor->second.ColorFactor()[3]);
 		}
 		if (alphaCutoff != x.additionalValues.end())
 		{
 			material.alphaRef = 1 - static_cast<float>(alphaCutoff->second.Factor());
+		}
+		if (alphaMode != x.additionalValues.end())
+		{
+			if (alphaMode->second.string_value.compare("BLEND") == 0)
+			{
+				material.blendMode = BLENDMODE_ALPHA;
+			}
 		}
 
 	}
@@ -560,31 +453,45 @@ void ImportModel_GLTF(const std::string& fileName)
 
 			const unsigned char* data = buffer.data.data() + accessor.byteOffset + bufferView.byteOffset;
 
+			int index_remap[3];
+			if (transform_to_LH)
+			{
+				index_remap[0] = 0;
+				index_remap[1] = 1;
+				index_remap[2] = 2;
+			}
+			else
+			{
+				index_remap[0] = 0;
+				index_remap[1] = 2;
+				index_remap[2] = 1;
+			}
+
 			if (stride == 1)
 			{
 				for (size_t i = 0; i < indexCount; i += 3)
 				{
-					mesh.indices[indexOffset + i + 0] = vertexOffset + data[i + 0];
-					mesh.indices[indexOffset + i + 1] = vertexOffset + data[i + 1];
-					mesh.indices[indexOffset + i + 2] = vertexOffset + data[i + 2];
+					mesh.indices[indexOffset + i + 0] = vertexOffset + data[i + index_remap[0]];
+					mesh.indices[indexOffset + i + 1] = vertexOffset + data[i + index_remap[1]];
+					mesh.indices[indexOffset + i + 2] = vertexOffset + data[i + index_remap[2]];
 				}
 			}
 			else if (stride == 2)
 			{
 				for (size_t i = 0; i < indexCount; i += 3)
 				{
-					mesh.indices[indexOffset + i + 0] = vertexOffset + ((uint16_t*)data)[i + 0];
-					mesh.indices[indexOffset + i + 1] = vertexOffset + ((uint16_t*)data)[i + 1];
-					mesh.indices[indexOffset + i + 2] = vertexOffset + ((uint16_t*)data)[i + 2];
+					mesh.indices[indexOffset + i + 0] = vertexOffset + ((uint16_t*)data)[i + index_remap[0]];
+					mesh.indices[indexOffset + i + 1] = vertexOffset + ((uint16_t*)data)[i + index_remap[1]];
+					mesh.indices[indexOffset + i + 2] = vertexOffset + ((uint16_t*)data)[i + index_remap[2]];
 				}
 			}
 			else if (stride == 4)
 			{
 				for (size_t i = 0; i < indexCount; i += 3)
 				{
-					mesh.indices[indexOffset + i + 0] = vertexOffset + ((uint32_t*)data)[i + 0];
-					mesh.indices[indexOffset + i + 1] = vertexOffset + ((uint32_t*)data)[i + 1];
-					mesh.indices[indexOffset + i + 2] = vertexOffset + ((uint32_t*)data)[i + 2];
+					mesh.indices[indexOffset + i + 0] = vertexOffset + ((uint32_t*)data)[i + index_remap[0]];
+					mesh.indices[indexOffset + i + 1] = vertexOffset + ((uint32_t*)data)[i + index_remap[1]];
+					mesh.indices[indexOffset + i + 2] = vertexOffset + ((uint32_t*)data)[i + index_remap[2]];
 				}
 			}
 			else

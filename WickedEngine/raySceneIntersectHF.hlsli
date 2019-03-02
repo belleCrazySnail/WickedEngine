@@ -298,15 +298,27 @@ inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2
 		hit.UV = frac(hit.UV); // emulate wrap
 		float4 baseColorMap = materialTextureAtlas.SampleLevel(sampler_linear_clamp, hit.UV * mat.baseColorAtlasMulAdd.xy + mat.baseColorAtlasMulAdd.zw, 0);
 		float4 surfaceMap = materialTextureAtlas.SampleLevel(sampler_linear_clamp, hit.UV * mat.surfaceMapAtlasMulAdd.xy + mat.surfaceMapAtlasMulAdd.zw, 0);
-		float4 normalMap = materialTextureAtlas.SampleLevel(sampler_linear_clamp, hit.UV * mat.normalMapAtlasMulAdd.xy + mat.normalMapAtlasMulAdd.zw, 0);
 
-		float4 baseColor = DEGAMMA(mat.baseColor * baseColorMap);
-		float reflectance = mat.reflectance * surfaceMap.r;
-		float metalness = mat.metalness * surfaceMap.g;
-		float3 emissive = baseColor.rgb * mat.emissive * surfaceMap.b;
-		float roughness = mat.roughness * normalMap.a;
+		float4 baseColor = baseColorMap;
+		baseColor.rgb = DEGAMMA(baseColor.rgb);
+		baseColor *= mat.baseColor;
+		float roughness = mat.roughness * surfaceMap.g;
+		float metalness = mat.metalness * surfaceMap.b;
+		float reflectance = mat.reflectance * surfaceMap.a;
 		roughness = sqr(roughness); // convert linear roughness to cone aperture
-		float sss = mat.subsurfaceScattering;
+		float4 emissiveColor;
+		[branch]
+		if (mat.emissiveColor.a > 0)
+		{
+			emissiveColor = materialTextureAtlas.SampleLevel(sampler_linear_clamp, hit.UV * mat.emissiveMapAtlasMulAdd.xy + mat.emissiveMapAtlasMulAdd.zw, 0);
+			emissiveColor.rgb = DEGAMMA(emissiveColor.rgb);
+			emissiveColor *= mat.emissiveColor;
+		}
+		else
+		{
+			emissiveColor = 0;
+		}
+
 
 
 		// Calculate chances of reflection types:
@@ -359,7 +371,7 @@ inline float3 Shade(inout Ray ray, inout RayHit hit, inout float seed, in float2
 		ray.bary = hit.bary;
 		ray.Update();
 
-		return emissive;
+		return emissiveColor.rgb * emissiveColor.a;
 	}
 	else
 	{
